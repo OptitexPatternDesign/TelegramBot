@@ -1,7 +1,15 @@
 const global = require("./core/global.js")
 
 global.bot.command("start", (ctx) => {
-  return ctx.reply("HI")
+  const keyboard =
+      new global.telegram.Keyboard()
+          .text('Salam').text('Hi').row()
+          .text('new')
+          .placeholder('Hello from IRAN')
+
+  return ctx.reply('Here is your custom keyboard!', {
+    reply_markup: keyboard
+  })
 })
 
 switch (process.env.BOT_ENV) {

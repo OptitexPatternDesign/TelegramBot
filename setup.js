@@ -6,9 +6,14 @@ global.bot.command("start", (ctx) => {
           .text('Salam').text('Hi').row()
           .text('new')
           .placeholder('Hello from IRAN')
-
+  global.bot.callbackQuery('Salam', ctx => {
+    return ctx.reply("Salam clicked")
+  })
   return ctx.reply('Here is your custom keyboard!', {
-    reply_markup: keyboard
+    reply_markup: {
+      keyboard: keyboard.build(),
+      one_time_keyboard: true,
+    }
   })
 })
 

@@ -1,9 +1,6 @@
 const global = require("./core/global.js")
 
 global.bot.command("start", (ctx) => {
-  console.log(ctx.user.displayName)
-  console.log(ctx.user.first_name)
-  console.log(ctx.user.name)
   console.log(ctx.user)
 
   const keyboard =

@@ -1,14 +1,10 @@
 const global = require("./global")
 
 global.bot.command('files', ctx => {
-  let animals = global.db.collection('files')
-  console.log(animals)
+  let files = global.db.collection('files')
+  console.log(files.list())
 
-  // create an item in collection with key "leo"
-  let leo = animals.set('leo', {
-      type:'cat',
-      color:'orange'
-  })
+
 
   const menu = new global.telegram.InlineKeyboard()
   for (let i in ['asdf', 'a33']) {

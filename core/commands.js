@@ -25,6 +25,7 @@ global.bot.command('files', async ctx => {
       ctx.reply('add File')
       global.bot.on('message', (ctx) => {
         console.log(ctx)
+        global.bot.removeListener('message')
       })
     })
     //

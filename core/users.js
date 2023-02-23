@@ -4,16 +4,16 @@ user  = exports.user  = 'user'
 admin = exports.admin = 'admin'
 
 const check = exports.check = async function (who) {
-  const user = await global.tables.users.get(who.id.toString())
+  let user = await global.tables.users.get(who.id.toString())
   if (user == null) {
-    console.log('create')
-    add(who)
+    user = add(who)
   }
-  console.log('exist', global.tables.users.item(who.id.toString()).props)
+  console.log('exist', user, user.props)
   return user
 }
 
 const add = exports.add = async function (who) {
+  console.log('create asdf')
   return await global.tables.users.set(who.id.toString(), {
     type: user,
     //

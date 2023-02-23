@@ -35,7 +35,9 @@ global.bot.callbackQuery('add_file', async (ctx) => {
       await ctx.deleteMessage(message.message_id)
       //
       message = await ctx.reply('Enter file name:')
-      actions.add(ctx.from, 'text', (ctx) => {
+      actions.add(ctx.from, 'text', async (ctx) => {
+        await ctx.deleteMessage(message.message_id)
+        //
         console.log('finish', ctx.message)
       })
     })

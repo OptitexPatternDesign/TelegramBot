@@ -7,7 +7,7 @@ global.bot.command("start", (ctx) => {
   return ctx.reply('Welcome')
 })
 
-global.bot.on('*', (ctx) => {
+global.bot.on('message', (ctx) => {
   console.log(ctx)
 })
 

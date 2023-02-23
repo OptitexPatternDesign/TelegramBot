@@ -9,18 +9,28 @@ global.bot.api.setMyCommands([
 
 global.bot.command('files', async ctx => {
   const user = await users.check(ctx.from)
-  console.log(user)
+  //
   if (users.isAdmin(user)) {
-    console.log('isAdmin')
+    const files = (await global.tables.files.list()).results
+    //
+    const menu = new global.telegram.InlineKeyboard()
+    files.forEach(file => {
+      menu.text(file.props.name).row()
+    })
+    menu.text('Add file...', 'add_file').row()
+    menu.text('Back', 'back').row()
+    //
+    global.bot.callbackQuery('add_file', (ctx) => {
+      ctx.reply('add File')
+    })
+    //
+    return ctx.reply('Download files', {
+      reply_markup: menu,
+    })
+  } else {
+    const files = users.files(user)
+    return ctx.reply('Download files', {
+      reply_markup: menu,
+    })
   }
-  console.log(user.fragment('files'))
-
-  const menu = new global.telegram.InlineKeyboard()
-  for (let i in ['asdf', 'a33']) {
-    menu.text(`📁 ${i}`)
-    menu.row()
-  }
-  return ctx.reply('Download files', {
-    reply_markup: menu,
-  })
 })

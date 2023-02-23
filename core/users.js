@@ -9,6 +9,7 @@ const check = exports.check = async function (who) {
     console.log('create')
     add(who)
   }
+  console.log('exist', global.tables.item(who.id.toString()))
   return user
 }
 

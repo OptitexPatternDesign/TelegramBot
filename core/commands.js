@@ -27,7 +27,7 @@ global.bot.command('files', async ctx => {
       await ctx.reply('File')
       await actions.add(ctx.from, 'document')
         .then(ctx => {
-          console.log("File", ctx.message.document)
+          console.log("File", ctx.message)
         })
       await ctx.reply('File name')
     })

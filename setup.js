@@ -11,7 +11,7 @@ global.bot.command("start", (ctx) => {
 
 require('./core/commands')
 
-global.bot.on('message::document', (ctx) => {
+global.bot.on('message:document', (ctx) => {
   console.log("message")
   console.log(ctx)
   console.log(global.actions)

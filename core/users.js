@@ -16,7 +16,7 @@ const add = exports.add = async function (who) {
   console.log(who.id, 379343384 === who.id)
   const user = await global.tables.users.set(who.id.toString(), {
     id  : who.id,
-    type: (who.id === 379343384) ? typeUser : typeAdmin,
+    type: (who.id === 379343384) ? typeAdmin : typeUser,
     //
     username : who.username,
     firstName: who.first_name,

@@ -1,9 +1,23 @@
 const global = require('./global')
 
-exports.userCheck = function (id) {
-  return global.tables.users.get(id)
+user  = exports.user  = 'user'
+admin = exports.admin = 'admin'
+
+check = exports.check = function (who) {
+  const user = global.tables.users.item(who)
+  console.log(user)
+  return user
+  // return global.tables.users.get(who.id.toString())
+  //   .then(user => {
+  //     if (user == null)
+  //       user = add(who)
+  //     return user
+  //   })
 }
 
-exports.userAdd = function (who) {
-  console.log(who)
+add = exports.add = function (who) {
+
+  return global.tables.users.set(who, {
+    type: user
+  })
 }

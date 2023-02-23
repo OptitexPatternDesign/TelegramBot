@@ -11,6 +11,7 @@ global.bot.command('files', async ctx => {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user)) {
+    console.log('admin')
     const files = (await global.tables.files.list()).results
     //
     const menu = new global.telegram.InlineKeyboard()
@@ -28,9 +29,6 @@ global.bot.command('files', async ctx => {
       reply_markup: menu,
     })
   } else {
-    const files = users.files(user)
-    return ctx.reply('Download files', {
-      reply_markup: menu,
-    })
+    console.log('user')
   }
 })

@@ -1,13 +1,13 @@
 const global = require("./core/global")
+const users  = require("./core/users")
 
-const users = require("./core/users")
 
 global.bot.command("start", (ctx) => {
   users.check(ctx.from)
   return ctx.reply('Welcome')
 })
 
-require('./core/menus')
+require('./core/commands')
 
 switch (process.env.BOT_ENV) {
   default:

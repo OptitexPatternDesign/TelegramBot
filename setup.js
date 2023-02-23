@@ -1,21 +1,7 @@
 const global = require("./core/global.js")
 
 global.bot.command("start", (ctx) => {
-  console.log(ctx)
-  console.log(ctx.from)
-
-  const keyboard =
-    new global.telegram.InlineKeyboard()
-      .text('Salam')
-      .text('Hi')
-        .row()
-      .text('new')
-  global.bot.callbackQuery('Salam', ctx => {
-    return ctx.reply("Salam clicked")
-  })
-  return ctx.reply('Here is your custom keyboard!', {
-    reply_markup: keyboard,
-  })
+  return ctx.reply('Welcome')
 })
 
 switch (process.env.BOT_ENV) {
@@ -26,6 +12,14 @@ switch (process.env.BOT_ENV) {
     global.app.use(global.telegram.webhookCallback(global.bot, 'express'))
     // start the server
     global.app.listen(global.config.port, () => {
+      console.log("Started the server!")
+      global.bot.api.setWebhook('https://opd-bot.cyclic.app')
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     })
   }
     break;

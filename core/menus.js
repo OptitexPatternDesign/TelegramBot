@@ -1,4 +1,4 @@
-const global = require("./core/global.js")
+const global = require("./global")
 
 global.bot.command('files', ctx => {
   const menu = new global.telegram.InlineKeyboard()

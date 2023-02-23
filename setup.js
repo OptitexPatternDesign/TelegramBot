@@ -4,6 +4,8 @@ global.bot.command("start", (ctx) => {
   return ctx.reply('Welcome')
 })
 
+require('./core/menus')
+
 switch (process.env.BOT_ENV) {
   default:
   case "release":

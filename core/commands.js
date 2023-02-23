@@ -25,7 +25,7 @@ global.bot.command('files', async ctx => {
       ctx.reply('add File')
       global.bot.on('message', (ctx) => {
         console.log('asdfasdf', ctx)
-        global.bot.on('message', () => {})
+        delete this
       })
     })
     //

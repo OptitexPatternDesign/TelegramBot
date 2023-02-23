@@ -23,6 +23,9 @@ global.bot.command('files', async ctx => {
     //
     global.bot.callbackQuery('add_file', (ctx) => {
       ctx.reply('add File')
+      global.bot.on('document', (ctx) => {
+        console.log(ctx)
+      })
     })
     //
     return ctx.reply('Download files', {

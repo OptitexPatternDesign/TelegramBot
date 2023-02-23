@@ -10,9 +10,6 @@ global.bot.command('files', ctx => {
       color:'orange'
   })
 
-  // get an item at key "leo" from collection animals
-  let item = await animals.get('leo')
-  console.log(item)
   const menu = new global.telegram.InlineKeyboard()
   for (let i in ['asdf', 'a33']) {
     menu.text(`📁 ${i}`)

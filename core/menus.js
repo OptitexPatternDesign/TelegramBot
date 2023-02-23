@@ -1,8 +1,9 @@
 const global = require("./global")
 
 global.bot.command('files', ctx => {
-  let files = global.db.collection('files')
-  console.log(files.list())
+  const files = global.tables.files
+  files.list()
+    .then(file => console.log(file))
 
 
 

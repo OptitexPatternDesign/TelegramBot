@@ -23,7 +23,7 @@ global.bot.command('files', async ctx => {
     //
     global.bot.callbackQuery('add_file', (ctx) => {
       ctx.reply('add File')
-      global.bot.on('message', (ctx) => {
+      global.bot.fork().on('message', (ctx) => {
         console.log('asdfasdf', ctx)
         delete this
       })

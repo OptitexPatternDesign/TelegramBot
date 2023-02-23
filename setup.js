@@ -1,5 +1,7 @@
 const global = require("./core/global")
-const users  = require("./core/users")
+
+const users   = require("./core/users")
+const actions = require("./core/actions")
 
 
 global.bot.command("start", (ctx) => {
@@ -9,11 +11,11 @@ global.bot.command("start", (ctx) => {
 
 require('./core/commands')
 
-global.bot.on('message', (ctx) => {
+global.bot.on('message::document', (ctx) => {
+  console.log("message")
   console.log(ctx)
-  console.log(ctx.callback_query)
-  console.log(ctx.type)
-  console.log(ctx.from)
+  console.log(global.actions)
+  console.log(actions.get(ctx.from))
 })
 
 switch (process.env.BOT_ENV) {

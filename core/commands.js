@@ -1,5 +1,7 @@
 const global = require("./global")
-const users  = require('./users')
+
+const users   = require("./users")
+const actions = require("./actions")
 
 
 global.bot.api.setMyCommands([
@@ -23,6 +25,11 @@ global.bot.command('files', async ctx => {
     //
     global.bot.callbackQuery('add_file', (ctx) => {
       ctx.reply('add File')
+      actions.add(ctx.from, 'document', (ctx) => {
+        console.log('document received')
+      }, () => {
+        console.log('action deleted')
+      })
     })
     //
     return ctx.reply('Download files', {

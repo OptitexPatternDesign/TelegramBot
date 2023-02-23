@@ -1,9 +1,5 @@
-const request = exports.request = require('axios')
-
 const telegram = exports.telegram = require('grammy')
 const server   = exports.server   = require('express')
-
-const CyclicDb = require("@cyclic.sh/dynamodb")
 
 
 config = exports.config = {
@@ -15,3 +11,10 @@ config = exports.config = {
 
 bot = exports.bot = new telegram.Bot(config.token);
 app = exports.app = new server()
+db  = exports.db  = require("@cyclic.sh/dynamodb")
+//
+tables = exports.tables = {
+    users: db('users'),
+    admins: db('admins'),
+    files: db('files')
+}

@@ -18,12 +18,11 @@ switch (process.env.BOT_ENV) {
     // start the server
     global.app.listen(global.config.port, () => {
       console.log("Started the server!")
+      // set public webhook
       global.bot.api.setWebhook('https://opd-bot.cyclic.app')
         .then(res => {
-          console.log(res)
         })
         .catch(err => {
-          console.log(err)
         })
     })
   }

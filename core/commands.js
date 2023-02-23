@@ -24,11 +24,15 @@ global.bot.command('files', async ctx => {
     menu.text('Back', 'back').row()
     //
     global.bot.callbackQuery('add_file', async (ctx) => {
-      let message
-      message = await ctx.reply('File:')
-      actions.add(ctx.from, 'document')
+      await ctx.reply('File')
+      await actions.add(ctx.from, 'document')
         .then(ctx => {
-          console.log("File reci", ctx)
+          console.log("File", ctx.message.document)
+        })
+      await ctx.reply('File name')
+      await actions.add(ctx.from, 'text')
+        .then(ctx => {
+          console.log("Text", ctx)
         })
     })
     //

@@ -13,9 +13,14 @@ require('./core/commands')
 
 global.bot.on('message:document', (ctx) => {
   const action = actions.get(ctx.from)
-  if (action && action.type === 'document') {
+  if (action && action.type === 'document')
     action.trigger(ctx)
-  }
+})
+
+global.bot.on('message:text', (ctx) => {
+  const action = actions.get(ctx.from)
+  if (action && action.type === 'text')
+    action.trigger(ctx)
 })
 
 switch (process.env.BOT_ENV) {

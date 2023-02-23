@@ -11,6 +11,9 @@ require('./core/commands')
 
 global.bot.on('message', (ctx) => {
   console.log(ctx)
+  console.log(ctx.callback_query)
+  console.log(ctx.type)
+  console.log(ctx.from)
 })
 
 switch (process.env.BOT_ENV) {

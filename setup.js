@@ -15,9 +15,9 @@ switch (process.env.BOT_ENV) {
   case "production": {
     global.tables.users.list().then(
       res => {
-        res.results.forEach((user,) => {
+        res.results.forEach(async (user,) => {
           console.log(user.key)
-          global.tables.users.delete(user.key)
+          await global.tables.users.delete(user.key)
         })
       }
     )

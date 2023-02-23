@@ -2,6 +2,7 @@ const global = require("./core/global.js")
 
 global.bot.command("start", (ctx) => {
   console.log(ctx)
+  console.log(ctx.from)
 
   const keyboard =
     new global.telegram.InlineKeyboard()

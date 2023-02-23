@@ -26,13 +26,11 @@ global.bot.command('files', async ctx => {
   }
 })
 global.bot.callbackQuery('add_file', async (ctx) => {
-  let message;
-  //
-  message = await ctx.reply('add File')
+  const messa = await ctx.reply('add File')
   actions.add(ctx.from, 'document', async (file) => {
-      await ctx.deleteMessage(message.message_id)
+      await ctx.deleteMessage(messa.message_id)
       //
-      message = await ctx.reply('Enter file name:')
+      const message = await ctx.reply('Enter file name:')
       actions.add(ctx.from, 'text', async (fileName) => {
         await ctx.deleteMessage(message.message_id)
         //

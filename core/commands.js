@@ -2,13 +2,14 @@ const global = require("./global")
 const users  = require('./users')
 
 
-void global.bot.api.setMyCommands([
+global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
   {command: "files", description: "Show your files"},
-]);
+]).then();
 
 global.bot.command('files', ctx => {
   const user = users.check(ctx.from)
+  console.log(user)
   if (users.isAdmin(user)) {
     console.log('isAdmin')
   }

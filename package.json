@@ -1,5 +1,5 @@
 {
-  "name": "telegrambot",
+  "name": "opd-bot",
   "version": "1.0.0",
   "description": "",
   "main": "setup.js",
@@ -25,6 +25,8 @@
     "node-telegram-bot-api": "^0.61.0"
   },
   "devDependencies": {
+    "axios": "^1.3.4",
+    "request": "^2.88.2",
     "typescript": "^4.9.5"
   }
 }

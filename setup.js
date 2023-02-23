@@ -26,10 +26,10 @@ switch (process.env.BOT_ENV) {
   case "release":
   case "production": {
     global.app.use(global.server.json())
-    // create webhook
     global.app.use(global.telegram.webhookCallback(global.bot, 'express'))
-    //
-    global.app.listen(global.config.port)
+    // start the server
+    global.app.listen(global.config.port, () => {
+    })
   }
     break;
 }

@@ -15,9 +15,9 @@ global.bot.command('files', async ctx => {
     const files = (await global.tables.files.list()).results
     //
     const menu = new global.telegram.InlineKeyboard()
-    files.forEach(file => {
-      menu.text(file.props.name).row()
-    })
+    // files.forEach(file => {
+    //   menu.text(file.props.name).row()
+    // })
     menu.text('Add file...', 'add_file').row()
     menu.text('Back', 'back').row()
     //

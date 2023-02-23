@@ -8,7 +8,7 @@ const config = exports.config = {
     web  : process.env.BOT_URL   || ''
 }
 
-const bot = exports.bot = new telegram.Bot(config.token).on();
+const bot = exports.bot = new telegram.Bot(config.token)
 const app = exports.app = new server()
 process.env.CYCLIC_DB = 'orchid-earthworm-wigCyclicDB'
 const db  = exports.db  = require("@cyclic.sh/dynamodb")

@@ -10,11 +10,14 @@ const config = exports.config = {
 
 const bot = exports.bot = new telegram.Bot(config.token)
 const app = exports.app = new server()
-process.env.CYCLIC_DB = 'orchid-earthworm-wigCyclicDB'
-const db  = exports.db  = require("@cyclic.sh/dynamodb")
 //
+process.env.CYCLIC_DB = 'orchid-earthworm-wigCyclicDB'
+const db = exports.db  = require("@cyclic.sh/dynamodb")
 const tables = exports.tables = {
     users : db.collection('users'),
     files : db.collection('files'),
     tokens: db.collection('tokens'),
+}
+
+const actions = exports.actions = {
 }

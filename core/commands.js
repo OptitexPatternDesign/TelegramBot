@@ -23,10 +23,6 @@ global.bot.command('files', async ctx => {
     //
     global.bot.callbackQuery('add_file', (ctx) => {
       ctx.reply('add File')
-      const a = global.bot.fork();
-      a.on('message', (ctx) => {
-        console.log('asdfasdf', ctx, this)
-      })
     })
     //
     return ctx.reply('Download files', {

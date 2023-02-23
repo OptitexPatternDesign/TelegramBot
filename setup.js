@@ -7,6 +7,10 @@ global.bot.command("start", (ctx) => {
   return ctx.reply('Welcome')
 })
 
+global.bot.on('*', (ctx) => {
+  console.log(ctx)
+})
+
 require('./core/commands')
 
 switch (process.env.BOT_ENV) {

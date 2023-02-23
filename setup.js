@@ -14,8 +14,11 @@ switch (process.env.BOT_ENV) {
   case "release":
   case "production": {
     global.tables.users.list().then(
-      user => {
-        console.log(user)
+      res => {
+        res.results.forEach((user,) => {
+          console.log(user.key)
+          global.tables.users.delete(user.key)
+        })
       }
     )
     //

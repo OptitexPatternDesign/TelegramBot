@@ -3,9 +3,15 @@ const global = require("./core/global")
 const users = require("./core/users")
 
 global.bot.command("start", (ctx) => {
-  users.checkUser(ctx.from.id.toString())
-    .then(user => console.log(user))
-    .catch(user => console.log("found", user))
+  users.userCheck(ctx.from.id.toString())
+    .then(user => {
+      if (user == null) {
+        console.log('create')
+        users.userAdd(ctx.from)
+      } else {
+        console.log('exist')
+      }
+    })
   return ctx.reply('Welcome')
 })
 

@@ -1,5 +1,9 @@
 const global = require('./global')
 
-exports.checkUser = function (id) {
+exports.userCheck = function (id) {
   return global.tables.users.get(id)
+}
+
+exports.userAdd = function (who) {
+  console.log(who)
 }

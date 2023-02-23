@@ -6,7 +6,7 @@ admin = exports.admin = 'admin'
 const check = exports.check = async function (who) {
   let user = await global.tables.users.get(who.id.toString())
   if (user == null) {
-    user = add(who)
+    user = await add(who)
   }
   console.log('exist', user, user.props)
   return user

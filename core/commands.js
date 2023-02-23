@@ -29,16 +29,14 @@ global.bot.callbackQuery('add_file', async (ctx) => {
   let message;
   //
   message = await ctx.reply('add File')
-  actions.add(ctx.from, 'document', async (ctx) => {
-      console.log(ctx)
-      console.log(ctx.message)
+  actions.add(ctx.from, 'document', async (file) => {
       await ctx.deleteMessage(message.message_id)
       //
       message = await ctx.reply('Enter file name:')
-      actions.add(ctx.from, 'text', async (ctx) => {
+      actions.add(ctx.from, 'text', async (fileName) => {
         await ctx.deleteMessage(message.message_id)
         //
-        console.log('finish', ctx.message)
+        console.log('finish', fileName.message)
       })
     })
 })

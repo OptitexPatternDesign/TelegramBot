@@ -23,11 +23,12 @@ global.bot.command('files', async ctx => {
     menu.text('Add file...', 'add_file').row()
     menu.text('Back', 'back').row()
     //
-    global.bot.callbackQuery('add_file', (ctx) => {
-      ctx.reply('add File')
+    global.bot.callbackQuery('add_file', async (ctx) => {
+      const message = await ctx.reply('add File')
       actions.add(ctx.from, 'document',
-        (ctx) => {
+        async  (ctx) => {
           console.log('document received')
+          await global.bot.api.deleteMessage(ctx.chat.id, message.message_id)
         }, () => {
           console.log('action deleted')
         })

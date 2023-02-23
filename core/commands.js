@@ -1,9 +1,8 @@
 const global = require("./global")
 const users  = require('./users')
-const {use} = require("express/lib/router");
 
 
-await global.bot.api.setMyCommands([
+void global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
   {command: "files", description: "Show your files"},
 ]);

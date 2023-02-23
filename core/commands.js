@@ -24,14 +24,15 @@ global.bot.command('files', async ctx => {
     menu.text('Back', 'back').row()
     //
     global.bot.callbackQuery('add_file', async (ctx) => {
-      const message = await ctx.reply('add File')
-      actions.add(ctx.from, 'document',
-        async  (ctx) => {
-          console.log('document received')
-          await global.bot.api.deleteMessage(ctx.chat.id, message.message_id)
-        }, () => {
-          console.log('action deleted')
+      let message
+
+      message = await ctx.reply('File:')
+      actions.add(ctx.from, 'document', async (file) => {
+        message = await ctx.reply('File name:')
+        actions.add(ctx.from, 'text', async (filename) => {
+          console.log('received file', file.message, filename.message)
         })
+      })
     })
     //
     return ctx.reply('Download files', {

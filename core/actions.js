@@ -1,15 +1,22 @@
 const global = require('./global')
+const {actions} = require("./global");
 
 
 const add = exports.add = function (user, type, run, del) {
-  if (global.actions[user.id] != null)
-    global.actions[user.id].del()
-  global.actions[user.id] = {
-    type: type,
+  return new Promise(((resolve, reject) => {
+    let action = {
+      type: type,
+      //
+      run: run,
+      del: del
+    }
+    action.trigger = (ctx) => {
+      console.log('inside trigger')
+      resolve(ctx)
+    }
     //
-    run: run,
-    del: del
-  }
+    global.actions[user.id] = action
+  }))
 }
 
 const get = exports.get = function (user) {

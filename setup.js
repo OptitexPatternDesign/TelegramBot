@@ -14,7 +14,8 @@ require('./core/commands')
 global.bot.on('message:document', (ctx) => {
   const action = actions.get(ctx.from)
   if (action && action.type === 'document') {
-    action.run(ctx)
+    console.log("from setup")
+    action.trigger(ctx)
   }
 })
 

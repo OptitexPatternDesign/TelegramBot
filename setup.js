@@ -1,6 +1,9 @@
-const global = require("./core/global.js")
+const global = require("./core/global")
+
+const users = require("./core/users")
 
 global.bot.command("start", (ctx) => {
+  console.log(users.checkUser(ctx.from.id))
   return ctx.reply('Welcome')
 })
 

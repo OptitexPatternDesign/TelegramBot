@@ -1,21 +1,18 @@
-const global = require("./global")
+// example.js
+const CyclicDB = require('@cyclic.sh/dynamodb')
+const db = CyclicDB('your-table-name')
 
-global.bot.command('files', ctx => {
-  let animals = global.db.collection('files')
-  console.log(animals)
+const run = async function(){
+    let animals = db.collection('animals')
 
-  // create an item in collection with key "leo"
-  let leo = animals.set('leo', {
-      type:'cat',
-      color:'orange'
-  })
+    // create an item in collection with key "leo"
+    let leo = await animals.set('leo', {
+        type:'cat',
+        color:'orange'
+    })
 
-  const menu = new global.telegram.InlineKeyboard()
-  for (let i in ['asdf', 'a33']) {
-    menu.text(`📁 ${i}`)
-    menu.row()
-  }
-  return ctx.reply('Download files', {
-    reply_markup: menu,
-  })
-})
+    // get an item at key "leo" from collection animals
+    let item = await animals.get('leo')
+    console.log(item)
+}
+run()

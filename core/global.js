@@ -11,10 +11,11 @@ config = exports.config = {
 
 bot = exports.bot = new telegram.Bot(config.token);
 app = exports.app = new server()
+process.env.CYCLIC_DB = 'orchid-earthworm-wigCyclicDB'
 db  = exports.db  = require("@cyclic.sh/dynamodb")
 //
 tables = exports.tables = {
-    users: db('users'),
-    admins: db('admins'),
-    files: db('files')
+    users : db.collection('users'),
+    admins: db.collection('admins'),
+    files : db.collection('files')
 }

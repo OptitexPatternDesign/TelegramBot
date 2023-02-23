@@ -5,7 +5,8 @@ admin = exports.admin = 'admin'
 
 check = exports.check = async function (who) {
   const user = await global.tables.users.get(who.id.toString())
-  console.log(user)
+  const user2 = await global.tables.users.get('asdfasdf')
+  console.log(user, user2)
   return user
   // return global.tables.users.get(who.id.toString())
   //   .then(user => {

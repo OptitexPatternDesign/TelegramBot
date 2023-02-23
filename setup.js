@@ -3,7 +3,9 @@ const global = require("./core/global")
 const users = require("./core/users")
 
 global.bot.command("start", (ctx) => {
-  console.log(users.checkUser(ctx.from.id.toString()))
+  users.checkUser(ctx.from.id.toString())
+    .then(user => console.log(user))
+    .catch(user => console.log("found", user))
   return ctx.reply('Welcome')
 })
 

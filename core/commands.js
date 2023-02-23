@@ -26,10 +26,10 @@ global.bot.command('files', async ctx => {
     global.bot.callbackQuery('add_file', async (ctx) => {
       let message
       message = await ctx.reply('File:')
-      actions.add(ctx.from, 'document', async (file) => {
-        console.log("recieved")
-        message = await ctx.reply('File name:')
-      })
+      actions.add(ctx.from, 'document')
+        .then(ctx => {
+          console.log("File reci", ctx)
+        })
     })
     //
     return ctx.reply('Download files', {

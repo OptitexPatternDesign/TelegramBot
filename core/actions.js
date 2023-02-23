@@ -2,21 +2,13 @@ const global = require('./global')
 const {actions} = require("./global");
 
 
-const add = exports.add = function (user, type, run, del) {
+const add = exports.add = function (user, type) {
   return new Promise(((resolve, reject) => {
-    let action = {
+    global.actions[user.id] = {
       type: type,
       //
-      run: run,
-      del: del
+      trigger: (ctx) => resolve(ctx)
     }
-    action.trigger = (ctx) => {
-      console.log('inside trigger')
-      run(ctx)
-      resolve(ctx)
-    }
-    //
-    global.actions[user.id] = action
   }))
 }
 

@@ -26,8 +26,7 @@ global.bot.command('files', async ctx => {
     global.bot.callbackQuery('add_file', async (ctx) => {
       await ctx.reply('File')
       const file = await actions.add(ctx.from, 'document')
-      await ctx.reply('File name')
-      const filename = await actions.add(ctx.from, 'text')
+      console.log(file)
     })
     //
     return ctx.reply('Download files', {

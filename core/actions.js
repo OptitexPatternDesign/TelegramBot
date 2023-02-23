@@ -7,7 +7,10 @@ const add = exports.add = function (user, type) {
     global.actions[user.id] = {
       type: type,
       //
-      trigger: (ctx) => resolve(ctx)
+      trigger: (ctx) => {
+        console.log("from trigger")
+        resolve(ctx)
+      }
     }
   }))
 }

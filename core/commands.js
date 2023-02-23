@@ -25,11 +25,12 @@ global.bot.command('files', async ctx => {
     //
     global.bot.callbackQuery('add_file', async (ctx) => {
       await ctx.reply('File')
-      actions.add(ctx.from, 'document')
+      await (actions.add(ctx.from, 'document')
         .then(ctx => {
+          console.log("asdf")
           console.log("File", ctx.message)
-        })
-      ctx.reply('File name')
+        }))
+      await ctx.reply('File name')
     })
     //
     return ctx.reply('Download files', {

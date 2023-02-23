@@ -13,7 +13,7 @@ require('./core/commands')
 
 global.bot.on('message:document', (ctx) => {
   console.log("message")
-  console.log(ctx)
+  console.log(ctx.updateType)
   console.log(global.actions)
   console.log(actions.get(ctx.from))
 })

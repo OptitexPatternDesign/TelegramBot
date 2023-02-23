@@ -1,28 +1,18 @@
-const global = require("./core/global.js")
+// example.js
+const CyclicDB = require('@cyclic.sh/dynamodb')
+const db = CyclicDB('asdf')
 
-global.bot.command("start", (ctx) => {
-  return ctx.reply('Welcome')
-})
+const run = async function(){
+    let animals = db.collection('animals')
 
-require('./core/menus')
-
-switch (process.env.BOT_ENV) {
-  default:
-  case "release":
-  case "production": {
-    global.app.use(global.server.json())
-    global.app.use(global.telegram.webhookCallback(global.bot, 'express'))
-    // start the server
-    global.app.listen(global.config.port, () => {
-      console.log("Started the server!")
-      global.bot.api.setWebhook('https://opd-bot.cyclic.app')
-        .then(res => {
-          console.log(res)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+    // create an item in collection with key "leo"
+    let leo = await animals.set('leo', {
+        type:'cat',
+        color:'orange'
     })
-  }
-    break;
+
+    // get an item at key "leo" from collection animals
+    let item = await animals.get('leo')
+    console.log(item)
 }
+run()

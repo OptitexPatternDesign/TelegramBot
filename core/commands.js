@@ -7,8 +7,8 @@ global.bot.api.setMyCommands([
   {command: "files", description: "Show your files"},
 ]).then();
 
-global.bot.command('files', ctx => {
-  const user = users.check(ctx.from)
+global.bot.command('files', async ctx => {
+  const user = await users.check(ctx.from)
   console.log(user)
   if (users.isAdmin(user)) {
     console.log('isAdmin')

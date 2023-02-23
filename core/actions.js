@@ -12,6 +12,7 @@ const add = exports.add = function (user, type, run, del) {
     }
     action.trigger = (ctx) => {
       console.log('inside trigger')
+      run(ctx)
       resolve(ctx)
     }
     //

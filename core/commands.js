@@ -30,10 +30,6 @@ global.bot.command('files', async ctx => {
           console.log("File", ctx.message.document)
         })
       await ctx.reply('File name')
-      await actions.add(ctx.from, 'text')
-        .then(ctx => {
-          console.log("Text", ctx)
-        })
     })
     //
     return ctx.reply('Download files', {

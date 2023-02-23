@@ -15,4 +15,3 @@ config = exports.config = {
 
 bot = exports.bot = new telegram.Bot(config.token);
 app = exports.app = new server()
-db  = exports.db  = CyclicDb(process.env.CYCLIC_DB)

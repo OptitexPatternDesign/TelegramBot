@@ -18,6 +18,6 @@ const add = exports.add = async function (file, title, description) {
 }
 
 const files = exports.files = async function () {
-  return (await global.tables.files.list()).results
-    .map(file => global.tables.files.get(file.key))
+  return Promise.all((await global.tables.files.list()).results
+    .map(file => global.tables.files.get(file.key)))
 }

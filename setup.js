@@ -38,7 +38,7 @@ switch (process.env.BOT_ENV) {
     global.tables.files.list().then(
       res => {
         res.results.forEach(async (file,) => {
-          await global.tables.users.delete(file.key)
+          await global.tables.files.delete(file.key)
         })
       }
     )

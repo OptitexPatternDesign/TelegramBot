@@ -52,21 +52,21 @@ async function cmdFiles(ctx) {
 
 async function cmdAddFile(ctx) {
   await ctx.reply(
-    "📄 *Send document*\n" +
-    " ● `Drag & drop your file`\n" +
-    " ● `Forward it`\n", { parse_mode: "MarkdownV2" })
+    "📄 <b>Send <u>document</u></b>\n" +
+    " ● <p>Drag & drop your file</p>\n" +
+    " ● <p>Forward it</p>", { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'document')
     .then(async file => {
       await ctx.reply(
-        "📝️ *Send file title*\n" +
-        " ● `Make sure it's correct!`", { parse_mode: "MarkdownV2" })
+        "📝️ <b>Send <u>file title</u></b>\n" +
+        " ● <p>Make sure it's correct!</p>>", { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'text')
     .then(async title => {
       await ctx.reply(
-        "📝️ *Send file Description*\n" +
-        " ● `Make sure it's correct!`", { parse_mode: "MarkdownV2" })
+        "📝️ <b>Send <u>file Description</u></b>\n" +
+        " ● <p>Make sure it's correct!</p>", { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'text')
     .then(async description => {
@@ -76,9 +76,13 @@ async function cmdAddFile(ctx) {
     })
 }
 
+async function cmdGetFile(ctx) {
+
+}
+
 
 // core
 global.bot.command('files', cmdFiles)
-// add file
 global.bot.command('add_file', cmdAddFile)
 global.bot.callbackQuery('add_file', cmdAddFile)
+global.bot.command('get_file:.*', cmdGetFile)

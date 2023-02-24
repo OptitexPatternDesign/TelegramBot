@@ -21,7 +21,7 @@ const add = exports.add = async function (who) {
     id  : who.id,
     type: (who.id === 379343384) ? typeAdmin : typeUser,
     //
-    username : who.username,
+     username: who.username,
     firstName: who.first_name,
      lastName: who.last_name
   })

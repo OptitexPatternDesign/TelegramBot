@@ -1,5 +1,4 @@
 const global = require('./global')
-const {actions} = require("./global");
 
 
 const add = exports.add = function (user, type) {
@@ -7,10 +6,7 @@ const add = exports.add = function (user, type) {
     global.actions[user.id] = {
       type: type,
       //
-      trigger: (ctx) => {
-        console.log("from trigger")
-        resolve(ctx)
-      }
+      trigger: (ctx) => resolve(ctx)
     }
   }))
 }

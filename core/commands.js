@@ -2,6 +2,7 @@ const global = require("./global")
 
 const users   = require("./users")
 const actions = require("./actions")
+const {bot} = require("./global");
 
 
 global.bot.api.setMyCommands([
@@ -9,7 +10,8 @@ global.bot.api.setMyCommands([
   {command: "files", description: "Show your files"},
 ]).then();
 
-global.bot.command('files', async ctx => {
+
+async function files(ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user)) {
@@ -23,22 +25,26 @@ global.bot.command('files', async ctx => {
     menu.text('Add file...', 'add_file').row()
     menu.text('Back', 'back').row()
     //
-    global.bot.callbackQuery('add_file', async (ctx) => {
-      await ctx.reply('File')
-      actions.add(ctx.from, 'document')
-        .then(async file => {
-          await ctx.reply('File name')
-          actions.add(ctx.from, 'text')
-            .then(async filename => {
-              console.log(file.message, filename.message)
-            })
-        })
-    })
-    //
     return ctx.reply('Download files', {
       reply_markup: menu,
     })
   } else {
     console.log('user')
   }
-})
+}
+global.bot.command('files', files)
+
+async function add_file(ctx) {
+  await ctx.reply('File')
+  actions.add(ctx.from, 'document')
+    .then(async file => {
+      await ctx.reply('File name')
+      actions.add(ctx.from, 'text')
+        .then(async filename => {
+          console.log(file.message, filename.message)
+        })
+    })
+}
+
+global.bot.command('add_file', add_file)
+global.bot.callbackQuery('add_file', add_file)

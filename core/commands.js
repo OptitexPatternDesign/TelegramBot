@@ -15,11 +15,11 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(file.props.title)
         .text('📄', (ctx) => {
           console.log(file.props.id, file)
           ctx.replyWithDocument(file.props.id)
         })
+        .text(file.props.title)
         .row()
     }
     for (const file of await files.files())

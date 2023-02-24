@@ -52,20 +52,13 @@ const menuUserFiles = new global.ext.menu.Menu('user-files')
 global.bot.use(menuAdminFiles)
 
 async function filesAdmin(ctx) {
-  return ctx.reply('Download core', { reply_markup: menuAdminFiles })
+  return ctx.reply('Download core', {
+    reply_markup: menuAdminFiles,
+    parse_mode: "HTML"
+  })
 }
 
 async function filesUser(ctx) {
-  const files = files.all()
-  // create menu
-  const menu = new global.telegram.InlineKeyboard()
-  files.forEach(file => {
-    console.log("asdf")
-    console.log(file, file.props)
-  })
-  menu.text('Back', 'back').row()
-  //
-  return ctx.reply('Download core', { reply_markup: menu })
 }
 
 

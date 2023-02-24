@@ -1,7 +1,7 @@
-const global = require("./core/global")
+const global = require("./files/global")
 
-const users   = require("./core/users")
-const actions = require("./core/actions")
+const users   = require("./files/users")
+const actions = require("./files/actions")
 
 
 global.bot.command("start", (ctx) => {
@@ -9,7 +9,7 @@ global.bot.command("start", (ctx) => {
   return ctx.reply('Welcome')
 })
 
-require('./core/commands')
+require('./files/commands')
 
 global.bot.on('message:document', (ctx) => {
   console.log("document")

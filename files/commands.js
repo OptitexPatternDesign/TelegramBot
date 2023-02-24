@@ -21,9 +21,7 @@ async function filesAdmin(ctx) {
   menu.text('Add file...', 'add_file').row()
   menu.text('Back', 'back').row()
   //
-  return ctx.reply('Download files', {
-    reply_markup: menu,
-  })
+  return ctx.reply('Download files', { reply_markup: menu })
 }
 
 async function filesUser(ctx) {
@@ -35,13 +33,11 @@ async function filesUser(ctx) {
   })
   menu.text('Back', 'back').row()
   //
-  return ctx.reply('Download files', {
-    reply_markup: menu,
-  })
+  return ctx.reply('Download files', { reply_markup: menu })
 }
 
 
-async function files(ctx) {
+async function cmdFiles(ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
@@ -50,7 +46,7 @@ async function files(ctx) {
     await filesUser(ctx)
 }
 
-async function add_file(ctx) {
+async function cmdAddFile(ctx) {
   await ctx.reply('File')
   actions.add(ctx.from, 'document')
     .then(async file => {
@@ -64,7 +60,7 @@ async function add_file(ctx) {
 
 
 // files
-global.bot.command('files', files)
+global.bot.command('files', cmdFiles)
 // add file
-global.bot.command('add_file', add_file)
-global.bot.callbackQuery('add_file', add_file)
+global.bot.command('add_file', cmdAddFile)
+global.bot.callbackQuery('add_file', cmdAddFile)

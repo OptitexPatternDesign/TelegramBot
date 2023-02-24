@@ -68,6 +68,7 @@ async function cmdAddFile(ctx) {
   actions
     .add(ctx.from, 'text')
     .then(async description => {
+      console.log("sdgasdg")
       await files.add(file.message, title.message, description.message)
     })
     })

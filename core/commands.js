@@ -48,15 +48,19 @@ async function cmdFiles(ctx) {
 }
 
 async function cmdAddFile(ctx) {
-  await ctx.reply('File')
+  await ctx.reply(
+    "Send document\n" +
+    " **●** `Drag or drop your file`", { parse_mode: "MarkdownV2" })
   actions
     .add(ctx.from, 'document')
     .then(async file => {
-      await ctx.reply('**Title**')
+      await ctx.reply(
+        "", { parse_mode: "MarkdownV2" })
   actions
     .add(ctx.from, 'text')
     .then(async title => {
-      await ctx.reply('**Description**')
+      await ctx.reply(
+        "", { parse_mode: "MarkdownV2" })
   actions
     .add(ctx.from, 'text')
     .then(async description => {

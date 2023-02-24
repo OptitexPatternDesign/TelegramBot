@@ -27,6 +27,26 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
     for (const file of await files.files())
       addFile(file)
   })
+  .text('*Add new file* **asd**', async ctx => {
+    await cmdAddFile(ctx)
+  })
+  .text('Back')
+const menuUserFiles = new global.ext.menu.Menu('user-files')
+  .dynamic(async (ctx, range) => {
+    function addFile(file) {
+      range
+        .text(`📄 ${file.props.title}`, (ctx) => {
+          ctx.replyWithDocument(file.props.id, {
+            caption:
+              file.props.title + '\n' +
+              file.props.description
+          })
+        })
+        .row()
+    }
+    for (const file of await files.files())
+      addFile(file)
+  })
   .text('Back')
 
 global.bot.use(menuAdminFiles)
@@ -79,9 +99,7 @@ async function cmdAddFile(ctx) {
     .add(ctx.from, 'text')
     .then(async description => {
       await files.add(file.message, title.message, description.message)
-    })
-    })
-    })
+    })})})
 }
 
 async function cmdGetFile(ctx) {

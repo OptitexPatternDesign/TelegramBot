@@ -14,9 +14,11 @@ global.bot.api.setMyCommands([
 const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.files())
-      range.text(file.props.title, (ctx) => {
-        console.log(ctx)
-      }).row()
+      ((file) => {
+        range.text(file.props.title, (ctx) => {
+          console.log(file, ctx)
+        }).row()
+      })(file)
   })
   .text('Back')
 

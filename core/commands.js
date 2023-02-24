@@ -4,6 +4,7 @@ const actions = require("./actions")
 
 const users = require("./helpers/users")
 const files = require("./helpers/files")
+const {raw} = require("express");
 
 
 global.bot.api.setMyCommands([
@@ -16,9 +17,9 @@ async function filesAdmin(ctx) {
   const allFiles = await files.all()
   // create menu
   const menu = new global.telegram.InlineKeyboard()
-  allFiles.forEach(file => {
-    console.log(file, file.props)
-  })
+  for (const file of allFiles) {
+    console.log(file, file.props, await global.tables.files.get(file.key))
+  }
   menu.text('Add file...', 'add_file').row()
   menu.text('Back', 'back').row()
   //
@@ -68,7 +69,6 @@ async function cmdAddFile(ctx) {
   actions
     .add(ctx.from, 'text')
     .then(async description => {
-      console.log("sdgasdg")
       await files.add(file.message, title.message, description.message)
     })
     })

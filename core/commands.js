@@ -11,28 +11,44 @@ global.bot.api.setMyCommands([
 ]).then();
 
 
+async function filesAdmin(ctx) {
+  const files = (await global.tables.files.list()).results
+  // create menu
+  const menu = new global.telegram.InlineKeyboard()
+  files.forEach(file => {
+    console.log(file)
+  })
+  menu.text('Add file...', 'add_file').row()
+  menu.text('Back', 'back').row()
+  //
+  return ctx.reply('Download files', {
+    reply_markup: menu,
+  })
+}
+
+async function filesUser(ctx) {
+  const files = (await global.tables.files.list()).results
+  // create menu
+  const menu = new global.telegram.InlineKeyboard()
+  files.forEach(file => {
+    console.log(file)
+  })
+  menu.text('Back', 'back').row()
+  //
+  return ctx.reply('Download files', {
+    reply_markup: menu,
+  })
+}
+
+
 async function files(ctx) {
   const user = await users.check(ctx.from)
   //
-  if (users.isAdmin(user)) {
-    console.log('admin')
-    const files = (await global.tables.files.list()).results
-    //
-    const menu = new global.telegram.InlineKeyboard()
-    // files.forEach(file => {
-    //   menu.text(file.props.name).row()
-    // })
-    menu.text('Add file...', 'add_file').row()
-    menu.text('Back', 'back').row()
-    //
-    return ctx.reply('Download files', {
-      reply_markup: menu,
-    })
-  } else {
-    console.log('user')
-  }
+  if (users.isAdmin(user))
+    await filesAdmin(ctx)
+  else
+    await filesUser(ctx)
 }
-global.bot.command('files', files)
 
 async function add_file(ctx) {
   await ctx.reply('File')
@@ -46,5 +62,9 @@ async function add_file(ctx) {
     })
 }
 
+
+// files
+global.bot.command('files', files)
+// add file
 global.bot.command('add_file', add_file)
 global.bot.callbackQuery('add_file', add_file)

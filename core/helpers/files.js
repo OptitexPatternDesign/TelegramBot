@@ -1,4 +1,4 @@
-const global = require("./global")
+const global = require("./../global")
 
 
 const add = exports.add = async function (file, title, description) {

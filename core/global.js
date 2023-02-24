@@ -1,6 +1,10 @@
 const telegram = exports.telegram = require('grammy')
 const server   = exports.server   = require('express')
 
+const ext = exports.ext = {
+  menu: require("@grammyjs/menu")
+}
+
 const config = exports.config = {
     port: process.env.BOT_PORT || 3000,
     // telegram

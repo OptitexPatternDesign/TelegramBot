@@ -4,7 +4,6 @@ const actions = require("./actions")
 
 const users = require("./helpers/users")
 const files = require("./helpers/files")
-const {raw} = require("express");
 
 
 global.bot.api.setMyCommands([
@@ -15,15 +14,14 @@ global.bot.api.setMyCommands([
 
 async function filesAdmin(ctx) {
   const allFiles = await files.files()
-  // create menu
-  const menu = new global.telegram.InlineKeyboard()
-  for (const f of allFiles) {
-    console.log(f.props.title)
+  const menu = new global.ext.menu.Menu('test')
+    .text('Hi')
+  for (const f of allFiles)
     menu.text(f.props.title).row()
-  }
-  menu.text('Add file...', 'add_file').row()
-  menu.text('Back', 'back').row()
+  menu.text('Add file...', (ctx) => console.log('asdf')).row()
+  menu.text('Back').row()
   //
+  global.bot.use(menu)
   return ctx.reply('Download core', { reply_markup: menu })
 }
 

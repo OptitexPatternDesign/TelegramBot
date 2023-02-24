@@ -1,13 +1,14 @@
 const global = require("./global")
 
-const users   = require("./users")
 const actions = require("./actions")
-const {bot} = require("./global");
+
+const users = require("./helpers/users")
+const files = require("./helpers/files")
 
 
 global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
-  {command: "files", description: "Show your files"},
+  {command: "files", description: "Show your core"},
 ]).then();
 
 
@@ -21,7 +22,7 @@ async function filesAdmin(ctx) {
   menu.text('Add file...', 'add_file').row()
   menu.text('Back', 'back').row()
   //
-  return ctx.reply('Download files', { reply_markup: menu })
+  return ctx.reply('Download core', { reply_markup: menu })
 }
 
 async function filesUser(ctx) {
@@ -33,7 +34,7 @@ async function filesUser(ctx) {
   })
   menu.text('Back', 'back').row()
   //
-  return ctx.reply('Download files', { reply_markup: menu })
+  return ctx.reply('Download core', { reply_markup: menu })
 }
 
 
@@ -48,18 +49,25 @@ async function cmdFiles(ctx) {
 
 async function cmdAddFile(ctx) {
   await ctx.reply('File')
-  actions.add(ctx.from, 'document')
+  actions
+    .add(ctx.from, 'document')
     .then(async file => {
-      await ctx.reply('File name')
-      actions.add(ctx.from, 'text')
-        .then(async filename => {
-          console.log(file.message, filename.message)
-        })
+      await ctx.reply('**Title**')
+  actions
+    .add(ctx.from, 'text')
+    .then(async title => {
+      await ctx.reply('**Description**')
+  actions
+    .add(ctx.from, 'text')
+    .then(async description => {
+      console.log(file, title, description)
+    })
+    })
     })
 }
 
 
-// files
+// core
 global.bot.command('files', cmdFiles)
 // add file
 global.bot.command('add_file', cmdAddFile)

@@ -1,8 +1,5 @@
 const global = require("./global")
 
-const users   = require("./users")
-const actions = require("./actions")
-
 
 const typeUser  = exports.user  = 'user'
 const typeAdmin = exports.admin = 'admin'
@@ -16,18 +13,17 @@ const check = exports.check = async function (who) {
 }
 
 const add = exports.add = async function (who) {
-  console.log(who.id, 379343384 === who.id)
-  const user = await global.tables.users.set(who.id.toString(), {
+  const record = await global.tables.users.set(who.id.toString(), {
     id  : who.id,
     type: (who.id === 379343384) ? typeAdmin : typeUser,
     //
      username: who.username,
     firstName: who.first_name,
      lastName: who.last_name
-  })
-  user.fragment('files')
+  }, {})
+  record.fragment('files')
   //
-  return user
+  return record
 }
 
 const isUser = exports.isUser = function (user) {

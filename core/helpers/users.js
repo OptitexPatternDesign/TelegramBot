@@ -20,7 +20,7 @@ const add = exports.add = async function (who) {
      username: who.username,
     firstName: who.first_name,
      lastName: who.last_name
-  }, {})
+  })
   record.fragment('files')
   //
   return record

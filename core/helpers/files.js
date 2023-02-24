@@ -11,7 +11,8 @@ const add = exports.add = async function (file, title, description) {
     //
     title      : title.text,
     description: description.text
-  }, {})
+  })
+  console.log("added", record)
   //
   return record
 }

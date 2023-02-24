@@ -13,11 +13,12 @@ global.bot.api.setMyCommands([
 
 
 async function filesAdmin(ctx) {
+  const allFiles = files.all()
   // create menu
   const menu = new global.telegram.InlineKeyboard()
-  files.all().forEach(file => {
-    console.log(file, file.props)
-    menu.text(file.props.title).row()
+  allFiles.forEach(file => {
+    console.log(file, file.title)
+    menu.text(file.title).row()
   })
   menu.text('Add file...', 'add_file').row()
   menu.text('Back', 'back').row()

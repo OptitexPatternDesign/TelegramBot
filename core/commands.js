@@ -17,9 +17,8 @@ async function filesAdmin(ctx) {
   const allFiles = await files.keys()
   // create menu
   const menu = new global.telegram.InlineKeyboard()
-  for (const key of allFiles) {
-    console.log(key)
-    console.log(await files.get(key))
+  for (const f of allFiles) {
+    console.log(await f)
   }
   menu.text('Add file...', 'add_file').row()
   menu.text('Back', 'back').row()

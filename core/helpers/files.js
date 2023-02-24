@@ -17,11 +17,7 @@ const add = exports.add = async function (file, title, description) {
   return record
 }
 
-const keys = exports.keys = async function () {
+const files = exports.files = async function () {
   return (await global.tables.files.list()).results
-    .map(file => file.key)
-}
-
-const get = exports.get = function (key) {
-  return global.tables.files.get(key)
+    .map(file => global.tables.files.get(file.key))
 }

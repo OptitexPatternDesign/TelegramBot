@@ -16,7 +16,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
     function addFile(file) {
       range
         .text(file.props.title, (ctx) => {
-          ctx.replyWithDocument(file.id)
+          console.log(file.id, file)
         })
         .row()
     }

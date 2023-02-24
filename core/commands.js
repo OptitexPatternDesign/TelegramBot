@@ -30,7 +30,7 @@ async function filesUser(ctx) {
   // create menu
   const menu = new global.telegram.InlineKeyboard()
   files.forEach(file => {
-    console.log(file)
+    console.log(file, file.props)
   })
   menu.text('Back', 'back').row()
   //

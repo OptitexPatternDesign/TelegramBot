@@ -14,7 +14,7 @@ global.bot.api.setMyCommands([
 
 
 async function filesAdmin(ctx) {
-  const allFiles = await files.keys()
+  const allFiles = await files.files()
   // create menu
   const menu = new global.telegram.InlineKeyboard()
   for (const f of allFiles) {

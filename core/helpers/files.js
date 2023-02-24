@@ -2,12 +2,12 @@ const global = require("./../global")
 
 
 const add = exports.add = async function (file, title, description) {
-  const record = await global.tables.files.set(file.file_unique_id, {
-           id: file.file_id,
-    unique_id: file.file_unique_id,
+  const record = await global.tables.files.set(file.document.file_unique_id, {
+           id: file.document.file_id,
+    unique_id: file.document.file_unique_id,
     //
-    name: file.name,
-    type: file.mime_type,
+    name: file.document.name,
+    type: file.document.mime_type,
     //
     title      : title.text,
     description: description.text

@@ -27,7 +27,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
     for (const file of await files.files())
       addFile(file)
   })
-  .text('*Add new file* **asd**', async ctx => {
+  .text('<b>Add new file</b>', async ctx => {
     await cmdAddFile(ctx)
   })
   .text('Back')

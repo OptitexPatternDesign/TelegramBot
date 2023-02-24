@@ -49,8 +49,9 @@ async function cmdFiles(ctx) {
 
 async function cmdAddFile(ctx) {
   await ctx.reply(
-    "Send document\n" +
-    " **●** `Drag or drop your file`", { parse_mode: "MarkdownV2" })
+    "📁 **Send document**\n" +
+    " **╟** `Drag or drop your file`\n" +
+    " **╙** `Forward it`\n", { parse_mode: "MarkdownV2" })
   actions
     .add(ctx.from, 'document')
     .then(async file => {

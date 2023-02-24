@@ -56,13 +56,13 @@ async function cmdAddFile(ctx) {
     .add(ctx.from, 'document')
     .then(async file => {
       await ctx.reply(
-        "📝️ Send file title\n" +
+        "📝️ *Send file title*\n" +
         " ● `Make sure it's correct!`", { parse_mode: "MarkdownV2" })
   actions
     .add(ctx.from, 'text')
     .then(async title => {
       await ctx.reply(
-        "📝️ Send file Description\n" +
+        "📝️ *Send file Description*\n" +
         " ● `Make sure it's correct!`", { parse_mode: "MarkdownV2" })
   actions
     .add(ctx.from, 'text')

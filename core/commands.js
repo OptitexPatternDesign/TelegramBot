@@ -11,20 +11,19 @@ global.bot.api.setMyCommands([
   {command: "files", description: "Show your core"},
 ]).then();
 
+const menuAdminFiles = new global.ext.menu.Menu('admin-files')
+  .dynamic(async (ctx, range) => {
+    const allFiles = await files.files()
+    //
+    for (const file of allFiles)
+      range.text(file.props.title).row()
+  })
+  .text('back')
+
+global.bot.use(menuAdminFiles)
 
 async function filesAdmin(ctx) {
-  const allFiles = await files.files()
-  console.log('h321')
-  const menu = new global.ext.menu.Menu('test')
-    .text('Hi')
-  for (const f of allFiles)
-    menu.text(f.props.title).row()
-  menu.text('Add file...', (ctx) => console.log('asdf')).row()
-  menu.text('Back').row()
-  await global.bot.use(menu)
-  console.log('here')
-  //
-  return ctx.reply('Download core', { reply_markup: menu })
+  return ctx.reply('Download core', { reply_markup: menuAdminFiles })
 }
 
 async function filesUser(ctx) {

@@ -26,10 +26,11 @@ async function filesAdmin(ctx) {
 }
 
 async function filesUser(ctx) {
-  const files = (await global.tables.files.list()).results
+  const files = files.all()
   // create menu
   const menu = new global.telegram.InlineKeyboard()
   files.forEach(file => {
+    console.log("asdf")
     console.log(file, file.props)
   })
   menu.text('Back', 'back').row()

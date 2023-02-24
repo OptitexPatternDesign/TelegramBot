@@ -53,20 +53,20 @@ async function cmdFiles(ctx) {
 async function cmdAddFile(ctx) {
   await ctx.reply(
     "📄 <b>Send <u>document</u></b>\n" +
-    " ● <p>Drag & drop your file</p>\n" +
-    " ● <p>Forward it</p>", { parse_mode: "HTML" })
+    " ● <code>Drag & drop your file</code>\n" +
+    " ● <code>Forward it</code>", { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'document')
     .then(async file => {
       await ctx.reply(
         "📝️ <b>Send <u>file title</u></b>\n" +
-        " ● <p>Make sure it's correct!</p>>", { parse_mode: "HTML" })
+        " ● <code>Make sure it's correct!</code>", { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'text')
     .then(async title => {
       await ctx.reply(
         "📝️ <b>Send <u>file Description</u></b>\n" +
-        " ● <p>Make sure it's correct!</p>", { parse_mode: "HTML" })
+        " ● <code>Make sure it's correct!</code>", { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'text')
     .then(async description => {

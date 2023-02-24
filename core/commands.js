@@ -17,12 +17,11 @@ async function filesAdmin(ctx) {
   console.log('h321')
   const menu = new global.ext.menu.Menu('test')
     .text('Hi')
-  global.bot.use(menu)
   for (const f of allFiles)
     menu.text(f.props.title).row()
   menu.text('Add file...', (ctx) => console.log('asdf')).row()
   menu.text('Back').row()
-  global.bot.use(menu)
+  await global.bot.use(menu)
   console.log('here')
   //
   return ctx.reply('Download core', { reply_markup: menu })

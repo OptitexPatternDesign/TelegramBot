@@ -17,10 +17,11 @@ const add = exports.add = async function (file, title, description) {
   return record
 }
 
-const all = exports.all = async function () {
-  const all = []
-  for (const file of (await global.tables.files.list()).results)
-    all.push(global.tables.files.item(file.key))
-  //
-  return all
+const keys = exports.keys = async function () {
+  return (await global.tables.files.list()).results
+    .map(file => file.key)
+}
+
+const get = exports.get = function (key) {
+  return global.tables.files.get(key)
 }

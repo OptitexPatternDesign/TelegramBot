@@ -17,16 +17,13 @@ const files = require("../helpers/files")
 
 m.menus = {
   replace: function (ctx, menu, text=null) {
-    this
-      .show(ctx, menu, text)
-      .then(_ => ctx.deleteMessage())
+    ctx.menu.nav(menu.id)
+    ctx.editMessageText(text || menu.text, { parse_mode: "HTML" })
   },
 
   show: function (ctx, menu, text=null) {
-    return ctx
-      .reply(
-        text || menu.text,
-        { parse_mode: "HTML", reply_markup: menu })
+    return ctx.reply(text || menu.text,
+      { parse_mode: "HTML", reply_markup: menu })
   }
 }
 
@@ -64,10 +61,13 @@ m.menus.users = new global.ext.menu.Menu('users')
       if (users.isUser(user))
         range
           .text(users.name(user), (ctx) => {
-              ctx.session.activeUser = user
-              //
-              m.menus.replace(ctx, m.menus.editUser)
-            })
+            ctx.session.activeUser = user
+            // move to new menu
+            m.menus
+              .replace(ctx,
+                m.menus.editUser,
+                m.menus.editUser.text.format(users.name(ctx.session.activeUser)))
+          })
           .row()
   })
 m.menus.users.text =
@@ -76,8 +76,13 @@ m.menus.users.text =
 
 m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .submenu('📄 Files', 'edit-user-files').row()
-  .text('↩', (ctx) => m.menus.replace(ctx, m.menus.users))
-m.menus.editUser.text = "adsrf"
+  .text('↩',
+    (ctx) => m.menus.replace(ctx, m.menus.users))
+m.menus.editUser.text =
+  "<b>You are editing '{0}'</b>\n" +
+  " ⚠️ <code>Any change will apply!</code>"
+m.menus.users
+  .register(m.menus.editUser)
 
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
@@ -94,7 +99,8 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
         .row()
   })
   .back('↩')
-m.menus.editUserFiles.text = "adsf"
+m.menus.editUserFiles.text =
+  "<b>Change {0} access to files</b>"
 m.menus.editUser
   .register(m.menus.editUserFiles)
 
@@ -106,7 +112,7 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
-global.bot.use(m.menus.editUser)
+
 global.bot.use(m.menus.users)
 
 

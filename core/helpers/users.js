@@ -23,7 +23,7 @@ m.add = async function (who) {
     firstName: who.first_name || '',
      lastName: who. last_name || ''
   })
-  record.fragment('files')
+  await record.fragment('files').set({})
   //
   return record
 }

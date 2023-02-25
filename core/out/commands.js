@@ -9,8 +9,8 @@ const {telegram} = require("../global");
 
 global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
-  {command: "show-files", description: "Show your core"},
-  {command: "show-users", description: "Show your core"},
+  {command: "show_files", description: "Show your core"},
+  {command: "show_users", description: "Show your core"},
 ]).then();
 
 let menus = exports.menus = {}

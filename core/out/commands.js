@@ -4,8 +4,6 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
-const {session} = require("grammy");
-const {telegram} = require("../global");
 
 
 // global.bot.api.setMyCommands([
@@ -138,7 +136,6 @@ global.bot.use(menus.users)
 
 global.bot.use(menus.editUser, 'users')
 global.bot.use(menus.editUserFiles)
-
 
 // core
 global.bot.command('show_files', commands.showFiles)

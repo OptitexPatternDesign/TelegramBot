@@ -1,9 +1,10 @@
 const global = require("./core/global")
+
+require('./core/out/commands')
+
 const actions = require("./core/actions")
 
 const users = require("./core/helpers/users")
-
-require('./core/out/commands')
 
 global.bot.use(global.telegram.session({
   initial: () => ({

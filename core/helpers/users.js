@@ -4,15 +4,17 @@ const global = require("./../global")
 const typeUser  = exports.user  = 'user'
 const typeAdmin = exports.admin = 'admin'
 
-const check = exports.check = async function (who) {
+const m = exports
+
+m.check = async function (who) {
   let user = await global.tables.users.get(who.id.toString())
   if (user == null)  // create user if not exists
-    user = await add(who)
+    user = await m.add(who)
   //
   return user
 }
 
-const add = exports.add = async function (who) {
+m.add = async function (who) {
   const record = await global.tables.users.set(who.id.toString(), {
     id  : who.id,
     type: (who.id === 379343384) ? typeAdmin : typeUser,
@@ -26,29 +28,41 @@ const add = exports.add = async function (who) {
   return record
 }
 
-const name = exports.name = function (user) {
+
+m.name = function (user) {
   return user.props.firstName + (user.props.lastName && ` ${user.props.lastName}`)
 }
 
-const username = exports.username = function (user) {
+m.username = function (user) {
   return user.props.username ? `@${user.props.username}` : ''
 }
 
-const isUser = exports.isUser = function (user) {
+
+m.isUser = function (user) {
   return user.props.type === typeUser;
 }
 
-const isAdmin = exports.isAdmin = function (user) {
+m.isAdmin = function (user) {
   return user.props.type === typeAdmin;
 }
 
-const files = exports.files = async function (user) {
+
+m.files = async function (user) {
   return (await user.fragment('files')
     .list())
     .map(file => global.tables.files.get(file.key))
 }
 
-const all = exports.all = async function () {
+m.fileToggle = async function (user, file) {
+
+}
+
+m.fileStatus = async function (user, file) {
+  return (await user.fragment('files').get())
+}
+
+
+m.all = async function () {
   return Promise.all(
     (await global.tables.users.list())
       .results

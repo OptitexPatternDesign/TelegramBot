@@ -1,7 +1,9 @@
 const global = require("./../global")
 
 
-const add = exports.add = async function (file, title, description) {
+const m = exports
+
+m.add = async function (file, title, description) {
   const record = await global.tables.files.set(file.document.file_unique_id, {
            id: file.document.file_id,
     unique_id: file.document.file_unique_id,
@@ -12,12 +14,11 @@ const add = exports.add = async function (file, title, description) {
     title      : title.text,
     description: description.text
   })
-  console.log("added", record)
   //
   return record
 }
 
-const all = exports.all = async function () {
+m.all = async function () {
   return Promise.all(
     (await global.tables.files.list())
       .results

@@ -118,21 +118,23 @@ menus.users = new global.ext.menu.Menu('users')
             console.log(user, "clicked")
               ctx.session.activeUser = user
               //
+              console.log(menus.user)
+              console.log(menus)
               await ctx.reply(
                 "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.userdf})
+                {parse_mode: "HTML", reply_markup: menus.editUser})
             })
           .row()
   })
   .back('↩')
 
-menus.userdf = new global.ext.menu.Menu('user-filesd')
+menus.editUser = new global.ext.menu.Menu('edit-user')
   // .text('📄 Files', async (ctx) => {
   //   console.log(ctx)
   // })
   .back('↩')
 
-menus.userFiles = new global.ext.menu.Menu('user-files')
+menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
@@ -147,8 +149,8 @@ global.bot.use(menus.adminFiles)
 
 global.bot.use(menus.users)
 
-global.bot.use(menus.userdf)
-global.bot.use(menus.userFiles)
+global.bot.use(menus.editUser)
+global.bot.use(menus.editUserFiles)
 
 
 // core

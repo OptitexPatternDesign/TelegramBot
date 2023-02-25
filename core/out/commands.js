@@ -119,7 +119,7 @@ menus.users = new global.ext.menu.Menu('users')
               //
               await ctx.reply(
                 "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.user})
+                {parse_mode: "HTML", reply_markup: menus.adminFiles})
             })
           .row()
   })

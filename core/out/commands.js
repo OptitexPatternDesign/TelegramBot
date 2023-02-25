@@ -6,6 +6,7 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
+const {menus} = require("./commands");
 
 
 // global.bot.api.setMym.commands([
@@ -16,9 +17,14 @@ const files = require("../helpers/files")
 
 
 m.menus = {
-  replace: function (ctx, menu) {
+  replace: function (ctx, menu, text=null) {
     ctx.menu.nav(menu.id)
-    ctx.editMessageText(menu.text)
+    ctx.editMessageText(text || menu.text)
+  },
+
+  show: function (ctx, menu, text=null) {
+    return ctx.reply(text || menu.text,
+      { parse_mode: "HTML", reply_markup: m.menus.adminFiles })
   }
 }
 
@@ -59,7 +65,7 @@ m.menus.users = new global.ext.menu.Menu('users')
             (ctx) => {
               ctx.session.activeUser = user
               //
-              m.menus.replace(ctx, m.menus.editUser)
+              m.menus.show(ctx, m.menus.editUser)
               // return ctx.menu.nav('edit-user')
             })
           .row()
@@ -72,8 +78,7 @@ m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .submenu('📄 Files', 'edit-user-files').row()
   .back('↩')
 m.menus.editUser.text = "adsrf"
-m.menus.users
-  .register(m.menus.editUser)
+
 
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
@@ -103,7 +108,7 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
 
-
+global.bot.use(m.menus.editUser)
 global.bot.use(m.menus.users)
 
 
@@ -123,23 +128,16 @@ m.commands.showFiles = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return ctx.reply(
-      m.menus.adminFiles.text,
-      { parse_mode: "HTML", reply_markup: m.menus.adminFiles })
+    return m.menus.show(ctx, m.menus.adminFiles)
   else
-    return ctx.reply(
-      m.menus.userFiles.text,
-      { parse_mode: "HTML", reply_markup: m.menus.userFiles })
+    return m.menus.show(ctx, m.menus.userFiles)
 }
 
 m.commands.showUsers = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return ctx.reply(
-      "👤 <b>All <u>users</u></b>\n" +
-      " ● <code>Change access to files</code> 📄",
-      { parse_mode: "HTML", reply_markup: m.menus.users })
+    return m.menus.show(ctx, m.menus.users)
   else
     return ctx.reply('error')
 }

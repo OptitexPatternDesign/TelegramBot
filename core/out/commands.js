@@ -65,7 +65,7 @@ m.menus.users = new global.ext.menu.Menu('users')
             (ctx) => {
               ctx.session.activeUser = user
               //
-              m.menus.show(ctx, m.menus.editUser)
+              m.menus.replace(ctx, m.menus.editUser)
               // return ctx.menu.nav('edit-user')
             })
           .row()

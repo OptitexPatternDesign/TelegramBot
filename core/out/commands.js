@@ -113,7 +113,8 @@ m.commands.showUsers = async function (ctx) {
   //
   if (users.isAdmin(user))
     return ctx.reply(
-      "Users",
+      "👤 <b>All <u>users</u>:</b>\n" +
+      " ● <code>Edit access to files</code> 📄",
       { parse_mode: "HTML", reply_markup: m.menus.users })
   else
     return ctx.reply('error')

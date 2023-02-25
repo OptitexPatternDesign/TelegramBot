@@ -24,14 +24,13 @@ m.add = async function (file, title, description) {
 
 m.toggle = async function (user, file) {
   const files = user.fragment('files')
-  console.log(files)
-  if (m.status(user, file)) {
+  if (await m.status(user, file)) {
     console.log("delete", file)
-    await files.set({[file.key]: '-'})
+    await files.set({[file.key]: m.fileNotExist})
     return false;
   } else {
     console.log("add", file)
-    await files.set({[file.key]: '+'})
+    await files.set({[file.key]: m.fileExist})
     return true
   }
 }

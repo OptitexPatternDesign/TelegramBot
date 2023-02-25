@@ -27,7 +27,7 @@ const add = exports.add = async function (who) {
 }
 
 const name = exports.name = function (user) {
-  return user.props.firstName + user.props.lastName && ` ${user.props.lastName}`
+  return user.props.firstName + (user.props.lastName && ` ${user.props.lastName}`)
 }
 
 const username = exports.username = function (user) {

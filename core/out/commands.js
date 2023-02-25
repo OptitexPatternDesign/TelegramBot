@@ -147,9 +147,9 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
 global.bot.use(menus.adminFiles)
 // global.bot.use(menus. userFiles)
 
-global.bot.use(menus.users)
+console.log(global.bot.use(menus.users))
 
-global.bot.use(menus.editUser)
+console.log(global.bot.use(menus.editUser))
 global.bot.use(menus.editUserFiles)
 
 

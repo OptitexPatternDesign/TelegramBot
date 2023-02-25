@@ -136,7 +136,7 @@ global.bot.use(menus. userFiles)
 
 global.bot.use(menus.users)
 
-global.bot.use(menus.editUser)
+global.bot.use(menus.editUser, 'users')
 global.bot.use(menus.editUserFiles)
 
 

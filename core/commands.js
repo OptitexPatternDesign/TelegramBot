@@ -15,7 +15,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(`📄 ${file.props.title.padStart(40, ' ')}`, (ctx) => {
+        .text(`📄 <code>${file.props.title.padStart(40, ' ')}</code>`, (ctx) => {
           ctx.replyWithDocument(file.props.id, {
             caption:
               `<b>${file.props.title}</b>\n` +
@@ -32,7 +32,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .text('Add new file', async ctx => {
     await cmdAddFile(ctx)
   })
-  .text('Back')
+  .text('Back ↩')
 const menuUserFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {

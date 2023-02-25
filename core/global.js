@@ -1,27 +1,29 @@
+const m = exports
+
 const telegram = exports.telegram = require('grammy')
 const server   = exports.server   = require('express')
 
-const ext = exports.ext = {
+m.ext = {
   menu: require("@grammyjs/menu")
 }
 
-const config = exports.config = {
+m.config = {
     port: process.env.BOT_PORT || 3000,
     // telegram
     token: process.env.BOT_TOKEN || '',
     web  : process.env.BOT_URL   || ''
 }
 
-const bot = exports.bot = new telegram.Bot(config.token)
-const app = exports.app = new server()
+m.bot = new telegram.Bot(m.config.token)
+m.app = new server()
 //
 process.env.CYCLIC_DB = 'orchid-earthworm-wigCyclicDB'
-const db = exports.db  = require("@cyclic.sh/dynamodb")
-const tables = exports.tables = {
-    users : db.collection('users'),
-    files : db.collection('files'),
-    tokens: db.collection('tokens'),
+m.db = require("@cyclic.sh/dynamodb")
+m.tables = {
+    users : m.db.collection('users'),
+    files : m.db.collection('files'),
+    tokens: m.db.collection('tokens'),
 }
 
-const actions = exports.actions = {
+m.actions = {
 }

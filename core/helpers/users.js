@@ -1,10 +1,10 @@
+const m = exports
+//
 const global = require("./../global")
 
 
 const typeUser  = exports.user  = 'user'
 const typeAdmin = exports.admin = 'admin'
-
-const m = exports
 
 m.check = async function (who) {
   let user = await global.tables.users.get(who.id.toString())

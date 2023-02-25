@@ -59,6 +59,7 @@ menus.users.register(menus.editUser)
 menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
     console.log(ctx.session)
+    console.log(await users.fileStatus(user, 123))
     for (const file of await files.all())
       range
         .text(file.props.title,

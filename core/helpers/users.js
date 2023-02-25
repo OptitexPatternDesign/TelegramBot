@@ -53,26 +53,6 @@ m.files = async function (user) {
     .map(file => global.tables.files.get(file.key))
 }
 
-m.fileToggle = async function (user, file) {
-  const files = user.fragment('files')
-  console.log(files)
-  if (m.fileStatus(user, file)) {
-    console.log("delete", file)
-    await files.delete({[file.key]: ''})
-    return false;
-  } else {
-    console.log("add", file)
-    await files.set({[file.key]: ''})
-    return true
-  }
-}
-
-m.fileStatus = async function (user, file) {
-  const files = await user.fragment('files').get()
-  console.log(files, files.props)
-  console.log(files[file.key])
-}
-
 
 m.all = async function () {
   return Promise.all(

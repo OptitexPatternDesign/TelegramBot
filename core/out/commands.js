@@ -61,9 +61,9 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
     const user = ctx.session.activeUser
     for (const file of await files.all())
       range
-        .text(file.props.title + (users.fileStatus(user, file) ? '✅' : '❌'),
+        .text(file.props.title + (await files.status(user, file) ? '✅' : '❌'),
           async (ctx) => {
-            await users.fileToggle(user, file)
+            await files.toggle(user, file)
             console.log("after", await user.fragment("files").get())
             //
             // ctx.menu.update()

@@ -18,6 +18,31 @@ m.add = async function (file, title, description) {
   return record
 }
 
+
+m.toggle = async function (user, file) {
+  const files = user.fragment('files')
+  console.log(files)
+  if (m.fileStatus(user, file)) {
+    console.log("delete", file)
+    await files.set({[file.key]: '-'})
+    return false;
+  } else {
+    console.log("add", file)
+    await files.set({[file.key]: '+'})
+    return true
+  }
+}
+
+m.status = async function (user, file) {
+  for (const fragment of await user.fragment('files').get()) {
+    console.log(fragment.props)
+    if (fragment.props[file.key] && fragment.props[file.key] === '+')
+      return true
+  }
+  return false
+}
+
+
 m.all = async function () {
   return Promise.all(
     (await global.tables.files.list())

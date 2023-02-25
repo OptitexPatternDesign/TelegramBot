@@ -18,8 +18,9 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
         .text(`📄 ${file.props.title}`, (ctx) => {
           ctx.replyWithDocument(file.props.id, {
             caption:
-              file.props.title + '\n' +
-              file.props.description
+              `<b>${file.props.title}</b>\n` +
+              file.props.description,
+            parse_mode: "HTML"
           })
         })
         .row()
@@ -27,7 +28,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
     for (const file of await files.files())
       addFile(file)
   })
-  .text('<b>Add new file</b>', async ctx => {
+  .text('Add new file', async ctx => {
     await cmdAddFile(ctx)
   })
   .text('Back')
@@ -38,8 +39,8 @@ const menuUserFiles = new global.ext.menu.Menu('user-files')
         .text(`📄 ${file.props.title}`, (ctx) => {
           ctx.replyWithDocument(file.props.id, {
             caption:
-              file.props.title + '\n' +
-              file.props.description
+              `<b>${file.props.title}</b>\n` +
+              file.props.description,
           })
         })
         .row()
@@ -50,6 +51,7 @@ const menuUserFiles = new global.ext.menu.Menu('user-files')
   .text('Back')
 
 global.bot.use(menuAdminFiles)
+global.bot.use(menuUserFiles)
 
 async function filesAdmin(ctx) {
   return ctx.reply('Download core', {

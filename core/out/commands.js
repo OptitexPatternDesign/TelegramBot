@@ -6,7 +6,6 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
-const {menus} = require("./commands");
 
 
 // global.bot.api.setMym.commands([
@@ -18,7 +17,7 @@ const {menus} = require("./commands");
 
 m.menus = {
   replace: function (ctx, menu, text=null) {
-    ctx.menu.nav(menu.id)
+    ctx.editMessageReplyMarkup({ reply_markup: menu })
     ctx.editMessageText(text || menu.text)
   },
 
@@ -74,7 +73,7 @@ m.menus.users.text =
 
 m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .submenu('📄 Files', 'edit-user-files').row()
-  .back('↩')
+  .text('↩', (ctx) => m.menus.replace(ctx, this))
 m.menus.editUser.text = "adsrf"
 m.menus.users
   .register(m.menus.editUser)
@@ -106,7 +105,7 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
-
+global.bot.use(m.menus.editUser)
 global.bot.use(m.menus.users)
 
 

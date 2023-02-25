@@ -58,7 +58,7 @@ m.fileToggle = async function (user, file) {
 }
 
 m.fileStatus = async function (user, file) {
-  return (await user.fragment('files').get())
+  // return (await user.fragment('files').get())
 }
 
 

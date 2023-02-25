@@ -24,7 +24,9 @@ async function sendFile(ctx, file) {
 }
 
 async function editUser(ctx, user) {
+  console.log(ctx)
   ctx.activeUser = user
+  console.log(ctx)
   await ctx.reply(
     "",
     { parse_mode: "HTML", reply_markup: menus.user })
@@ -135,7 +137,10 @@ global.bot.use(menus.adminFiles)
 global.bot.use(menus. userFiles)
 
 global.bot.use(menus.users)
+
 global.bot.use(menus.user)
+global.bot.use(menus.userFiles)
+
 
 // core
 global.bot.command('show_files', commands.showFiles)

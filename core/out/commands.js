@@ -29,6 +29,7 @@ m.menus = {
   }
 }
 
+// +++++++++++++++
 m.menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
@@ -45,6 +46,7 @@ m.menus.adminFiles.text = (ctx) =>
   " ● <code>Edit file</code> 📄\n" +
   " ● <code>Add new file</code> 📄\n"
 
+// ++++++++++++++
 m.menus.userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
     const user = await users.check(ctx.from)
@@ -59,6 +61,7 @@ m.menus.userFiles.text = (ctx) =>
   "📄 <b>Your accessible <u>files</u></b>\n" +
   " ● <code>Click on your file, َAnd pay attention to description!</code>\n"
 
+// ++++++++++
 m.menus.users = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
@@ -78,12 +81,14 @@ m.menus.users.text = (ctx) =>
   "👤 <b>All <u>users</u></b>\n" +
   " ● <code>Change access to files</code> 📄"
 
+// +++++++++++++
 m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .text('📄 Files',
     (ctx) => m.menus
       .replace(ctx,
         m.menus.editUserFiles,
-        m.menus.editUserFiles.text(ctx))).row()
+        m.menus.editUserFiles.text(ctx)))
+  .row()
   .text('↩',
     (ctx) => m.menus
       .replace(ctx,
@@ -96,6 +101,7 @@ m.menus.editUser.text = (ctx) =>
   `<b>You are editing '${users.name(ctx.session.activeUser)}'</b><br>` +
   ` ⚠️ <code>Any change will apply!</code>`
 
+// ++++++++++++++++++
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
     const user = ctx.session.activeUser
@@ -121,10 +127,14 @@ m.menus
 m.menus.editUserFiles.text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
 
+// +++++++++++++
 m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
-  .text('Download').row()
-  .text('📄 Document').text('📝️ Title').text('📝️ Description').row()
+  .text('Download')
+  .row()
+  .text('📄 Document').text('📝️ Title').text('📝️ Description')
+  .row()
   .text('❌ Delete')
+  .row()
   .back('↩')
 
 global.bot.use(m.menus.adminFiles)
@@ -149,16 +159,25 @@ m.commands.showFiles = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return m.menus.show(ctx, m.menus.adminFiles)
+    return m
+      .menus.show(ctx,
+        m.menus.adminFiles,
+        m.menus.adminFiles.text(ctx))
   else
-    return m.menus.show(ctx, m.menus.userFiles)
+    return m
+      .menus.show(ctx,
+        m.menus.userFiles,
+        m.menus.userFiles.text(ctx))
 }
 
 m.commands.showUsers = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return m.menus.show(ctx, m.menus.users)
+    return m
+      .menus.show(ctx,
+        m.menus.users,
+        m.menus.users.text(ctx))
   else
     return ctx.reply('error')
 }

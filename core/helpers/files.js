@@ -3,6 +3,9 @@ const m = exports
 const global = require("./../global")
 
 
+m.fileExist    = '+'
+m.fileNotExist = '-'
+
 m.add = async function (file, title, description) {
   const record = await global.tables.files.set(file.document.file_unique_id, {
            id: file.document.file_id,
@@ -22,7 +25,7 @@ m.add = async function (file, title, description) {
 m.toggle = async function (user, file) {
   const files = user.fragment('files')
   console.log(files)
-  if (m.fileStatus(user, file)) {
+  if (m.status(user, file)) {
     console.log("delete", file)
     await files.set({[file.key]: '-'})
     return false;
@@ -35,8 +38,8 @@ m.toggle = async function (user, file) {
 
 m.status = async function (user, file) {
   for (const fragment of await user.fragment('files').get()) {
-    console.log('props', fragment.props)
-    if (fragment.props[file.key] && fragment.props[file.key] === '+')
+    console.log('props', fragment.props, fragment.props[file.key])
+    if (fragment.props[file.key] && fragment.props[file.key] === m.fileExist)
       return true
   }
   return false

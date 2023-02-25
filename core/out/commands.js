@@ -64,6 +64,7 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
         .text(file.props.title + (users.fileStatus(user, file) ? '✅' : '❌'),
           (ctx) => {
             users.fileToggle(user, file)
+            console.log("after", user.fragment("files").get())
             //
             // ctx.menu.update()
           })

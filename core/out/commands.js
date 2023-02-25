@@ -120,13 +120,13 @@ menus.users = new global.ext.menu.Menu('users')
               //
               await ctx.reply(
                 "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.user})
+                {parse_mode: "HTML", reply_markup: menus.userdf})
             })
           .row()
   })
   .back('↩')
 
-menus.user = new global.ext.menu.Menu('user-filesd')
+menus.userdf = new global.ext.menu.Menu('user-filesd')
   // .text('📄 Files', async (ctx) => {
   //   console.log(ctx)
   // })
@@ -147,8 +147,7 @@ global.bot.use(menus.adminFiles)
 
 global.bot.use(menus.users)
 
-global.bot.use(menus.user)
-global.bot.use(menus.user)
+global.bot.use(menus.userdf)
 global.bot.use(menus.userFiles)
 
 

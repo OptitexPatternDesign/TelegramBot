@@ -43,7 +43,8 @@ menus.users = new global.ext.menu.Menu('users')
         range
           .text(users.name(user),
             (ctx) => {
-              ctx.session.activeUser = user
+            console.log(ctx.session)
+              // ctx.session.activeUser = user
               //
               ctx.menu.nav('edit-user')
             })

@@ -47,13 +47,6 @@ m.isAdmin = function (user) {
 }
 
 
-m.files = async function (user) {
-  return (await user.fragment('files')
-    .list())
-    .map(file => global.tables.files.get(file.key))
-}
-
-
 m.all = async function () {
   return Promise.all(
     (await global.tables.users.list())

@@ -22,6 +22,10 @@ m.add = async function (file, title, description) {
 }
 
 
+m.user = async function (user) {
+  return user.fragment('files').list()
+}
+
 m.userToggle = async function (user, file) {
   const contain = await m.userContain(user, file)
   //

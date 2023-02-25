@@ -4,6 +4,7 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
+const {session} = require("grammy");
 
 
 global.bot.api.setMyCommands([
@@ -97,7 +98,7 @@ menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .text('📄 Add new file', commands.addFile).row()
   .back('↩')
 
-menus.userFiles = new global.ext.menu.Menu('admin-files')
+menus.userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
@@ -113,7 +114,10 @@ menus.users = new global.ext.menu.Menu('users')
       if (users.isUser(user))
         range
           .text(users.name(user),
-            (ctx) => editUser(ctx, user))
+            (ctx) => {
+            console.log(ctx.session)
+              ctx.session.activeUser = user
+            })
           .row()
   })
   .back('↩')

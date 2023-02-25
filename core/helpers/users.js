@@ -69,7 +69,7 @@ m.fileToggle = async function (user, file) {
 
 m.fileStatus = async function (user, file) {
   const files = await user.fragment('files').get()
-  console.log(files)
+  console.log(files.props[file.key])
 }
 
 

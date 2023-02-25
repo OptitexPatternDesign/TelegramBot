@@ -8,11 +8,11 @@ const {session} = require("grammy");
 const {telegram} = require("../global");
 
 
-global.bot.api.setMyCommands([
-  {command: "start", description: "Begin the robot"},
-  {command: "show_files", description: "Show your core"},
-  {command: "show_users", description: "Show your core"},
-]).then();
+// global.bot.api.setMyCommands([
+//   {command: "start", description: "Begin the robot"},
+//   {command: "show_files", description: "Show your core"},
+//   {command: "show_users", description: "Show your core"},
+// ]).then();
 
 
 async function sendFile(ctx, file) {

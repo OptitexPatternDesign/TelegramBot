@@ -36,7 +36,7 @@ const menuUserFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(`📄 ${file.props.title}`, (ctx) => {
+        .text(`📄 ${file.props.title}                 `, (ctx) => {
           ctx.replyWithDocument(file.props.id, {
             caption:
               `<b>${file.props.title}</b>`

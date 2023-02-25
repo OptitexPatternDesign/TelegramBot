@@ -61,8 +61,12 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
     const user = ctx.session.activeUser
     for (const file of await files.all())
       range
-        .text(file.props.title + (users.fileStatus(user, file) ? ' has' : 'dont'),
-          (ctx) => sendFile(ctx, file))
+        .text(file.props.title + (users.fileStatus(user, file) ? '✅' : '❌'),
+          (ctx) => {
+            users.fileToggle(user, file)
+            //
+            ctx.menu.update()
+          })
         .row()
   })
   .back('↩')

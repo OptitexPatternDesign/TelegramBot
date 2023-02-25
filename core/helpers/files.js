@@ -22,25 +22,19 @@ m.add = async function (file, title, description) {
 }
 
 
-m.toggle = async function (user, file) {
-  const files = user.fragment('files')
-  if (await m.status(user, file)) {
-    console.log("delete", file)
-    await files.set({[file.key]: m.fileNotExist})
-    return false;
-  } else {
-    console.log("add", file)
-    await files.set({[file.key]: m.fileExist})
-    return true
-  }
+m.userToggle = async function (user, file) {
+  const contain = await m.userContain(user, file)
+  //
+  await user.fragment('files').set({
+    [file.key]: contain? m.fileNotExist : m.fileExist  // reverse file status
+  })
+  return !contain
 }
 
-m.status = async function (user, file) {
-  for (const fragment of await user.fragment('files').get()) {
-    console.log('props', fragment.props, fragment.props[file.key])
-    if (fragment.props[file.key] && fragment.props[file.key] === m.fileExist)
+m.userContain = async function (user, file) {
+  for (const fragment of await user.fragment('files').get())
+    if (fragment.props[file.key] === m.fileExist)
       return true
-  }
   return false
 }
 

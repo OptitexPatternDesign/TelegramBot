@@ -44,7 +44,6 @@ menus.users = new global.ext.menu.Menu('users')
           .text(users.name(user),
             (ctx) => {
               ctx.session.activeUser = user
-              console.log(ctx.session)
               //
               ctx.menu.nav('edit-user')
             })
@@ -61,12 +60,11 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
     const user = ctx.session.activeUser
     for (const file of await files.all())
       range
-        .text(file.props.title + (await files.status(user, file) ? '✅' : '❌'),
+        .text(file.props.title + (await files.userContain(user, file) ? '✅' : '❌'),
           async (ctx) => {
-            await files.toggle(user, file)
-            console.log("after", await user.fragment("files").get())
+            await files.userToggle(user, file)
             //
-            // ctx.menu.update()
+            ctx.menu.update()
           })
         .row()
   })

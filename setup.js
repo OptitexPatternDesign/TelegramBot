@@ -7,7 +7,8 @@ const users = require("./core/helpers/users")
 
 global.bot.use(global.telegram.session({
   initial: () => ({
-    activeUser: null
+    activeUser: null,
+    activeFile: null
   })
 }));
 

@@ -15,7 +15,11 @@ const files = require("../helpers/files")
 // ]).then();
 
 
-m.menus = {}
+m.menus = {
+  replace: function (ctx, menu) {
+    console.log(ctx.message)
+  }
+}
 
 m.menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
@@ -26,6 +30,10 @@ m.menus.adminFiles = new global.ext.menu.Menu('admin-files')
         .row()
   })
   .text('📄 Add new file', (ctx) => m.commands.addFile(ctx)).row()
+m.menus.adminFiles.text =
+  "📄 <b>Server <u>files</u></b>\n" +
+  " ● <code>Edit file</code> 📄\n" +
+  " ● <code>Add new file</code> 📄\n"
 
 m.menus.userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
@@ -37,6 +45,9 @@ m.menus.userFiles = new global.ext.menu.Menu('user-files')
           (ctx) => sendFile(ctx, file))
         .row()
   })
+m.menus.userFiles.text =
+  "📄 <b>Your accessible <u>files</u></b>\n" +
+  " ● <code>Click on your file, َAnd pay attention to description!</code>\n"
 
 m.menus.users = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
@@ -47,15 +58,21 @@ m.menus.users = new global.ext.menu.Menu('users')
             (ctx) => {
               ctx.session.activeUser = user
               //
-              console.log(ctx)
-              ctx.menu.nav('edit-user')
+              m.menus.replace(ctx, m.menus.editUser)
+              // return ctx.menu.nav('edit-user')
             })
           .row()
   })
+m.menus.users.text =
+  "👤 <b>All <u>users</u></b>\n" +
+  " ● <code>Change access to files</code> 📄"
 
 m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .submenu('📄 Files', 'edit-user-files').row()
   .back('↩')
+m.menus.editUser.text = "adsrf"
+m.menus.users
+  .register(m.menus.editUser)
 
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
@@ -72,12 +89,19 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
         .row()
   })
   .back('↩')
+m.menus.editUserFiles.text = "adsf"
+m.menus.editUser
+  .register(m.menus.editUserFiles)
 
-m.menus.users.register(m.menus.editUser)
-m.menus.editUser.register(m.menus.editUserFiles)
+m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
+  .text('Download').row()
+  .text('📄 Document').text('📝️ Title').text('📝️ Description').row()
+  .text('❌ Delete')
+  .back('↩')
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
+
 
 global.bot.use(m.menus.users)
 
@@ -99,14 +123,11 @@ m.commands.showFiles = async function (ctx) {
   //
   if (users.isAdmin(user))
     return ctx.reply(
-      "📄 <b>Server <u>files</u></b>\n" +
-      " ● <code>Edit file</code> 📄\n" +
-      " ● <code>Add new file</code> 📄\n",
+      m.menus.adminFiles.text,
       { parse_mode: "HTML", reply_markup: m.menus.adminFiles })
   else
     return ctx.reply(
-      "📄 <b>Your accessible <u>files</u></b>\n" +
-      " ● <code>Click on your file, َAnd pay attention to description</code>\n" +
+      m.menus.userFiles.text,
       { parse_mode: "HTML", reply_markup: m.menus.userFiles })
 }
 
@@ -132,14 +153,14 @@ m.commands.addFile = async function (ctx) {
     .add(ctx.from, 'document')
     .then(async file => {
       await ctx.reply(
-        "📝️ <b>Send <u>file title</u></b>\n" +
+        "📝️ <b>Send <u>title</u></b>\n" +
         " ● <code>Make sure it's correct!</code>",
         { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'text')
     .then(async title => {
       await ctx.reply(
-        "📝️ <b>Send <u>file Description</u></b>\n" +
+        "📝️ <b>Send <u>description</u></b>\n" +
         " ● <code>Make sure it's correct!</code>",
         { parse_mode: "HTML" })
   actions

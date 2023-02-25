@@ -58,7 +58,7 @@ m.fileToggle = async function (user, file) {
   console.log(files)
   if (m.fileStatus(user, file)) {
     console.log("delete", file)
-    delete files.props[file.key]
+    await files.delete({[file.key]: ''})
     return false;
   } else {
     console.log("add", file)

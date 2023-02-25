@@ -114,9 +114,12 @@ menus.users = new global.ext.menu.Menu('users')
       if (users.isUser(user))
         range
           .text(users.name(user),
-            (ctx) => {
-            console.log(ctx.session)
+            async (ctx) => {
               ctx.session.activeUser = user
+              //
+              await ctx.reply(
+                "Edit user",
+                {parse_mode: "HTML", reply_markup: menus.user})
             })
           .row()
   })

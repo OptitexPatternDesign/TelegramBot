@@ -115,6 +115,7 @@ menus.users = new global.ext.menu.Menu('users')
         range
           .text(users.name(user),
             async (ctx) => {
+            console.log(user, "clicked")
               ctx.session.activeUser = user
               //
               await ctx.reply(

@@ -143,10 +143,11 @@ menus.userFiles = new global.ext.menu.Menu('user-files')
   .back('↩')
 
 global.bot.use(menus.adminFiles)
-global.bot.use(menus. userFiles)
+// global.bot.use(menus. userFiles)
 
 global.bot.use(menus.users)
 
+global.bot.use(menus.user)
 global.bot.use(menus.user)
 global.bot.use(menus.userFiles)
 

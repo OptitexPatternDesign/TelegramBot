@@ -4,7 +4,6 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
-const {telegram} = require("../global");
 
 
 global.bot.api.setMyCommands([
@@ -22,7 +21,7 @@ menus.adminFiles = new global.ext.menu.Menu('admin-files')
         .text(file.props.title, (ctx) => sendFile(ctx, file))
         .row()
   })
-  .text('📄 Add new file', cmdAddFile).row()
+  .text('📄 Add new file', commands.addFile).row()
   .back('↩')
 
 menus.userFiles = new global.ext.menu.Menu('admin-files')

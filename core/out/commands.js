@@ -17,16 +17,15 @@ const files = require("../helpers/files")
 
 m.menus = {
   replace: function (ctx, menu, text=null) {
-    ctx.reply(text || menu.text, {
-      reply_markup: menu,
-      parse_mode: "HTML"
-    })
-    ctx.deleteMessage()
+    this.show(ctx, menu, text)
+      .then(_ => ctx.deleteMessage())
   },
 
   show: function (ctx, menu, text=null) {
-    return ctx.reply(text || menu.text,
-      { parse_mode: "HTML", reply_markup: menu })
+    return ctx
+      .reply(
+        text || menu.text,
+        { parse_mode: "HTML", reply_markup: menu })
   }
 }
 

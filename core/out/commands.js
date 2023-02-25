@@ -12,42 +12,6 @@ global.bot.api.setMyCommands([
   {command: "show_users", description: "Show your core"},
 ]).then();
 
-let menus = exports.menus = {}
-
-menus.adminFiles = new global.ext.menu.Menu('admin-files')
-  .dynamic(async (ctx, range) => {
-    for (const file of await files.all())
-      range
-        .text(file.props.title, (ctx) => sendFile(ctx, file))
-        .row()
-  })
-  .text('📄 Add new file', commands.addFile).row()
-  .back('↩')
-
-menus.userFiles = new global.ext.menu.Menu('admin-files')
-  .dynamic(async (ctx, range) => {
-    for (const file of await files.all())
-      range
-        .text(file.props.title, (ctx) => sendFile(ctx, file))
-        .row()
-  })
-  .back('↩')
-
-menus.users = new global.ext.menu.Menu('users')
-  .dynamic(async (ctx, range) => {
-    for (const user of await users.all())
-      console.log(user)
-  })
-  .back('↩')
-
-menus.user = new global.ext.menu.Menu('user')
-  .text('📄 Files', async ctx => {})
-
-global.bot.use(menus.adminFiles)
-global.bot.use(menus. userFiles)
-
-global.bot.use(menus.users)
-global.bot.use(menus.user)
 
 async function sendFile(ctx, file) {
   await ctx.replyWithDocument(file.props.id, {
@@ -113,6 +77,42 @@ commands.addFile = async function (ctx) {
     })})})
 }
 
+let menus = exports.menus = {}
+
+menus.adminFiles = new global.ext.menu.Menu('admin-files')
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+        .text(file.props.title, (ctx) => sendFile(ctx, file))
+        .row()
+  })
+  .text('📄 Add new file', commands.addFile).row()
+  .back('↩')
+
+menus.userFiles = new global.ext.menu.Menu('admin-files')
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+        .text(file.props.title, (ctx) => sendFile(ctx, file))
+        .row()
+  })
+  .back('↩')
+
+menus.users = new global.ext.menu.Menu('users')
+  .dynamic(async (ctx, range) => {
+    for (const user of await users.all())
+      console.log(user)
+  })
+  .back('↩')
+
+menus.user = new global.ext.menu.Menu('user')
+  .text('📄 Files', async ctx => {})
+
+global.bot.use(menus.adminFiles)
+global.bot.use(menus. userFiles)
+
+global.bot.use(menus.users)
+global.bot.use(menus.user)
 
 // core
 global.bot.command('show_files', commands.showFiles)

@@ -18,8 +18,8 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
         .text(`📄 ${file.props.title}`, (ctx) => {
           ctx.replyWithDocument(file.props.id, {
             caption:
-              `<b>${file.props.title}</b>\n` +
-              file.props.description,
+              `<b>${file.props.title}</b>`
+              `\n\n${file.props.description}`,
             parse_mode: "HTML"
           })
         })
@@ -39,8 +39,9 @@ const menuUserFiles = new global.ext.menu.Menu('user-files')
         .text(`📄 ${file.props.title}`, (ctx) => {
           ctx.replyWithDocument(file.props.id, {
             caption:
-              `<b>${file.props.title}</b>\n` +
-              file.props.description,
+              `<b>${file.props.title}</b>`
+              `\n\n${file.props.description}`,
+            parse_mode: "HTML"
           })
         })
         .row()

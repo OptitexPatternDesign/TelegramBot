@@ -49,6 +49,7 @@ commands.showFiles = async function (ctx) {
 }
 
 commands.showUsers = async function (ctx) {
+  console.log("asdf", menus.editUser)
   const user = await users.check(ctx.from)
   if (users.isAdmin(user))
     return ctx.reply(

@@ -6,6 +6,7 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
+const {menus} = require("./commands");
 
 
 // global.bot.api.setMym.commands([
@@ -18,7 +19,8 @@ const files = require("../helpers/files")
 m.menus = {
   replace: function (ctx, menu, text=null) {
     ctx.menu.nav(menu.id)
-    ctx.editMessageText(text || menu.text, { parse_mode: "HTML" })
+    if (text)
+      ctx.editMessageText(text || menu.text, { parse_mode: "HTML" })
   },
 
   show: function (ctx, menu, text=null) {
@@ -35,8 +37,10 @@ m.menus.adminFiles = new global.ext.menu.Menu('admin-files')
           (ctx) => sendFile(ctx, file))
         .row()
   })
-  .text('📄 Add new file', (ctx) => m.commands.addFile(ctx)).row()
-m.menus.adminFiles.text =
+  .text('📄 Add new file',
+    (ctx) => m.commands
+      .addFile(ctx))
+m.menus.adminFiles.text = (ctx) =>
   "📄 <b>Server <u>files</u></b>\n" +
   " ● <code>Edit file</code> 📄\n" +
   " ● <code>Add new file</code> 📄\n"
@@ -51,7 +55,7 @@ m.menus.userFiles = new global.ext.menu.Menu('user-files')
           (ctx) => sendFile(ctx, file))
         .row()
   })
-m.menus.userFiles.text =
+m.menus.userFiles.text = (ctx) =>
   "📄 <b>Your accessible <u>files</u></b>\n" +
   " ● <code>Click on your file, َAnd pay attention to description!</code>\n"
 
@@ -66,12 +70,11 @@ m.menus.users = new global.ext.menu.Menu('users')
             m.menus
               .replace(ctx,
                 m.menus.editUser,
-                m.menus.editUser.text
-                  .replace('{name}', users.name(ctx.session.activeUser)))
+                m.menus.editUser.text(ctx))
           })
           .row()
   })
-m.menus.users.text =
+m.menus.users.text = (ctx) =>
   "👤 <b>All <u>users</u></b>\n" +
   " ● <code>Change access to files</code> 📄"
 
@@ -80,18 +83,18 @@ m.menus.editUser = new global.ext.menu.Menu('edit-user')
     (ctx) => m.menus
       .replace(ctx,
         m.menus.editUserFiles,
-        m.menus.editUserFiles.text
-          .replace('{name}', users.name(ctx.session.activeUser)))).row()
+        m.menus.editUserFiles.text(ctx))).row()
   .text('↩',
     (ctx) => m.menus
       .replace(ctx,
-        m.menus.users))
-//
-m.menus.editUser.text =
-  "<b>You are editing '{name}'</b>\n" +
-  " ⚠️ <code>Any change will apply!</code>"
+        m.menus.users,
+        m.menus.users.text(ctx)))
 m.menus
   .users.register(m.menus.editUser)
+//
+m.menus.editUser.text = (ctx) =>
+  `<b>You are editing '${users.name(ctx.session.activeUser)}'</b><br>` +
+  ` ⚠️ <code>Any change will apply!</code>`
 
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
@@ -110,12 +113,13 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .text('↩',
     (ctx) => m.menus
       .replace(ctx,
-        m.menus.editUser))
-//
-m.menus.editUserFiles.text =
-  "<b>Change {name} access to files</b>"
+        m.menus.editUser,
+        m.menus.editUser.text(ctx)))
 m.menus
   .editUser.register(m.menus.editUserFiles)
+//
+m.menus.editUserFiles.text = (ctx) =>
+  `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
 
 m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
   .text('Download').row()

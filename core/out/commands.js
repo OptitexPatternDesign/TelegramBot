@@ -5,6 +5,7 @@ const actions = require("../actions")
 const users = require("../helpers/users")
 const files = require("../helpers/files")
 const {session} = require("grammy");
+const {telegram} = require("../global");
 
 
 global.bot.api.setMyCommands([
@@ -104,9 +105,7 @@ menus.users = new global.ext.menu.Menu('users')
       if (users.isUser(user))
         range
           .text(users.name(user),
-            async (ctx) => {
-            console.log(ctx, "clicked")
-
+            async (_) => {
               ctx.reply(
                 "Edit user",
                 {parse_mode: "HTML", reply_markup: menus.editUser}).then(r => r)

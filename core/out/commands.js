@@ -43,7 +43,9 @@ menus.users = new global.ext.menu.Menu('users')
         range
           .text(users.name(user),
             (ctx) => {
-              console.log(ctx.menu, ctx)
+              ctx.activeUser = user
+              ctx.session.activeUser = user
+              //
               ctx.menu.nav('edit-user')
             })
           .row()
@@ -52,8 +54,8 @@ menus.users = new global.ext.menu.Menu('users')
 
 menus.editUser = new global.ext.menu.Menu('edit-user')
   .text('📄 Files', async (ctx) => {
-    console.log(ctx)
-  })
+    console.log('files', ctx.session.activeUser, ctx.activeUser)
+  }).row()
   .back('↩')
 menus.users.register(menus.editUser)
 

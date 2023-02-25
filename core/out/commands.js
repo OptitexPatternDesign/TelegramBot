@@ -50,13 +50,9 @@ commands.showFiles = async function (ctx) {
 
 commands.showUsers = async function (ctx) {
   console.log("asdf", deditUser)
-  const user = await users.check(ctx.from)
-  if (users.isAdmin(user))
-    return ctx.reply(
-      "Users",
-      { parse_mode: "HTML", reply_markup: deditUser })
-  else
-    return ctx.reply('error')
+  return ctx.reply(
+    "Users",
+    { parse_mode: "HTML", reply_markup: deditUser })
 }
 
 commands.addFile = async function (ctx) {

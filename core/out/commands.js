@@ -13,18 +13,12 @@ global.bot.api.setMyCommands([
 
 const adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
-    function addFile(file) {
-      range
-        .text(file.props.title, (ctx) => sendFile(ctx, file))
-        .row()
-    }
-
     for (const file of await files.files())
       range
         .text(file.props.title, (ctx) => sendFile(ctx, file))
         .row()
   })
-  .text('Add new file', cmdAddFile)
+  .text('📄 Add new file', cmdAddFile).row()
   .back('↩')
 
 

@@ -43,7 +43,7 @@ commands.showUsers = async function (ctx) {
   if (users.isAdmin(user))
     return ctx.reply(
       "Users",
-      { parse_mode: "HTML", reply_markup: menus.editUser })
+      { parse_mode: "HTML", reply_markup: menus.users })
   else
     return ctx.reply('error')
 }
@@ -106,13 +106,10 @@ menus.users = new global.ext.menu.Menu('users')
           .text(users.name(user),
             async (ctx) => {
             console.log(user, "clicked")
-              ctx.session.activeUser = user
-              //
-              console.log(menus.editUser)
-              console.log(menus)
+
               await ctx.reply(
                 "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.editUserFiles})
+                {parse_mode: "HTML", reply_markup: menus.editUser})
             })
           .row()
   })

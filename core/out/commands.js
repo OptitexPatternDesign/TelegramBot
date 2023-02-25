@@ -1,9 +1,9 @@
-const global = require("./global")
+const global = require("../global")
 
-const actions = require("./actions")
+const actions = require("../actions")
 
-const users = require("./helpers/users")
-const files = require("./helpers/files")
+const users = require("../helpers/users")
+const files = require("../helpers/files")
 
 
 global.bot.api.setMyCommands([
@@ -11,40 +11,21 @@ global.bot.api.setMyCommands([
   {command: "files", description: "Show your core"},
 ]).then();
 
-const menuAdminFiles = new global.ext.menu.Menu('admin-files')
+const adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(`file.props.title`, (ctx) => sendFile(ctx, file))
+        .text(file.props.title, (ctx) => sendFile(ctx, file))
         .row()
     }
+
     for (const file of await files.files())
-      addFile(file)
+      range
+        .text(file.props.title, (ctx) => sendFile(ctx, file))
+        .row()
   })
   .text('Add new file', cmdAddFile)
-  .text('↩')
-const menuUserFiles = new global.ext.menu.Menu('user-files')
-  .dynamic(async (ctx, range) => {
-    function addFile(file) {
-      range
-        .text(`📄 ${file.props.title.padStart(20, ' ')}`, (ctx) => {
-          ctx.replyWithDocument(file.props.id, {
-            caption:
-              `<b>${file.props.title}</b>\n` +
-              `\n` +
-              `${file.props.description}`,
-            parse_mode: "HTML"
-          })
-        })
-        .row()
-    }
-    for (const file of await files.files())
-      addFile(file)
-  })
-  .text('Back')
-
-global.bot.use(menuAdminFiles)
-global.bot.use(menuUserFiles)
+  .back('↩')
 
 
 async function sendFile(ctx, file) {
@@ -59,7 +40,7 @@ async function sendFile(ctx, file) {
 
 async function filesAdmin(ctx) {
   return ctx.reply('Download core', {
-    reply_markup: menuAdminFiles,
+    reply_markup: adminFiles,
     parse_mode: "HTML"
   })
 }
@@ -101,13 +82,9 @@ async function cmdAddFile(ctx) {
     })})})
 }
 
-async function cmdGetFile(ctx) {
-  console.log(ctx.query)
-}
 
 
 // core
 global.bot.command('files', cmdFiles)
 global.bot.command('add_file', cmdAddFile)
 global.bot.callbackQuery('add_file', cmdAddFile)
-global.bot.command('get_file_.*', cmdGetFile)

@@ -7,7 +7,7 @@ global.bot.command("start", (ctx) => {
   return ctx.reply('Welcome')
 })
 
-require('./core/commands')
+require('./core/out/commands')
 
 global.bot.on('message:document', (ctx) => {
   const action = actions.get(ctx.from)

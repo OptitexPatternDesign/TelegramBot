@@ -35,17 +35,14 @@ const username = exports.username = function (user) {
 }
 
 const isUser = exports.isUser = function (user) {
-  //
   return user.props.type === typeUser;
 }
 
 const isAdmin = exports.isAdmin = function (user) {
-  //
   return user.props.type === typeAdmin;
 }
 
 const files = exports.files = async function (user) {
-  //
   return (await user.fragment('files')
     .list())
     .map(file => global.tables.files.get(file.key))

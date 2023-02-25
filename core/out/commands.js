@@ -23,6 +23,13 @@ async function sendFile(ctx, file) {
   })
 }
 
+async function editUser(ctx, user) {
+  ctx.activeUser = user
+  await ctx.reply(
+    "",
+    { parse_mode: "HTML", reply_markup: menus.user })
+}
+
 
 let commands = exports.commands = {}
 
@@ -104,13 +111,25 @@ menus.users = new global.ext.menu.Menu('users')
       if (users.isUser(user))
         range
           .text(users.name(user),
-            (ctx) => null)
+            (ctx) => editUser(ctx, user))
           .row()
   })
   .back('↩')
 
 menus.user = new global.ext.menu.Menu('user')
-  .text('📄 Files', async ctx => {})
+  .text('📄 Files', async (ctx) => {
+    console.log(ctx)
+  })
+
+menus.userFiles = new global.ext.menu.Menu('user-files')
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+        .text(file.props.title,
+          (ctx) => sendFile(ctx, file))
+        .row()
+  })
+  .back('↩')
 
 global.bot.use(menus.adminFiles)
 global.bot.use(menus. userFiles)

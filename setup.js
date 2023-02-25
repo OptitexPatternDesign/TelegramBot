@@ -2,8 +2,11 @@ const global = require("./core/global")
 
 const actions = require("./core/actions")
 
+const users = require("./core/helpers/users")
 
-global.bot.command("start", (ctx) => {
+global.bot.command("start", async (ctx) => {
+  await users.check(ctx.from)
+  //
   return ctx.reply('Welcome')
 })
 

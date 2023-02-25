@@ -125,8 +125,11 @@ menus.users = new global.ext.menu.Menu('users')
   })
   .back('↩')
 
-menus.user = new global.ext.menu.Menu('user')
-
+menus.user = new global.ext.menu.Menu('dfa')
+  .text('📄 Files', async (ctx) => {
+    console.log(ctx)
+  })
+  .back('↩')
 
 menus.userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
@@ -140,9 +143,9 @@ menus.userFiles = new global.ext.menu.Menu('user-files')
 
 global.bot.use(menus.adminFiles)
 global.bot.use(menus. userFiles)
-//
+
 global.bot.use(menus.users)
-//
+
 global.bot.use(menus.user)
 global.bot.use(menus.userFiles)
 

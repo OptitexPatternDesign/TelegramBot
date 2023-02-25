@@ -43,24 +43,21 @@ menus.users = new global.ext.menu.Menu('users')
         range
           .text(users.name(user),
             (ctx) => {
-            console.log(ctx.session)
-              // ctx.session.activeUser = user
+              ctx.session.activeUser = user
               //
               ctx.menu.nav('edit-user')
             })
           .row()
   })
-  .back('↩')
 
 menus.editUser = new global.ext.menu.Menu('edit-user')
-  .text('📄 Files', async (ctx) => {
-    console.log('files', ctx.session.activeUser)
-  }).row()
+  .submenu('📄 Files', 'edit-user-files').row()
   .back('↩')
 menus.users.register(menus.editUser)
 
 menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
+    console.log(ctx, ctx.session)
     for (const file of await files.all())
       range
         .text(file.props.title,

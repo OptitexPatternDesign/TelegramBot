@@ -57,10 +57,12 @@ m.fileToggle = async function (user, file) {
   const files = user.fragment('files')
   console.log(files)
   if (m.fileStatus(user, file)) {
+    console.log("delete", file)
     delete files.props[file.key]
     return false;
   } else {
-    files.props[file.key] = 'Salam'
+    console.log("add", file)
+    await files.set({[file.key]: ''})
     return true
   }
 }

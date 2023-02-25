@@ -126,10 +126,10 @@ menus.users = new global.ext.menu.Menu('users')
   })
   .back('↩')
 
-menus.user = new global.ext.menu.Menu('dfa')
-  .text('📄 Files', async (ctx) => {
-    console.log(ctx)
-  })
+menus.user = new global.ext.menu.Menu('user-filesd')
+  // .text('📄 Files', async (ctx) => {
+  //   console.log(ctx)
+  // })
   .back('↩')
 
 menus.userFiles = new global.ext.menu.Menu('user-files')

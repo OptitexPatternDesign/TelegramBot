@@ -23,7 +23,14 @@ m.add = async function (file, title, description) {
 
 
 m.user = async function (user) {
-  return user.fragment('files').list()
+  let files = []
+  //
+  for (const fragment of await user.fragment('files').list())
+    for (const [file, status] of Object.entries(fragment.props))
+      if (status === m.fileExist)
+        files.push(await global.tables.files.get(file))
+  //
+  return files;
 }
 
 m.userToggle = async function (user, file) {

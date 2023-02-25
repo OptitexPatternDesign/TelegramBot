@@ -76,14 +76,22 @@ m.menus.users.text =
   " ● <code>Change access to files</code> 📄"
 
 m.menus.editUser = new global.ext.menu.Menu('edit-user')
-  .submenu('📄 Files', 'edit-user-files').row()
+  .text('📄 Files',
+    (ctx) => m.menus
+      .replace(ctx,
+        m.menus.editUserFiles,
+        m.menus.editUserFiles.text
+          .replace('{name}', users.name(ctx.session.activeUser)))).row()
   .text('↩',
-    (ctx) => m.menus.replace(ctx, m.menus.users))
+    (ctx) => m.menus
+      .replace(ctx,
+        m.menus.users))
+//
 m.menus.editUser.text =
   "<b>You are editing '{name}'</b>\n" +
   " ⚠️ <code>Any change will apply!</code>"
-m.menus.users
-  .register(m.menus.editUser)
+m.menus
+  .users.register(m.menus.editUser)
 
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
@@ -99,11 +107,15 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
           })
         .row()
   })
-  .back('↩')
+  .text('↩',
+    (ctx) => m.menus
+      .replace(ctx,
+        m.menus.editUser))
+//
 m.menus.editUserFiles.text =
-  "<b>Change {0} access to files</b>"
-m.menus.editUser
-  .register(m.menus.editUserFiles)
+  "<b>Change {name} access to files</b>"
+m.menus
+  .editUser.register(m.menus.editUserFiles)
 
 m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
   .text('Download').row()

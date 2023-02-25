@@ -118,11 +118,11 @@ menus.users = new global.ext.menu.Menu('users')
             console.log(user, "clicked")
               ctx.session.activeUser = user
               //
-              console.log(menus.user)
+              console.log(menus.editUser)
               console.log(menus)
               await ctx.reply(
                 "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.editUser})
+                {parse_mode: "HTML", reply_markup: menus.editUserFiles})
             })
           .row()
   })

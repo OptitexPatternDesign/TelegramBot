@@ -35,7 +35,7 @@ m.toggle = async function (user, file) {
 
 m.status = async function (user, file) {
   for (const fragment of await user.fragment('files').get()) {
-    console.log(fragment.props)
+    console.log('props', fragment.props)
     if (fragment.props[file.key] && fragment.props[file.key] === '+')
       return true
   }

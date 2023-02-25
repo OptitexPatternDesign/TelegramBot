@@ -104,7 +104,7 @@ menus.users = new global.ext.menu.Menu('users')
     for (const user of await users.all())
       if (users.isUser(user))
         range
-          .submenu(users.name(user), 'edit-user')
+          .text('asdf')
           .row()
   })
   .back('↩')
@@ -130,8 +130,8 @@ global.bot.use(menus. userFiles)
 
 global.bot.use(menus.users)
 
-global.bot.use(menus.editUser, 'users')
-global.bot.use(menus.editUserFiles, 'edit-user')
+global.bot.use(menus.editUser)
+global.bot.use(menus.editUserFiles)
 
 
 // core

@@ -59,7 +59,7 @@ global.bot.use(menuUserFiles)
 async function filesAdmin(ctx) {
   return ctx.reply('Download core', {
     reply_markup: menuAdminFiles,
-    parse_mode: "HTML"
+    parse_mode: "MarkdownV2"
   })
 }
 

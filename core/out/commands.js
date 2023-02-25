@@ -17,7 +17,7 @@ const files = require("../helpers/files")
 
 m.menus = {
   replace: function (ctx, menu) {
-    console.log(ctx.message)
+    console.log(ctx.update.message)
   }
 }
 

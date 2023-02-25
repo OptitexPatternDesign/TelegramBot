@@ -13,6 +13,70 @@ const files = require("../helpers/files")
 // ]).then();
 
 
+let menus = exports.menus = {}
+
+menus.adminFiles = new global.ext.menu.Menu('admin-files')
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+        .text(file.props.title,
+          (ctx) => sendFile(ctx, file))
+        .row()
+  })
+  .text('📄 Add new file', (ctx) => commands.addFile(ctx)).row()
+  .back('↩')
+
+menus.userFiles = new global.ext.menu.Menu('user-files')
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+        .text(file.props.title,
+          (ctx) => sendFile(ctx, file))
+        .row()
+  })
+  .back('↩')
+
+menus.users = new global.ext.menu.Menu('users')
+  .dynamic(async (ctx, range) => {
+    for (const user of await users.all())
+      if (users.isUser(user))
+        range
+          .text(users.name(user),
+            (ctx) => {
+              console.log(ctx.menu, ctx)
+              ctx.reply("asdfc", {
+                reply_markup: menus.editUser
+              })
+            })
+          .row()
+  })
+  .back('↩')
+
+menus.editUser = new global.ext.menu.Menu('edit-user')
+  .text('📄 Files', async (ctx) => {
+    console.log(ctx)
+  })
+  .back('↩')
+
+menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+        .text(file.props.title,
+          (ctx) => sendFile(ctx, file))
+        .row()
+  })
+  .back('↩')
+
+menus.users.register(menus.editUser)
+menus.editUser.register(menus.editUserFiles)
+
+global.bot.use(menus.adminFiles)
+global.bot.use(menus. userFiles)
+
+global.bot.use(menus.users)
+
+
 async function sendFile(ctx, file) {
   await ctx.replyWithDocument(file.props.id, {
     caption:
@@ -73,69 +137,6 @@ commands.addFile = async function (ctx) {
       await files.add(file.message, title.message, description.message)
     })})})
 }
-
-let menus = exports.menus = {}
-
-menus.adminFiles = new global.ext.menu.Menu('admin-files')
-  .dynamic(async (ctx, range) => {
-    for (const file of await files.all())
-      range
-        .text(file.props.title,
-          (ctx) => sendFile(ctx, file))
-        .row()
-  })
-  .text('📄 Add new file', commands.addFile).row()
-  .back('↩')
-
-menus.userFiles = new global.ext.menu.Menu('user-files')
-  .dynamic(async (ctx, range) => {
-    for (const file of await files.all())
-      range
-        .text(file.props.title,
-          (ctx) => sendFile(ctx, file))
-        .row()
-  })
-  .back('↩')
-
-menus.users = new global.ext.menu.Menu('users')
-  .dynamic(async (ctx, range) => {
-    for (const user of await users.all())
-      if (users.isUser(user))
-        range
-          .text(users.name(user),
-            (ctx) => {
-              console.log(ctx.menu, ctx)
-              ctx.reply("asdfc", {
-                reply_markup: menus.editUser
-              })
-            })
-          .row()
-  })
-  .back('↩')
-
-menus.editUser = new global.ext.menu.Menu('edit-user')
-  .text('📄 Files', async (ctx) => {
-    console.log(ctx)
-  })
-  .back('↩')
-
-menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
-  .dynamic(async (ctx, range) => {
-    for (const file of await files.all())
-      range
-        .text(file.props.title,
-          (ctx) => sendFile(ctx, file))
-        .row()
-  })
-  .back('↩')
-
-global.bot.use(menus.adminFiles)
-global.bot.use(menus. userFiles)
-
-global.bot.use(menus.users)
-
-global.bot.use(menus.editUser, 'users')
-global.bot.use(menus.editUserFiles)
 
 // core
 global.bot.command('show_files', commands.showFiles)

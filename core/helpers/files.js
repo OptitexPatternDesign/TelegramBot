@@ -17,7 +17,7 @@ const add = exports.add = async function (file, title, description) {
   return record
 }
 
-const files = exports.files = async function () {
+const all = exports.all = async function () {
   return Promise.all(
     (await global.tables.files.list())
       .results

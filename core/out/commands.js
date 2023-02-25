@@ -4,16 +4,20 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
+const {telegram} = require("../global");
 
 
 global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
-  {command: "files", description: "Show your core"},
+  {command: "show-files", description: "Show your core"},
+  {command: "show-users", description: "Show your core"},
 ]).then();
 
-const adminFiles = new global.ext.menu.Menu('admin-files')
+let menus = exports.menus = {}
+
+menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
-    for (const file of await files.files())
+    for (const file of await files.all())
       range
         .text(file.props.title, (ctx) => sendFile(ctx, file))
         .row()
@@ -21,8 +25,30 @@ const adminFiles = new global.ext.menu.Menu('admin-files')
   .text('📄 Add new file', cmdAddFile).row()
   .back('↩')
 
+menus.userFiles = new global.ext.menu.Menu('admin-files')
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+        .text(file.props.title, (ctx) => sendFile(ctx, file))
+        .row()
+  })
+  .back('↩')
 
-global.bot.use(adminFiles)
+menus.users = new global.ext.menu.Menu('users')
+  .dynamic(async (ctx, range) => {
+    for (const user of await users.all())
+      console.log(user)
+  })
+  .back('↩')
+
+menus.user = new global.ext.menu.Menu('user')
+  .text('📄 Files', async ctx => {})
+
+global.bot.use(menus.adminFiles)
+global.bot.use(menus. userFiles)
+
+global.bot.use(menus.users)
+global.bot.use(menus.user)
 
 async function sendFile(ctx, file) {
   await ctx.replyWithDocument(file.props.id, {
@@ -34,43 +60,53 @@ async function sendFile(ctx, file) {
   })
 }
 
-async function filesAdmin(ctx) {
-  return ctx.reply('Download core', {
-    reply_markup: adminFiles,
-    parse_mode: "HTML"
-  })
-}
 
-async function filesUser(ctx) {
-}
+let commands = exports.commands = {}
 
-
-async function cmdFiles(ctx) {
+commands.showFiles = async function (ctx) {
   const user = await users.check(ctx.from)
-  //
   if (users.isAdmin(user))
-    await filesAdmin(ctx)
+    return ctx.reply(
+      "Download core",
+      { parse_mode: "HTML", reply_markup: menus.adminFiles })
   else
-    await filesUser(ctx)
+    return ctx.reply(
+      "Download core",
+      { parse_mode: "HTML", reply_markup: menus.userFiles })
 }
 
-async function cmdAddFile(ctx) {
+commands.showUsers = async function (ctx) {
+  const user = await users.check(ctx.from)
+  if (users.isAdmin(user))
+    return ctx.reply(
+      "Users",
+      { parse_mode: "HTML", reply_markup: menus.users })
+  else
+    ctx.answerCallbackQuery({
+      text: "❌ You aren't admin!"
+    })
+}
+
+commands.addFile = async function (ctx) {
   await ctx.reply(
     "📄 <b>Send <u>document</u></b>\n" +
     " ● <code>Drag & drop your file</code>\n" +
-    " ● <code>Forward it</code>", { parse_mode: "HTML" })
+    " ● <code>Forward it</code>",
+    { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'document')
     .then(async file => {
       await ctx.reply(
         "📝️ <b>Send <u>file title</u></b>\n" +
-        " ● <code>Make sure it's correct!</code>", { parse_mode: "HTML" })
+        " ● <code>Make sure it's correct!</code>",
+        { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'text')
     .then(async title => {
       await ctx.reply(
         "📝️ <b>Send <u>file Description</u></b>\n" +
-        " ● <code>Make sure it's correct!</code>", { parse_mode: "HTML" })
+        " ● <code>Make sure it's correct!</code>",
+        { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'text')
     .then(async description => {
@@ -79,8 +115,8 @@ async function cmdAddFile(ctx) {
 }
 
 
-
 // core
-global.bot.command('files', cmdFiles)
-global.bot.command('add_file', cmdAddFile)
-global.bot.callbackQuery('add_file', cmdAddFile)
+global.bot.command('show_files', commands.showFiles)
+global.bot.command('show_users', commands.showUsers)
+//
+global.bot.command('add_file', commands.addFile)

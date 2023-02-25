@@ -42,3 +42,11 @@ const files = exports.files = async function (user) {
     .list())
     .map(file => global.tables.files.get(file.key))
 }
+
+const all = exports.all = async function () {
+  return Promise.all(
+    (await global.tables.users.list())
+      .results
+      .map(user => global.tables.users.get(user.key))
+  )
+}

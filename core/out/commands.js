@@ -32,7 +32,7 @@ m.menus.userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
     const user = await users.check(ctx.from)
     //
-    console.log(files.user(user))
+    console.log(await files.user(user))
       // range
       //   .text(file.props.title,
       //     (ctx) => sendFile(ctx, file))

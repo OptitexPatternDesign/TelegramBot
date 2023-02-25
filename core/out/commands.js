@@ -66,7 +66,8 @@ m.menus.users = new global.ext.menu.Menu('users')
             m.menus
               .replace(ctx,
                 m.menus.editUser,
-                m.menus.editUser.text.format(users.name(ctx.session.activeUser)))
+                m.menus.editUser.text
+                  .replace('{name}', users.name(ctx.session.activeUser)))
           })
           .row()
   })
@@ -79,7 +80,7 @@ m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .text('↩',
     (ctx) => m.menus.replace(ctx, m.menus.users))
 m.menus.editUser.text =
-  "<b>You are editing '{0}'</b>\n" +
+  "<b>You are editing '{name}'</b>\n" +
   " ⚠️ <code>Any change will apply!</code>"
 m.menus.users
   .register(m.menus.editUser)

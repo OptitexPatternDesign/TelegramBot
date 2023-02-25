@@ -28,6 +28,8 @@ const adminFiles = new global.ext.menu.Menu('admin-files')
   .back('↩')
 
 
+global.bot.use(adminFiles)
+
 async function sendFile(ctx, file) {
   await ctx.replyWithDocument(file.props.id, {
     caption:

@@ -1,3 +1,5 @@
+const m = exports
+//
 const global = require("../global")
 
 const actions = require("../actions")
@@ -6,16 +8,16 @@ const users = require("../helpers/users")
 const files = require("../helpers/files")
 
 
-// global.bot.api.setMyCommands([
+// global.bot.api.setMym.commands([
 //   {command: "start", description: "Begin the robot"},
 //   {command: "show_files", description: "Show your core"},
 //   {command: "show_users", description: "Show your core"},
 // ]).then();
 
 
-let menus = exports.menus = {}
+m.menus = {}
 
-menus.adminFiles = new global.ext.menu.Menu('admin-files')
+m.menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
@@ -23,12 +25,14 @@ menus.adminFiles = new global.ext.menu.Menu('admin-files')
           (ctx) => sendFile(ctx, file))
         .row()
   })
-  .text('📄 Add new file', (ctx) => commands.addFile(ctx)).row()
+  .text('📄 Add new file', (ctx) => m.commands.addFile(ctx)).row()
   .back('↩')
 
-menus.userFiles = new global.ext.menu.Menu('user-files')
+m.menus.userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
-    for (const file of await files.all())
+    const user = await users.check(ctx.from)
+    //
+    for (const file of await users.files(user))
       range
         .text(file.props.title,
           (ctx) => sendFile(ctx, file))
@@ -36,7 +40,7 @@ menus.userFiles = new global.ext.menu.Menu('user-files')
   })
   .back('↩')
 
-menus.users = new global.ext.menu.Menu('users')
+m.menus.users = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
       if (users.isUser(user))
@@ -50,17 +54,17 @@ menus.users = new global.ext.menu.Menu('users')
           .row()
   })
 
-menus.editUser = new global.ext.menu.Menu('edit-user')
+m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .submenu('📄 Files', 'edit-user-files').row()
   .back('↩')
-menus.users.register(menus.editUser)
 
-menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
+m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
     const user = ctx.session.activeUser
+    //
     for (const file of await files.all())
       range
-        .text(file.props.title + (await files.userContain(user, file) ? '✅' : '❌'),
+        .text(`${file.props.title} ${await files.userContain(user, file) ? '✅' : '❌'}`,
           async (ctx) => {
             await files.userToggle(user, file)
             //
@@ -69,12 +73,14 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
         .row()
   })
   .back('↩')
-menus.editUser.register(menus.editUserFiles)
 
-global.bot.use(menus.adminFiles)
-global.bot.use(menus. userFiles)
+m.menus.users.register(m.menus.editUser)
+m.menus.editUser.register(m.menus.editUserFiles)
 
-global.bot.use(menus.users)
+global.bot.use(m.menus.adminFiles)
+global.bot.use(m.menus. userFiles)
+
+global.bot.use(m.menus.users)
 
 
 async function sendFile(ctx, file) {
@@ -87,31 +93,33 @@ async function sendFile(ctx, file) {
   })
 }
 
-let commands = exports.commands = {}
+m.commands = {}
 
-commands.showFiles = async function (ctx) {
+m.commands.showFiles = async function (ctx) {
   const user = await users.check(ctx.from)
+  //
   if (users.isAdmin(user))
     return ctx.reply(
       "Download core",
-      { parse_mode: "HTML", reply_markup: menus.adminFiles })
+      { parse_mode: "HTML", reply_markup: m.menus.adminFiles })
   else
     return ctx.reply(
       "Download core",
-      { parse_mode: "HTML", reply_markup: menus.userFiles })
+      { parse_mode: "HTML", reply_markup: m.menus.userFiles })
 }
 
-commands.showUsers = async function (ctx) {
+m.commands.showUsers = async function (ctx) {
   const user = await users.check(ctx.from)
+  //
   if (users.isAdmin(user))
     return ctx.reply(
       "Users",
-      { parse_mode: "HTML", reply_markup: menus.users })
+      { parse_mode: "HTML", reply_markup: m.menus.users })
   else
     return ctx.reply('error')
 }
 
-commands.addFile = async function (ctx) {
+m.commands.addFile = async function (ctx) {
   await ctx.reply(
     "📄 <b>Send <u>document</u></b>\n" +
     " ● <code>Drag & drop your file</code>\n" +
@@ -139,7 +147,7 @@ commands.addFile = async function (ctx) {
 }
 
 // core
-global.bot.command('show_files', commands.showFiles)
-global.bot.command('show_users', commands.showUsers)
+global.bot.command('show_files', m.commands.showFiles)
+global.bot.command('show_users', m.commands.showUsers)
 //
-global.bot.command('add_file', commands.addFile)
+global.bot.command('add_file', m.commands.addFile)

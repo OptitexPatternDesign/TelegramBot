@@ -107,6 +107,7 @@ menus.users = new global.ext.menu.Menu('users')
           .text(users.name(user),
             (ctx) => {
               console.log(ctx.menu, ctx)
+              ctx.menu.nav('edit-user')
             })
           .row()
   })

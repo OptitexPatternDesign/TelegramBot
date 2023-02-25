@@ -53,7 +53,7 @@ commands.showUsers = async function (ctx) {
   if (users.isAdmin(user))
     return ctx.reply(
       "Users",
-      { parse_mode: "HTML", reply_markup: menus.users })
+      { parse_mode: "HTML", reply_markup: menus.editUser })
   else
     return ctx.reply('error')
 }

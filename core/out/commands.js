@@ -30,7 +30,7 @@ async function editUser(ctx, user) {
   console.log(ctx)
   await ctx.reply(
     "",
-    { parse_mode: "HTML", reply_markup: menus.user })
+    { parse_mode: "HTML", reply_markup: user })
 }
 
 
@@ -41,20 +41,20 @@ commands.showFiles = async function (ctx) {
   if (users.isAdmin(user))
     return ctx.reply(
       "Download core",
-      { parse_mode: "HTML", reply_markup: menus.adminFiles })
+      { parse_mode: "HTML", reply_markup: adminFiles })
   else
     return ctx.reply(
       "Download core",
-      { parse_mode: "HTML", reply_markup: menus.userFiles })
+      { parse_mode: "HTML", reply_markup: userFiles })
 }
 
 commands.showUsers = async function (ctx) {
-  console.log("asdf", menus.editUser)
+  console.log("asdf", deditUser)
   const user = await users.check(ctx.from)
   if (users.isAdmin(user))
     return ctx.reply(
       "Users",
-      { parse_mode: "HTML", reply_markup: menus.editUser })
+      { parse_mode: "HTML", reply_markup: deditUser })
   else
     return ctx.reply('error')
 }
@@ -88,7 +88,7 @@ commands.addFile = async function (ctx) {
 
 let menus = exports.menus = {}
 
-menus.adminFiles = new global.ext.menu.Menu('admin-files')
+const adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
@@ -99,7 +99,7 @@ menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .text('📄 Add new file', commands.addFile).row()
   .back('↩')
 
-menus.userFiles = new global.ext.menu.Menu('user-files')
+const userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
@@ -109,7 +109,7 @@ menus.userFiles = new global.ext.menu.Menu('user-files')
   })
   .back('↩')
 
-menus.users = new global.ext.menu.Menu('users')
+const getUsers = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
       if (users.isUser(user))
@@ -119,23 +119,23 @@ menus.users = new global.ext.menu.Menu('users')
             console.log(user, "clicked")
               ctx.session.activeUser = user
               //
-              console.log(menus.editUser)
+              console.log(editUser)
               console.log(menus)
               await ctx.reply(
                 "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.editUserFiles})
+                {parse_mode: "HTML", reply_markup: editUserFiles})
             })
           .row()
   })
   .back('↩')
 
-menus.editUser = new global.ext.menu.Menu('edit-user')
+const deditUser = new global.ext.menu.Menu('edit-user')
   // .text('📄 Files', async (ctx) => {
   //   console.log(ctx)
   // })
   .back('↩')
 
-menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
+const editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
@@ -145,13 +145,13 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   })
   .back('↩')
 
-global.bot.use(menus.adminFiles)
-// global.bot.use(menus. userFiles)
+global.bot.use(adminFiles)
+// global.bot.use( userFiles)
 
-console.log(global.bot.use(menus.users))
+console.log(global.bot.use(getUsers))
 
-console.log(global.bot.use(menus.editUser))
-global.bot.use(menus.editUserFiles)
+global.bot.use(deditUser)
+global.bot.use(editUserFiles)
 
 
 // core

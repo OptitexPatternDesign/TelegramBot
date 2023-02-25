@@ -26,7 +26,6 @@ m.menus.adminFiles = new global.ext.menu.Menu('admin-files')
         .row()
   })
   .text('📄 Add new file', (ctx) => m.commands.addFile(ctx)).row()
-  .back('↩')
 
 m.menus.userFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
@@ -38,7 +37,6 @@ m.menus.userFiles = new global.ext.menu.Menu('user-files')
           (ctx) => sendFile(ctx, file))
         .row()
   })
-  .back('↩')
 
 m.menus.users = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
@@ -100,11 +98,14 @@ m.commands.showFiles = async function (ctx) {
   //
   if (users.isAdmin(user))
     return ctx.reply(
-      "Download core",
+      "📄 <b>Server <u>files</u></b>\n" +
+      " ● <code>Edit file</code> 📄\n" +
+      " ● <code>Add new file</code> 📄\n",
       { parse_mode: "HTML", reply_markup: m.menus.adminFiles })
   else
     return ctx.reply(
-      "Download core",
+      "📄 <b>Your accessible <u>files</u></b>\n" +
+      " ● <code>Click on your file, َAnd pay attention to description</code>\n" +
       { parse_mode: "HTML", reply_markup: m.menus.userFiles })
 }
 
@@ -114,7 +115,7 @@ m.commands.showUsers = async function (ctx) {
   if (users.isAdmin(user))
     return ctx.reply(
       "👤 <b>All <u>users</u>:</b>\n" +
-      " ● <code>Edit access to files</code> 📄",
+      " ● <code>Change access to files</code> 📄",
       { parse_mode: "HTML", reply_markup: m.menus.users })
   else
     return ctx.reply('error')

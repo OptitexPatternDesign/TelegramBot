@@ -76,7 +76,7 @@ commands.addFile = async function (ctx) {
     })})})
 }
 
-let menus = exports.menus = {}
+const menus = exports.menus = {}
 
 menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
@@ -111,7 +111,7 @@ menus.users = new global.ext.menu.Menu('users')
 
 menus.editUser = new global.ext.menu.Menu('edit-user')
   .text('📄 Files', async (ctx) => {
-    console.log(ctx)
+    console.log(ctx.menu)
   })
   .back('↩')
 

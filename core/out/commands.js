@@ -102,11 +102,10 @@ menus.users = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
       if (users.isUser(user))
-        console.log(user)
-        // range
-        //   .text(`${users.name(user)} ${users.username(user)}`,
-        //     (ctx) => null)
-        //   .row()
+        range
+          .text(users.name(user),
+            (ctx) => null)
+          .row()
   })
   .back('↩')
 

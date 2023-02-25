@@ -61,12 +61,10 @@ m.menus.users = new global.ext.menu.Menu('users')
     for (const user of await users.all())
       if (users.isUser(user))
         range
-          .text(users.name(user),
-            (ctx) => {
+          .text(users.name(user), (ctx) => {
               ctx.session.activeUser = user
               //
               m.menus.replace(ctx, m.menus.editUser)
-              // return ctx.menu.nav('edit-user')
             })
           .row()
   })

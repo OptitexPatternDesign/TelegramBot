@@ -57,6 +57,7 @@ menus.editUser = new global.ext.menu.Menu('edit-user')
     console.log(ctx)
   })
   .back('↩')
+menus.users.register(menus.editUser)
 
 menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
@@ -67,8 +68,6 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
         .row()
   })
   .back('↩')
-
-menus.users.register(menus.editUser)
 menus.editUser.register(menus.editUserFiles)
 
 global.bot.use(menus.adminFiles)

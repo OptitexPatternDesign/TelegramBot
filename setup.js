@@ -1,17 +1,15 @@
 const global = require("./core/global")
-
 const actions = require("./core/actions")
 
 const users = require("./core/helpers/users")
+
+require('./core/out/commands')
 
 global.bot.use(global.telegram.session({
   initial: () => ({
     activeUser: null
   })
 }));
-
-require('./core/out/commands')
-
 
 global.bot.command("start", async (ctx) => {
   await users.check(ctx.from)

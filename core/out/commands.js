@@ -17,6 +17,7 @@ const files = require("../helpers/files")
 
 m.menus = {
   replace: function (ctx, menu) {
+    ctx.editMessageText("asdfasdf")
     console.log(ctx.update.callback_query.message)
   }
 }

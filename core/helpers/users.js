@@ -57,10 +57,8 @@ m.fileToggle = async function (user, file) {
   const files = user.fragment(user)
 }
 
-m.fileStatus = async function (user, file) {
-  console.log(await user.fragment('files'))
-  console.log(await user.fragment('files').get())
-  return (await user.fragment('files').get())
+m.fileStatus = function (user, file) {
+  return user.fragment('files').props[file.key] != null
 }
 
 

@@ -54,11 +54,13 @@ m.files = async function (user) {
 }
 
 m.fileToggle = async function (user, file) {
-
+  const files = user.fragment(user)
 }
 
 m.fileStatus = async function (user, file) {
-  // return (await user.fragment('files').get())
+  console.log(await user.fragment('files'))
+  console.log(await user.fragment('files').get())
+  return (await user.fragment('files').get())
 }
 
 

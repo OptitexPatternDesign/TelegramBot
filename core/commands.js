@@ -15,7 +15,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(`${file.props.title.padEnd(80)}\u200d`, (ctx) => sendFile(ctx, file))
+        .text(`file.props.title`, (ctx) => sendFile(ctx, file))
         .row()
     }
     for (const file of await files.files())
@@ -102,6 +102,7 @@ async function cmdAddFile(ctx) {
 }
 
 async function cmdGetFile(ctx) {
+  console.log(ctx.query)
 }
 
 
@@ -109,4 +110,4 @@ async function cmdGetFile(ctx) {
 global.bot.command('files', cmdFiles)
 global.bot.command('add_file', cmdAddFile)
 global.bot.callbackQuery('add_file', cmdAddFile)
-global.bot.command('get_file:.*', cmdGetFile)
+global.bot.command('get_file_.*', cmdGetFile)

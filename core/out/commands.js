@@ -6,7 +6,6 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
-const {menus} = require("./commands");
 
 
 // global.bot.api.setMym.commands([
@@ -41,7 +40,7 @@ m.menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .text('📄 Add new file',
     (ctx) => m.commands
       .addFile(ctx))
-m.menus.adminFiles.text = (ctx) =>
+m.menus.adminFiles.text = () =>
   "📄 <b>Server <u>files</u></b>\n" +
   " ● <code>Edit file</code> 📄\n" +
   " ● <code>Add new file</code> 📄\n"
@@ -57,7 +56,7 @@ m.menus.userFiles = new global.ext.menu.Menu('user-files')
           (ctx) => sendFile(ctx, file))
         .row()
   })
-m.menus.userFiles.text = (ctx) =>
+m.menus.userFiles.text = () =>
   "📄 <b>Your accessible <u>files</u></b>\n" +
   " ● <code>Click on your file, َAnd pay attention to description!</code>\n"
 
@@ -77,7 +76,7 @@ m.menus.users = new global.ext.menu.Menu('users')
           })
           .row()
   })
-m.menus.users.text = (ctx) =>
+m.menus.users.text = () =>
   "👤 <b>All <u>users</u></b>\n" +
   " ● <code>Change access to files</code> 📄"
 

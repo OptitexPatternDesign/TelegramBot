@@ -17,8 +17,8 @@ const files = require("../helpers/files")
 
 m.menus = {
   replace: function (ctx, menu) {
+    ctx.menu.nav(menu.id)
     ctx.editMessageText(menu.text)
-    ctx.editMessageReplyMarkup(menu)
   }
 }
 
@@ -72,6 +72,8 @@ m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .submenu('📄 Files', 'edit-user-files').row()
   .back('↩')
 m.menus.editUser.text = "adsrf"
+m.menus.users
+  .register(m.menus.editUser)
 
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {
@@ -101,7 +103,6 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
 
-global.bot.use(m.menus.editUser)
 
 global.bot.use(m.menus.users)
 

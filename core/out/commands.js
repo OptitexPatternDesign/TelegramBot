@@ -107,9 +107,9 @@ menus.users = new global.ext.menu.Menu('users')
             async (ctx) => {
             console.log(ctx, "clicked")
 
-              await ctx.reply(
+              ctx.reply(
                 "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.editUser})
+                {parse_mode: "HTML", reply_markup: menus.editUser}).then(r => r)
             })
           .row()
   })

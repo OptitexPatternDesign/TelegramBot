@@ -104,7 +104,7 @@ menus.users = new global.ext.menu.Menu('users')
       if (users.isUser(user))
         console.log(user),
         range
-          .text(`${user.props.firstName} ${user.props.username && '@' + user.props.username}`,
+          .text(`${users.name(user)} ${users.username(user)}`,
             (ctx) => null)
           .row()
   })

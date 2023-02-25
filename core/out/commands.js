@@ -24,7 +24,7 @@ m.menus = {
 
   show: function (ctx, menu, text=null) {
     return ctx.reply(text || menu.text,
-      { parse_mode: "HTML", reply_markup: m.menus.adminFiles })
+      { parse_mode: "HTML", reply_markup: menu })
   }
 }
 

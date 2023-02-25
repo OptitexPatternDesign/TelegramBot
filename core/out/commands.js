@@ -24,16 +24,6 @@ async function sendFile(ctx, file) {
   })
 }
 
-async function editUser(ctx, user) {
-  console.log(ctx)
-  ctx.activeUser = user
-  console.log(ctx)
-  await ctx.reply(
-    "",
-    { parse_mode: "HTML", reply_markup: menus.user })
-}
-
-
 let commands = exports.commands = {}
 
 commands.showFiles = async function (ctx) {
@@ -53,7 +43,7 @@ commands.showUsers = async function (ctx) {
   if (users.isAdmin(user))
     return ctx.reply(
       "Users",
-      { parse_mode: "HTML", reply_markup: menus.users })
+      { parse_mode: "HTML", reply_markup: menus.editUser })
   else
     return ctx.reply('error')
 }

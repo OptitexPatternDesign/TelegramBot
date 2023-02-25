@@ -17,7 +17,8 @@ const files = require("../helpers/files")
 
 m.menus = {
   replace: function (ctx, menu, text=null) {
-    this.show(ctx, menu, text)
+    this
+      .show(ctx, menu, text)
       .then(_ => ctx.deleteMessage())
   },
 
@@ -75,10 +76,8 @@ m.menus.users.text =
 
 m.menus.editUser = new global.ext.menu.Menu('edit-user')
   .submenu('📄 Files', 'edit-user-files').row()
-  .text('↩', (ctx) => m.menus.replace(ctx, this))
+  .text('↩', (ctx) => m.menus.replace(ctx, m.menus.users))
 m.menus.editUser.text = "adsrf"
-m.menus.users
-  .register(m.menus.editUser)
 
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .dynamic(async (ctx, range) => {

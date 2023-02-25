@@ -104,12 +104,7 @@ menus.users = new global.ext.menu.Menu('users')
     for (const user of await users.all())
       if (users.isUser(user))
         range
-          .text(users.name(user),
-            async (_) => {
-              ctx.reply(
-                "Edit user",
-                {parse_mode: "HTML", reply_markup: menus.editUser}).then(r => r)
-            })
+          .submenu(users.name(user), 'edit-user')
           .row()
   })
   .back('↩')
@@ -131,7 +126,7 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
   .back('↩')
 
 global.bot.use(menus.adminFiles)
-// global.bot.use(menus. userFiles)
+global.bot.use(menus. userFiles)
 
 global.bot.use(menus.users)
 

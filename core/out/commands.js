@@ -47,6 +47,7 @@ m.menus.users = new global.ext.menu.Menu('users')
             (ctx) => {
               ctx.session.activeUser = user
               //
+              console.log(ctx)
               ctx.menu.nav('edit-user')
             })
           .row()
@@ -114,7 +115,7 @@ m.commands.showUsers = async function (ctx) {
   //
   if (users.isAdmin(user))
     return ctx.reply(
-      "👤 <b>All <u>users</u>:</b>\n" +
+      "👤 <b>All <u>users</u></b>\n" +
       " ● <code>Change access to files</code> 📄",
       { parse_mode: "HTML", reply_markup: m.menus.users })
   else

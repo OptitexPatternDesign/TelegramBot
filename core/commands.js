@@ -15,7 +15,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(`📄 <code>${file.props.title.padStart(40, ' ')}</code>`, (ctx) => {
+        .text(`*${file.props.title}*`, (ctx) => {
           ctx.replyWithDocument(file.props.id, {
             caption:
               `<b>${file.props.title}</b>\n` +

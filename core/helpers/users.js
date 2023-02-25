@@ -17,13 +17,21 @@ const add = exports.add = async function (who) {
     id  : who.id,
     type: (who.id === 379343384) ? typeAdmin : typeUser,
     //
-     username: who.username,
-    firstName: who.first_name,
-     lastName: who.last_name
+     username: who.username   || '',
+    firstName: who.first_name || '',
+     lastName: who. last_name || ''
   })
   record.fragment('files')
   //
   return record
+}
+
+const name = exports.name = function (user) {
+  return user.props.firstName + user.props.lastName && ` ${user.props.lastName}`
+}
+
+const username = exports.username = function (user) {
+  return user.props.username ? `@${user.props.username}` : ''
 }
 
 const isUser = exports.isUser = function (user) {

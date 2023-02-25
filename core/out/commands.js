@@ -81,7 +81,8 @@ menus.adminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
-        .text(file.props.title, (ctx) => sendFile(ctx, file))
+        .text(file.props.title,
+          (ctx) => sendFile(ctx, file))
         .row()
   })
   .text('📄 Add new file', commands.addFile).row()
@@ -91,7 +92,8 @@ menus.userFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
-        .text(file.props.title, (ctx) => sendFile(ctx, file))
+        .text(file.props.title,
+          (ctx) => sendFile(ctx, file))
         .row()
   })
   .back('↩')
@@ -100,8 +102,10 @@ menus.users = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
       if (users.isUser(user))
+        console.log(user),
         range
-          .text(`${user.props.firstName} ${user.props.username && '@' + user.props.username}`)
+          .text(`${user.props.firstName} ${user.props.username && '@' + user.props.username}`,
+            (ctx) => null)
           .row()
   })
   .back('↩')

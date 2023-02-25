@@ -15,7 +15,7 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(`${file.props.title.padEnd(10)}\u200d`, (ctx) => sendFile(ctx, file))
+        .text(`${file.props.title.padEnd(40)}\u200d`, (ctx) => sendFile(ctx, file))
         .row()
     }
     for (const file of await files.files())

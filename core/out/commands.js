@@ -33,7 +33,7 @@ m.menus.userFiles = new global.ext.menu.Menu('user-files')
     const user = await users.check(ctx.from)
     //
     for (const file of await files.user(user))
-      console.log(files)
+      console.log(file)
       // range
       //   .text(file.props.title,
       //     (ctx) => sendFile(ctx, file))

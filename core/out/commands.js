@@ -45,9 +45,7 @@ commands.showUsers = async function (ctx) {
       "Users",
       { parse_mode: "HTML", reply_markup: menus.users })
   else
-    ctx.answerCallbackQuery({
-      text: "❌ You aren't admin!"
-    })
+    return ctx.reply('error')
 }
 
 commands.addFile = async function (ctx) {

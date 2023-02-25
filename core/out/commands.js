@@ -98,7 +98,7 @@ m.menus
   .users.register(m.menus.editUser)
 //
 m.menus.editUser.text = (ctx) =>
-  `<b>You are editing '${users.name(ctx.session.activeUser)}'</b><br>` +
+  `<b>You are editing '${users.name(ctx.session.activeUser)}'</b>\n` +
   ` ⚠️ <code>Any change will apply!</code>`
 
 // ++++++++++++++++++

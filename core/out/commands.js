@@ -99,7 +99,9 @@ menus.userFiles = new global.ext.menu.Menu('admin-files')
 menus.users = new global.ext.menu.Menu('users')
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
-      console.log(user)
+      if (users.isUser(user))
+        range
+          .text(`${user.props.firstName} ${user.props.username && '@' + user.props.username}`)
   })
   .back('↩')
 

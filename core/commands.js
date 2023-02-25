@@ -15,24 +15,14 @@ const menuAdminFiles = new global.ext.menu.Menu('admin-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
       range
-        .text(`*${file.props.title}*`, (ctx) => {
-          ctx.replyWithDocument(file.props.id, {
-            caption:
-              `<b>${file.props.title}</b>\n` +
-              `\n` +
-              `${file.props.description}`,
-            parse_mode: "HTML"
-          })
-        })
+        .text(`${file.props.title.padEnd(10)}\u200d`, (ctx) => sendFile(ctx, file))
         .row()
     }
     for (const file of await files.files())
       addFile(file)
   })
-  .text('Add new file', async ctx => {
-    await cmdAddFile(ctx)
-  })
-  .text('Back ↩')
+  .text('Add new file', cmdAddFile)
+  .text('↩')
 const menuUserFiles = new global.ext.menu.Menu('user-files')
   .dynamic(async (ctx, range) => {
     function addFile(file) {
@@ -56,10 +46,21 @@ const menuUserFiles = new global.ext.menu.Menu('user-files')
 global.bot.use(menuAdminFiles)
 global.bot.use(menuUserFiles)
 
+
+async function sendFile(ctx, file) {
+  await ctx.replyWithDocument(file.props.id, {
+    caption:
+      `<b>${file.props.title}</b>\n` +
+      `\n` +
+      `${file.props.description}`,
+    parse_mode: "HTML"
+  })
+}
+
 async function filesAdmin(ctx) {
   return ctx.reply('Download core', {
     reply_markup: menuAdminFiles,
-    parse_mode: "MarkdownV2"
+    parse_mode: "HTML"
   })
 }
 
@@ -101,7 +102,6 @@ async function cmdAddFile(ctx) {
 }
 
 async function cmdGetFile(ctx) {
-
 }
 
 

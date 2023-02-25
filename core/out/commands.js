@@ -107,7 +107,9 @@ menus.users = new global.ext.menu.Menu('users')
           .text(users.name(user),
             (ctx) => {
               console.log(ctx.menu, ctx)
-              ctx.menu.nav('edit-user')
+              ctx.reply("asdfc", {
+                reply_markup: menus.users
+              })
             })
           .row()
   })

@@ -104,7 +104,10 @@ menus.users = new global.ext.menu.Menu('users')
     for (const user of await users.all())
       if (users.isUser(user))
         range
-          .text('asdf')
+          .text(users.name(user),
+            (ctx) => {
+              console.log(ctx.menu, ctx)
+            })
           .row()
   })
   .back('↩')

@@ -65,7 +65,7 @@ menus.editUserFiles = new global.ext.menu.Menu('edit-user-files')
           (ctx) => {
             users.fileToggle(user, file)
             //
-            ctx.menu.update()
+            // ctx.menu.update()
           })
         .row()
   })

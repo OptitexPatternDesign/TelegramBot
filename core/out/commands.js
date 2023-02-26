@@ -159,7 +159,7 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files',
   .text('📄 Document',
     async (ctx) => {
       await ctx.reply(
-        "📄 <b>Update <u>document</u></b>\n",
+        "📄 <b>Update <u>file document</u></b>\n",
         { parse_mode: "HTML" })
       actions
         .add(ctx.from, 'document')
@@ -187,7 +187,12 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files',
           await files.update(ctx.session.activeFile, null, null, description.message))
     })
   .row()
-  .text('❌ Delete')
+  .text('❌ Delete',
+    async (ctx) => {
+      await files.delete(ctx.session.activeFile)
+      //
+      m.menus.replace(ctx, m.menus.adminFiles)
+    })
   .row()
   .text('↩',
     (ctx) => m

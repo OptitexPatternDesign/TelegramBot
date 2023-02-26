@@ -41,6 +41,10 @@ m.update = async function (file, document=null, title=null, description=null) {
     })
 }
 
+m.delete = async function (file) {
+  await global.tables.files.delete(file.key)
+}
+
 
 m.user = async function (user) {
   let files = []

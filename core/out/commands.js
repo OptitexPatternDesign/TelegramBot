@@ -133,8 +133,10 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files',
       range
         .text(`${file.props.title} ${await files.userContain(user, file) ? '✅' : '❌'}`,
           async (ctx) => {
+            console.log('before')
             await files.userToggle(user, file)
             // update menu buttons
+            console.log(ctx.menu)
             ctx.menu.update()
           })
         .row()

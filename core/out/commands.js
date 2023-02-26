@@ -123,9 +123,10 @@ m.menus.editUser.text = (ctx) =>
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files',
   {
     onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-      m.menus.show(ctx, m.menus.editUserFiles)
+      console.log("delete")
+      // await ctx.answerCallbackQuery();
+      // await ctx.deleteMessage()
+      // m.menus.show(ctx, m.menus.editUserFiles)
     }
   })
   .dynamic(async (ctx, range) => {

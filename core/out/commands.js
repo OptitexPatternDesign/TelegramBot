@@ -6,6 +6,7 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
+const {menus} = require("./commands");
 
 
 // global.bot.api.setMym.commands([
@@ -40,8 +41,11 @@ m.menus.adminFiles = new global.ext.menu.Menu('admin-files',
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
-        .text(file.props.title,
-          (ctx) => sendFile(ctx, file))
+        .text(file.props.title, (ctx) => {
+          ctx.session.activeFile = file
+          //
+          m.menus.replace(ctx, m.menus.editFile)
+        })
         .row()
   })
   .text('📄 Add new file',
@@ -146,13 +150,15 @@ m.menus.editUserFiles.text = (ctx) =>
 
 // +++++++++++++
 m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
-  .text('Download')
-  .row()
   .text('📄 Document').text('📝️ Title').text('📝️ Description')
   .row()
   .text('❌ Delete')
   .row()
-  .back('↩')
+  .text('↩',
+    (ctx) => m
+      .menus.replace(ctx, m.menus.adminFiles))
+m.menus
+  .adminFiles.register(m.menus.editUserFiles)
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)

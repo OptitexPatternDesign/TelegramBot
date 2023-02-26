@@ -175,9 +175,9 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
     async (ctx) => {
       await ctx.reply(
         "📄 <b>Update <u>file description</u></b>\n",
-        { parse_mode: "text" })
+        { parse_mode: "HTML" })
       actions
-        .add(ctx.from, 'document')
+        .add(ctx.from, 'text')
         .then(async description =>
           await files.update({ file: ctx.session.activeFile, description: description.message}))
     })

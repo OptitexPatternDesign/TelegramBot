@@ -175,7 +175,12 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
       actions
         .add(ctx.from, 'text')
         .then(async title => {
-          console.log(await global.tables.files.get(file.key))
+          const record = await global.tables.files.get(file.key)
+          console.log(record)
+          record.set({
+            title: title.message.text
+          })
+          console.log(record)
         })
     })
   .text('📝️ Description')

@@ -33,10 +33,10 @@ m.menus = {
 // +++++++++++++++
 m.menus.adminFiles = new global.ext.menu.Menu('admin-files',
   {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
+    // onMenuOutdated: async (ctx) => {
+    //   await ctx.answerCallbackQuery();
+    //   await ctx.deleteMessage()
+    // }
   })
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
@@ -76,10 +76,10 @@ m.menus.userFiles.text = () =>
 // ++++++++++
 m.menus.users = new global.ext.menu.Menu('users',
   {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
+    // onMenuOutdated: async (ctx) => {
+    //   await ctx.answerCallbackQuery();
+    //   await ctx.deleteMessage()
+    // }
   })
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
@@ -100,10 +100,10 @@ m.menus.users.text = () =>
 // +++++++++++++
 m.menus.editUser = new global.ext.menu.Menu('edit-user',
   {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
+    // onMenuOutdated: async (ctx) => {
+    //   await ctx.answerCallbackQuery();
+    //   await ctx.deleteMessage()
+    // }
   })
   .text('📄 Files',
     (ctx) => m

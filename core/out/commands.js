@@ -6,6 +6,7 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
+const {menus} = require("./commands");
 
 
 // global.bot.api.setMym.commands([
@@ -124,6 +125,7 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files',
     onMenuOutdated: async (ctx) => {
       await ctx.answerCallbackQuery();
       await ctx.deleteMessage()
+      m.menus.show(ctx, m.menus.editUserFiles)
     }
   })
   .dynamic(async (ctx, range) => {

@@ -159,7 +159,10 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
     (ctx) => m
       .menus.replace(ctx, m.menus.adminFiles))
 m.menus
-  .adminFiles.register(m.menus.editUserFiles)
+  .adminFiles.register(m.menus.editFile)
+//
+m.menus.editFile.text = (ctx) =>
+  'reatea'
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)

@@ -153,34 +153,34 @@ m.menus.editUserFiles.text = (ctx) =>
 m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
   .text('📄 Document',
     async (ctx) => {
-      const file = ctx.session.activeFile
-      //
       await ctx.reply(
-        "📄 <b>Send <u>document</u></b>\n" +
-        " ● <code>Drag & drop your file</code>\n" +
-        " ● <code>Forward it</code>",
+        "📄 <b>Update <u>document</u></b>\n",
         { parse_mode: "HTML" })
       actions
         .add(ctx.from, 'document')
-        .then(async document => {
-        })
+        .then(async title =>
+          await files.update({ file: ctx.session.activeFile, document: document.message}))
     })
   .text('📝️ Title',
     async (ctx) => {
-      const file = ctx.session.activeFile
-      //
       await ctx.reply(
         "📄 <b>Update <u>file title</u></b>\n",
         { parse_mode: "HTML" })
       actions
         .add(ctx.from, 'text')
-        .then(async title => {
-          file.set({
-            title: title.message.text
-          })
-        })
+        .then(async title =>
+          await files.update({ file: ctx.session.activeFile, title: title.message}))
     })
-  .text('📝️ Description')
+  .text('📝️ Description',
+    async (ctx) => {
+      await ctx.reply(
+        "📄 <b>Update <u>file description</u></b>\n",
+        { parse_mode: "text" })
+      actions
+        .add(ctx.from, 'document')
+        .then(async description =>
+          await files.update({ file: ctx.session.activeFile, description: description.message}))
+    })
   .row()
   .text('❌ Delete')
   .row()

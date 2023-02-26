@@ -6,19 +6,38 @@ const global = require("./../global")
 m.fileExist    = '+'
 m.fileNotExist = '-'
 
-m.add = async function (file, title, description) {
-  const record = await global.tables.files.set(file.document.file_unique_id, {
-           id: file.document.file_id,
-    unique_id: file.document.file_unique_id,
+m.add = async function (document, title, description) {
+  const record = await global.tables.files.set(document.document.file_unique_id, {
+           id: document.document.file_id,
+    unique_id: document.document.file_unique_id,
     //
-    name: file.document.name,
-    type: file.document.mime_type,
+    name: document.document.name,
+    type: document.document.mime_type,
     //
     title      : title.text,
     description: description.text
   })
   //
   return record
+}
+
+m.update = async function (file, document=null, title=null, description=null) {
+  if (document)
+    file.set({
+             id: document.document.file_id,
+      unique_id: document.document.file_unique_id,
+      //
+      name: document.document.name,
+      type: document.document.mime_type,
+    })
+  if (title)
+    file.set({
+      title: title.text
+    })
+  if (description)
+    file.set({
+      description: description.text
+    })
 }
 
 

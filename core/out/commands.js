@@ -6,14 +6,14 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
-const {menus} = require("./commands");
 
 
-// global.bot.api.setMym.commands([
-//   {command: "start", description: "Begin the robot"},
-//   {command: "show_files", description: "Show your core"},
-//   {command: "show_users", description: "Show your core"},
-// ]).then();
+global.bot.api.setMyCommands([
+  {command: "start", description: "Begin the robot"},
+  {command: "show_files", description: "Show your core"},
+  {command: "show_users", description: "Show your core"},
+  {command: "add_file", description: "Show your core"},
+]).then();
 
 
 m.menus = {
@@ -33,10 +33,10 @@ m.menus = {
 // +++++++++++++++
 m.menus.adminFiles = new global.ext.menu.Menu('admin-files',
   {
-    // onMenuOutdated: async (ctx) => {
-    //   await ctx.answerCallbackQuery();
-    //   await ctx.deleteMessage()
-    // }
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
   })
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
@@ -76,10 +76,10 @@ m.menus.userFiles.text = () =>
 // ++++++++++
 m.menus.users = new global.ext.menu.Menu('users',
   {
-    // onMenuOutdated: async (ctx) => {
-    //   await ctx.answerCallbackQuery();
-    //   await ctx.deleteMessage()
-    // }
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
   })
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
@@ -100,10 +100,10 @@ m.menus.users.text = () =>
 // +++++++++++++
 m.menus.editUser = new global.ext.menu.Menu('edit-user',
   {
-    // onMenuOutdated: async (ctx) => {
-    //   await ctx.answerCallbackQuery();
-    //   await ctx.deleteMessage()
-    // }
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
   })
   .text('📄 Files',
     (ctx) => m
@@ -123,10 +123,8 @@ m.menus.editUser.text = (ctx) =>
 m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files',
   {
     onMenuOutdated: async (ctx) => {
-      console.log("delete")
-      // await ctx.answerCallbackQuery();
-      // await ctx.deleteMessage()
-      // m.menus.show(ctx, m.menus.editUserFiles)
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
     }
   })
   .dynamic(async (ctx, range) => {
@@ -136,11 +134,9 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files',
       range
         .text(`adsf ${file.props.title} ${await files.userContain(user, file) ? '✅' : '❌'}`,
           async (ctx) => {
-            console.log('click')
-            // await files.userToggle(user, file)
-            // // update menu buttons
-            // console.log(ctx.menu)
-            // ctx.menu.update()
+            await files.userToggle(user, file)
+            // update menu buttons
+            ctx.menu.update()
           })
         .row()
   })
@@ -154,7 +150,7 @@ m.menus.editUserFiles.text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
 
 // +++++++++++++
-m.menus.editFile = new global.ext.menu.Menu('edit-user-files',
+m.menus.editFile = new global.ext.menu.Menu('edit-file',
     {
     onMenuOutdated: async (ctx) => {
       await ctx.answerCallbackQuery();
@@ -230,25 +226,16 @@ m.commands.showFiles = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return m
-      .menus.show(ctx,
-        m.menus.adminFiles,
-        m.menus.adminFiles.text(ctx))
+    return m.menus.show(ctx, m.menus.adminFiles)
   else
-    return m
-      .menus.show(ctx,
-        m.menus.userFiles,
-        m.menus.userFiles.text(ctx))
+    return m.menus.show(ctx, m.menus.userFiles)
 }
 
 m.commands.showUsers = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return m
-      .menus.show(ctx,
-        m.menus.users,
-        m.menus.users.text(ctx))
+    return m.menus.show(ctx, m.menus.users)
   else
     return ctx.reply('error')
 }

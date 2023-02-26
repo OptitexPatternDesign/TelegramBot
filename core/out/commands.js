@@ -151,7 +151,34 @@ m.menus.editUserFiles.text = (ctx) =>
 
 // +++++++++++++
 m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
-  .text('📄 Document').text('📝️ Title').text('📝️ Description')
+  .text('📄 Document',
+    async (ctx) => {
+      const file = ctx.session.activeFile
+      //
+      await ctx.reply(
+        "📄 <b>Send <u>document</u></b>\n" +
+        " ● <code>Drag & drop your file</code>\n" +
+        " ● <code>Forward it</code>",
+        { parse_mode: "HTML" })
+      actions
+        .add(ctx.from, 'document')
+        .then(async document => {
+        })
+    })
+  .text('📝️ Title',
+    async (ctx) => {
+      const file = ctx.session.activeFile
+      //
+      await ctx.reply(
+        "📄 <b>Update <u>file title</u></b>\n",
+        { parse_mode: "HTML" })
+      actions
+        .add(ctx.from, 'text')
+        .then(async title => {
+          console.log(await global.tables.files.get(file.key))
+        })
+    })
+  .text('📝️ Description')
   .row()
   .text('❌ Delete')
   .row()
@@ -217,7 +244,7 @@ m.commands.addFile = async function (ctx) {
     { parse_mode: "HTML" })
   actions
     .add(ctx.from, 'document')
-    .then(async file => {
+    .then(async document => {
       await ctx.reply(
         "📝️ <b>Send <u>title</u></b>\n" +
         " ● <code>Make sure it's correct!</code>",
@@ -232,7 +259,7 @@ m.commands.addFile = async function (ctx) {
   actions
     .add(ctx.from, 'text')
     .then(async description => {
-      await files.add(file.message, title.message, description.message)
+      await files.add(document.message, title.message, description.message)
     })})})
 }
 

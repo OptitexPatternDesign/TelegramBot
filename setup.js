@@ -37,8 +37,8 @@ switch (process.env.BOT_ENV) {
   case "release":
   case "production": {
     global.tables.users.list().then(res => {res.results.forEach(async (user,) => {
-      console.log(user)
-      // await global.tables.users.delete(user.key)
+      // console.log(user)
+      await global.tables.users.delete(user.key)
     })})
     // global.tables.core.list().then(res => {res.results.forEach(async (file,) => {await global.tables.core.delete(file.key)})})
     //

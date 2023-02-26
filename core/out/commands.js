@@ -164,7 +164,7 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files',
       actions
         .add(ctx.from, 'document')
         .then(async title =>
-          await files.update({ file: ctx.session.activeFile, document: document.message}))
+          await files.update(ctx.session.activeFile, document.message, null, null))
     })
   .text('📝️ Title',
     async (ctx) => {
@@ -174,7 +174,7 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files',
       actions
         .add(ctx.from, 'text')
         .then(async title =>
-          await files.update({ file: ctx.session.activeFile, title: title.message}))
+          await files.update(ctx.session.activeFile, null, title.message, null))
     })
   .text('📝️ Description',
     async (ctx) => {
@@ -184,7 +184,7 @@ m.menus.editFile = new global.ext.menu.Menu('edit-user-files',
       actions
         .add(ctx.from, 'text')
         .then(async description =>
-          await files.update({ file: ctx.session.activeFile, description: description.message}))
+          await files.update(ctx.session.activeFile, null, null, description.message))
     })
   .row()
   .text('❌ Delete')

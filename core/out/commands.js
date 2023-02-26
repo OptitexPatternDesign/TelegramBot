@@ -6,7 +6,6 @@ const actions = require("../actions")
 
 const users = require("../helpers/users")
 const files = require("../helpers/files")
-const {menus} = require("./commands");
 
 
 // global.bot.api.setMym.commands([
@@ -150,7 +149,13 @@ m.menus.editUserFiles.text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
 
 // +++++++++++++
-m.menus.editFile = new global.ext.menu.Menu('edit-user-files')
+m.menus.editFile = new global.ext.menu.Menu('edit-user-files',
+    {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
+  })
   .text('📄 Document',
     async (ctx) => {
       await ctx.reply(

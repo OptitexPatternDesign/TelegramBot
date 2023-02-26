@@ -12,7 +12,7 @@ global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
   {command: "show_files", description: "Show your core"},
   {command: "show_users", description: "Show your core"},
-  {command: "add_file", description: "Show your core"},
+  {command: "add_file", description: "Add new file to server"},
 ]).then();
 
 
@@ -132,7 +132,7 @@ m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files',
     //
     for (const file of await files.all())
       range
-        .text(`adsf ${file.props.title} ${await files.userContain(user, file) ? '✅' : '❌'}`,
+        .text(`${file.props.title} ${await files.userContain(user, file) ? '✅' : '❌'}`,
           async (ctx) => {
             await files.userToggle(user, file)
             // update menu buttons

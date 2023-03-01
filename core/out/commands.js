@@ -275,38 +275,44 @@ m.commands.showUsers = async function (ctx) {
   //
   if (users.isAdmin(user))
     return m.menus.show(ctx, m.menus.users)
-  else
-    return ctx.reply('error')
 }
 
 m.commands.addFile = async function (ctx) {
-  await ctx.reply(
-    "📄 <b>Send <u>document</u></b>\n" +
-    " ● <code>Drag & drop your file</code>\n" +
-    " ● <code>Forward it</code>",
-    { parse_mode: "HTML" })
-  actions
-    .add(ctx.from, 'document')
-    .then(async document => {
-      await ctx.reply(
-        "📝️ <b>Send <u>title</u></b>\n" +
-        " ● <code>Make sure it's correct!</code>",
-        { parse_mode: "HTML" })
-  actions
-    .add(ctx.from, 'text')
-    .then(async title => {
-      await ctx.reply(
-        "📝️ <b>Send <u>description</u></b>\n" +
-        " ● <code>Make sure it's correct!</code>",
-        { parse_mode: "HTML" })
-  actions
-    .add(ctx.from, 'text')
-    .then(async description => {
-      await files.add(document.message, title.message, description.message)
-    })})})
+  const user = await users.check(ctx.from)
+  //
+  if (users.isAdmin(user)) {
+    await ctx.reply(
+      "📄 <b>Send <u>document</u></b>\n" +
+      " ● <code>Drag & drop your file</code>\n" +
+      " ● <code>Forward it</code>",
+      { parse_mode: "HTML" })
+    actions
+      .add(ctx.from, 'document')
+      .then(async document => {
+        await ctx.reply(
+          "📝️ <b>Send <u>title</u></b>\n" +
+          " ● <code>Make sure it's correct!</code>",
+          { parse_mode: "HTML" })
+    actions
+      .add(ctx.from, 'text')
+      .then(async title => {
+        await ctx.reply(
+          "📝️ <b>Send <u>description</u></b>\n" +
+          " ● <code>Make sure it's correct!</code>",
+          { parse_mode: "HTML" })
+    actions
+      .add(ctx.from, 'text')
+      .then(async description => {
+        await files.add(document.message, title.message, description.message)
+      })})})
+  }
 }
 
 m.commands.showTokens = async function (ctx) {
+  const user = await users.check(ctx.from)
+  //
+  if (users.isAdmin(user))
+    return m.menus.show(ctx, m.menus.tokens)
 }
 
 m.commands.addToken = async function (ctx) {

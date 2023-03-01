@@ -375,4 +375,4 @@ global.bot.command('show_tokens', m.commands.showTokens)
 global.bot.command('add_file' , m.commands.addFile)
 global.bot.command('add_token', m.commands.addToken)
 //
-global.bot.command('register', m.commands.addToken)
+global.bot.command('register', m.commands.register)

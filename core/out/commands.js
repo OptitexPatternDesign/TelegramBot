@@ -13,7 +13,9 @@ global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
   {command: "show_files", description: "Show your core"},
   {command: "show_users", description: "Show your core"},
+  {command: "show_tokens", description: "Show your core"},
   {command: "add_file", description: "Add new file to server"},
+  {command: "add_token", description: "Add new file to server"},
 ]).then();
 
 

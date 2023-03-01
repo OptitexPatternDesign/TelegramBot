@@ -264,6 +264,9 @@ m.commands.register = async function (ctx) {
   if (user.props.registered) {
     await ctx.reply('Already registered')
   } else {
+    await ctx.reply(
+      'Enter token key'
+    )
     actions
       .add(ctx.from, 'document')
       .then(async key => {

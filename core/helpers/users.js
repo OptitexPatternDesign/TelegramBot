@@ -3,8 +3,8 @@ const m = exports
 const global = require("./../global")
 
 
-const typeUser  = exports.user  = 'user'
-const typeAdmin = exports.admin = 'admin'
+m.typeUser  = 'user'
+m.typeAdmin = 'admin'
 
 m.check = async function (who) {
   let user = await global.tables.users.get(who.id.toString())
@@ -17,7 +17,7 @@ m.check = async function (who) {
 m.add = async function (who) {
   const record = await global.tables.users.set(who.id.toString(), {
     id  : who.id,
-    type: global.admins.includes(who.id) ? typeAdmin : typeUser,
+    type: global.admins.includes(who.id) ? m.typeAdmin : m.typeUser,
     //
      username: who.username   || '',
     firstName: who.first_name || '',
@@ -39,11 +39,11 @@ m.username = function (user) {
 
 
 m.isUser = function (user) {
-  return user.props.type === typeUser;
+  return user.props.type === m.typeUser;
 }
 
 m.isAdmin = function (user) {
-  return user.props.type === typeAdmin;
+  return user.props.type === m.typeAdmin;
 }
 
 

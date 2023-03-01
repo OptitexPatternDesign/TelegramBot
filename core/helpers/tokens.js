@@ -5,6 +5,9 @@ const global = require("./../global")
 const {generate} = require('randomstring')
 
 
+m.errorTokenInvalidKey = 'invalid key'
+m.errorTokenUsersLimit = 'limits reached'
+
 m.add = async function (name, limitUsers) {
   const key = generate()
   //
@@ -21,12 +24,23 @@ m.add = async function (name, limitUsers) {
 }
 
 
-m.addUser = async function(token, user) {
+m.addUser = async function (token, user) {
   if (token.props.users.length < token.props.limitUsers) {
     token.props.users.push(user.key)
+    user.props.registered = true
+    //
     return token
   }
-  return null
+  return m.errorTokenUsersLimit;
+}
+
+
+m.register = async function (key, user) {
+  const token = global.tables.tokens.get(key.text)
+  if (token == null) {
+    return m.errorTokenInvalidKey;
+  }
+  return m.addUser(token, user)
 }
 
 

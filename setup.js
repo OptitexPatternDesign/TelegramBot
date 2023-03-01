@@ -14,12 +14,6 @@ global.bot.use(global.telegram.session({
 
 require('./core/out/commands')
 
-global.bot.command("start", async (ctx) => {
-  await users.check(ctx.from)
-  //
-  return ctx.reply('Welcome')
-})
-
 global.bot.on('message:document', (ctx) => {
   const action = actions.get(ctx.from)
   if (action && action.type === 'document')
@@ -53,6 +47,5 @@ switch (process.env.BOT_ENV) {
         .catch(err => {
         })
     })
-  }
-    break;
+  } break;
 }

@@ -22,7 +22,6 @@ m.add = async function (document, title, description) {
 }
 
 m.update = async function (file, document=null, title=null, description=null) {
-  console.log(file, document, title, description)
   if (document)
     file.set({
              id: document.document.file_id,

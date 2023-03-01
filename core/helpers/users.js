@@ -15,7 +15,6 @@ m.check = async function (who) {
 }
 
 m.add = async function (who) {
-  const isAdmin = global.admins.includes(who.id)
   const record = await global.tables.users.set(who.id.toString(), {
     id  : who.id,
     type: global.admins.includes(who.id) ? typeAdmin : typeUser,

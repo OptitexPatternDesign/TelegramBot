@@ -4,8 +4,9 @@ const global = require("../global")
 
 const actions = require("../actions")
 
-const users = require("../helpers/users")
-const files = require("../helpers/files")
+const users  = require("../helpers/users")
+const files  = require("../helpers/files")
+const tokens = require("../helpers/tokens")
 
 
 global.bot.api.setMyCommands([
@@ -31,7 +32,8 @@ m.menus = {
 }
 
 // +++++++++++++++
-m.menus.adminFiles = new global.ext.menu.Menu('admin-files',
+m.menus.adminFiles
+  = new global.ext.menu.Menu('admin-files',
   {
     onMenuOutdated: async (ctx) => {
       await ctx.answerCallbackQuery();
@@ -59,7 +61,14 @@ m.menus.adminFiles.text = () =>
   " ● <code>Add new file</code> 📄\n"
 
 // ++++++++++++++
-m.menus.userFiles = new global.ext.menu.Menu('user-files')
+m.menus.userFiles =
+  new global.ext.menu.Menu('user-files',
+  {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
+  })
   .dynamic(async (ctx, range) => {
     const user = await users.check(ctx.from)
     //
@@ -74,7 +83,8 @@ m.menus.userFiles.text = () =>
   " ● <code>Click on your file, َAnd pay attention to description!</code>\n"
 
 // ++++++++++
-m.menus.users = new global.ext.menu.Menu('users',
+m.menus.users =
+  new global.ext.menu.Menu('users',
   {
     onMenuOutdated: async (ctx) => {
       await ctx.answerCallbackQuery();
@@ -98,7 +108,8 @@ m.menus.users.text = () =>
   " ● <code>Change access to files</code> 📄"
 
 // +++++++++++++
-m.menus.editUser = new global.ext.menu.Menu('edit-user',
+m.menus.editUser =
+  new global.ext.menu.Menu('edit-user',
   {
     onMenuOutdated: async (ctx) => {
       await ctx.answerCallbackQuery();
@@ -120,7 +131,8 @@ m.menus.editUser.text = (ctx) =>
   ` ⚠️ <code>Any change will apply!</code>`
 
 // ++++++++++++++++++
-m.menus.editUserFiles = new global.ext.menu.Menu('edit-user-files',
+m.menus.editUserFiles =
+  new global.ext.menu.Menu('edit-user-files',
   {
     onMenuOutdated: async (ctx) => {
       await ctx.answerCallbackQuery();
@@ -150,8 +162,9 @@ m.menus.editUserFiles.text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
 
 // +++++++++++++
-m.menus.editFile = new global.ext.menu.Menu('edit-file',
-    {
+m.menus.editFile =
+  new global.ext.menu.Menu('edit-file',
+  {
     onMenuOutdated: async (ctx) => {
       await ctx.answerCallbackQuery();
       await ctx.deleteMessage()
@@ -204,10 +217,34 @@ m.menus
 m.menus.editFile.text = (ctx) =>
   'reatea'
 
+//
+m.menus.tokens =
+  new global.ext.menu.Menu('edit-file',
+  {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
+  })
+  .dynamic(async (ctx, range) => {
+    for (const token of global.tables.tokens) {
+      range
+        .text(`${token.props.name}`)
+    }
+  })
+  .text('Generate',
+    (ctx) => m.commands
+      .addToken(ctx))
+//
+m.menus.tokens.text = (ctx) =>
+  'Tokens'
+
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
 
 global.bot.use(m.menus.users)
+
+global.bot.use(m.menus.tokens)
 
 
 async function sendFile(ctx, file) {
@@ -267,8 +304,31 @@ m.commands.addFile = async function (ctx) {
     })})})
 }
 
+m.commands.showTokens = async function (ctx) {
+}
+
+m.commands.addToken = async function (ctx) {
+  await ctx.reply(
+    "📄 <b>Set <u>token name</u></b>\n",
+    { parse_mode: "HTML" })
+  actions
+    .add(ctx.from, 'text')
+    .then(async name => {
+      await ctx.reply(
+        "📝️ <b>Set <u>users limit</u></b>\n",
+        { parse_mode: "HTML" })
+  actions
+    .add(ctx.from, 'text')
+    .then(async limitUsers => {
+      await tokens.add(name.message, limitUsers.message)
+    })})
+}
+
 // core
-global.bot.command('show_files', m.commands.showFiles)
-global.bot.command('show_users', m.commands.showUsers)
+global.bot.command('show_files' , m.commands.showFiles)
+global.bot.command('show_users' , m.commands.showUsers)
+global.bot.command('show_tokens', m.commands.showTokens)
 //
-global.bot.command('add_file', m.commands.addFile)
+global.bot.command('add_file' , m.commands.addFile)
+global.bot.command('add_token', m.commands.addToken)
+//

@@ -258,7 +258,9 @@ m.commands.start = async function (ctx) {
   return ctx.reply('Welcome')
 }
 
-m.commands.register = async function (ctx, user) {
+m.commands.register = async function (ctx) {
+  const user = users.check(ctx.from)
+  //
   if (user.props.registered) {
     await ctx.reply('Already registered')
   } else {
@@ -373,3 +375,4 @@ global.bot.command('show_tokens', m.commands.showTokens)
 global.bot.command('add_file' , m.commands.addFile)
 global.bot.command('add_token', m.commands.addToken)
 //
+global.bot.command('register', m.commands.addToken)

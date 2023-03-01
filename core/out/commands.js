@@ -229,7 +229,7 @@ m.menus.tokens =
     }
   })
   .dynamic(async (ctx, range) => {
-    for (const token of global.tables.tokens) {
+    for (const token of await tokens.all()) {
       range
         .text(`${token.props.name}`)
     }

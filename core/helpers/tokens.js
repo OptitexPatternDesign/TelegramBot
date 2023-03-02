@@ -37,10 +37,10 @@ m.addUser = async function (token, user) {
 
 
 m.register = async function (key, user) {
-  const token = global.tables.tokens.get(key.text)
-  if (token == null) {
+  const token = await global.tables.tokens.get(key.text)
+  if (token == null)
     return m.errorTokenInvalidKey;
-  }
+  //
   return m.addUser(token, user)
 }
 

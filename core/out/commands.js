@@ -259,7 +259,7 @@ m.commands.start = async function (ctx) {
 }
 
 m.commands.register = async function (ctx) {
-  const user = users.check(ctx.from)
+  const user = await users.check(ctx.from)
   console.log(user.props)
   //
   if (user.props.registered) {

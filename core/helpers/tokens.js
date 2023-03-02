@@ -28,8 +28,12 @@ m.addUser = async function (token, user) {
   console.log(token)
   if (token.props.users.length < token.props.limitUsers) {
     console.log("add", user.props)
-    token.props.users.push(user.key)
-    user.props.registered = true
+    token.set({
+      users: token.props.users.concat(user.key)
+    })
+    user.set({
+      registered: true
+    })
     //
     return token
   }

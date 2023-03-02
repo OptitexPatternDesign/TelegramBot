@@ -266,14 +266,6 @@ m.commands.help = async function (ctx) {
   //
   if (users.isAdmin(user)) {
     return ctx.reply(
-      "<b>Me</b>\n" +
-      " ● /register<code> - Register to server</code>\n" +
-      "\n" +
-      "<b>Files</b>\n" +
-      " ● /show_files<code> - Show my downloadable files</code>\n",
-      { parse_mode: "HTML" })
-  } else {
-    return ctx.reply(
       "<b>Tokens</b>\n" +
       " ● /add_token<code>   - Generate new token</code>\n" +
       " ● /show_tokens<code> - Show all generate tokens</code>\n" +
@@ -284,6 +276,14 @@ m.commands.help = async function (ctx) {
       "\n" +
       "<b>Users</b>\n" +
       " ● /show_users<code> - Show all registered users</code>\n",
+      { parse_mode: "HTML" })
+  } else {
+    return ctx.reply(
+      "<b>Me</b>\n" +
+      " ● /register<code> - Register to server</code>\n" +
+      "\n" +
+      "<b>Files</b>\n" +
+      " ● /show_files<code> - Show my downloadable files</code>\n",
       { parse_mode: "HTML" })
   }
 }

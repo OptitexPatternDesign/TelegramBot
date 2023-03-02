@@ -51,7 +51,6 @@ m.menus.adminFiles
         .text(file.props.title, (ctx) => {
           ctx.session.activeFile = file
           //
-          console.log("click")
           m.menus.replace(ctx, m.menus.editFile)
         })
         .row()

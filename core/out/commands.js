@@ -14,6 +14,7 @@ global.bot.api.setMyCommands([
   {command: "help" , description: "Show commands help"},
   {command: "register", description: "Register to server"},
   {command: "show_files", description: "Show your downloadable files"},
+  // admin related
   // {command: "show_users", description: "Show your core"},
   // {command: "show_tokens", description: "Show your core"},
   // {command: "add_file", description: "Add new file to server"},
@@ -246,9 +247,9 @@ m.menus.tokens.text = () =>
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
-
+//
 global.bot.use(m.menus.users)
-
+//
 global.bot.use(m.menus.tokens)
 
 
@@ -420,12 +421,12 @@ m.commands.addToken = async function (ctx) {
 
 global.bot.command('start', m.commands.start)
 global.bot.command('help' , m.commands.help)
-// core
+// show
 global.bot.command('show_files' , m.commands.showFiles)
 global.bot.command('show_users' , m.commands.showUsers)
 global.bot.command('show_tokens', m.commands.showTokens)
-//
+// add
 global.bot.command('add_file' , m.commands.addFile)
 global.bot.command('add_token', m.commands.addToken)
-//
+// user
 global.bot.command('register', m.commands.register)

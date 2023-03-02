@@ -25,9 +25,7 @@ m.add = async function (name, limitUsers) {
 
 
 m.addUser = async function (token, user) {
-  console.log(token)
   if (token.props.users.length < token.props.limitUsers) {
-    console.log("add", user.props)
     token.set({
       users: token.props.users.concat(user.key)
     })

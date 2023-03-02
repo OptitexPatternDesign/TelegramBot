@@ -11,6 +11,7 @@ const tokens = require("../helpers/tokens")
 
 global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
+  {command: "help" , description: "Show commands help"},
   {command: "show_files", description: "Show your core"},
   {command: "show_users", description: "Show your core"},
   {command: "show_tokens", description: "Show your core"},
@@ -217,9 +218,9 @@ m.menus
   .adminFiles.register(m.menus.editFile)
 //
 m.menus.editFile.text = (ctx) =>
-  'reatea'
+  ` ⚠ <b>You are editing '${ctx.activeFile.props.title}'</b>`
 
-//
+// +++++++++++
 m.menus.tokens =
   new global.ext.menu.Menu('tokens',
   {
@@ -240,7 +241,7 @@ m.menus.tokens =
       .addToken(ctx))
 //
 m.menus.tokens.text = (ctx) =>
-  'Tokens'
+  '<b>Tokens</b>'
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)
@@ -253,14 +254,15 @@ global.bot.use(m.menus.tokens)
 m.commands = {}
 
 m.commands.start = async function (ctx) {
-  await users.check(ctx.from)
+  const user = await users.check(ctx.from)
   //
-  return ctx.reply('Welcome')
+  return ctx.reply(
+    `<b>Welcome <u>${users.name(user)}</u> (ID: <u>${user.key}</u>)</b>`,
+    { parse_mode: "HTML" })
 }
 
 m.commands.register = async function (ctx) {
   const user = await users.check(ctx.from)
-  console.log(user.props)
   //
   if (user.props.registered) {
     await ctx.reply('Already registered')
@@ -293,8 +295,11 @@ m.commands.showFiles = async function (ctx) {
   //
   if (users.isAdmin(user))
     return m.menus.show(ctx, m.menus.adminFiles)
-  else
+  else {
+    if (!user.props.registered)
+      return m.commands.register(ctx)
     return m.menus.show(ctx, m.menus.userFiles)
+  }
 }
 
 m.commands.showUsers = async function (ctx) {
@@ -353,22 +358,26 @@ m.commands.addFile = async function (ctx) {
 }
 
 m.commands.addToken = async function (ctx) {
-  await ctx.reply(
-    "📄 <b>Set <u>token name</u></b>\n",
-    { parse_mode: "HTML" })
-  actions
-    .add(ctx.from, 'text')
-    .then(async name => {
-      await ctx.reply(
-        "📝️ <b>Set <u>users limit</u></b>\n",
-        { parse_mode: "HTML" })
-  actions
-    .add(ctx.from, 'text')
-    .then(async limitUsers => {
-      const result = await tokens.add(name.message, limitUsers.message)
-      //
-      await ctx.reply(result.key)
-    })})
+  const user = await users.check(ctx.from)
+  //
+  if (users.isAdmin(user)) {
+    await ctx.reply(
+      "📄 <b>Set <u>token name</u></b>\n",
+      { parse_mode: "HTML" })
+    actions
+      .add(ctx.from, 'text')
+      .then(async name => {
+        await ctx.reply(
+          "📝️ <b>Set <u>users limit</u></b>\n",
+          { parse_mode: "HTML" })
+    actions
+      .add(ctx.from, 'text')
+      .then(async limitUsers => {
+        const result = await tokens.add(name.message, limitUsers.message)
+        //
+        await ctx.reply(result.key)
+      })})
+  }
 }
 
 // core

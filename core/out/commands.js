@@ -83,7 +83,7 @@ m.menus.userFiles =
   })
 m.menus.userFiles.text = () =>
   "📄 <b>Your accessible <u>files</u></b>\n" +
-  " ● <code>Click on your file, َAnd pay attention to description!</code>\n"
+  "<code>Click on your file to download it, َAnd pay attention to description!</code>\n"
 
 // ++++++++++
 m.menus.users =
@@ -261,15 +261,32 @@ m.commands.start = async function (ctx) {
     { parse_mode: "HTML" })
 }
 
+m.commands.help = async function (ctx) {
+  const user = await users.check(ctx.from)
+  //
+  if (users.isAdmin(user)) {
+    return ctx.reply(
+      "<b>Help</b>\n" +
+      " ● ",
+      { parse_mode: "HTML" })
+  } else {
+    return ctx.reply(
+      " ● ",
+      { parse_mode: "HTML" })
+  }
+}
+
 m.commands.register = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (user.props.registered) {
-    await ctx.reply('Already registered')
+    await ctx.reply(
+      '✅ <b>Already registered<b>',
+      { parse_mode: "HTML" })
   } else {
     await ctx.reply(
-      'Enter token key'
-    )
+      '<b>Enter <u>token key</u></b>',
+      { parse_mode: "HTML" })
     actions
       .add(ctx.from, 'text')
       .then(async key => {
@@ -277,13 +294,19 @@ m.commands.register = async function (ctx) {
         //
         switch (result) {
           case tokens.errorTokenInvalidKey: {
-            await ctx.reply('Invalid token!')
+            await ctx.reply(
+              '❌ <b>Invalid token!</b>',
+              { parse_mode: "HTML" })
           } break
           case tokens.errorTokenUsersLimit: {
-            await ctx.reply('Reached users limit!')
+            await ctx.reply(
+              '❌ <b>Reached users limit!</b>',
+              { parse_mode: "HTML" })
           } break
           default: {
-            await ctx.reply('Successfully registered')
+            await ctx.reply(
+              '✅ <b>Successfully registered</b>',
+              { parse_mode: "HTML" })
           }
         }
       })
@@ -380,6 +403,9 @@ m.commands.addToken = async function (ctx) {
   }
 }
 
+
+global.bot.command('start', m.commands.start)
+global.bot.command('help' , m.commands.help)
 // core
 global.bot.command('show_files' , m.commands.showFiles)
 global.bot.command('show_users' , m.commands.showUsers)

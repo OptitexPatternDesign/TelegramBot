@@ -237,7 +237,7 @@ m.menus.tokens =
         .row()
     }
   })
-  .text('Generate',
+  .text('🔑 Generate new token',
     (ctx) => m.commands
       .addToken(ctx))
 //
@@ -399,13 +399,13 @@ m.commands.addToken = async function (ctx) {
   //
   if (users.isAdmin(user)) {
     await ctx.reply(
-      "📄 <b>Set <u>token name</u></b>\n",
+      "🔑 <b>Set <u>token name</u></b>\n",
       { parse_mode: "HTML" })
     actions
       .add(ctx.from, 'text')
       .then(async name => {
         await ctx.reply(
-          "📝️ <b>Set <u>users limit</u></b>\n",
+          "🔑 <b>Set <u>users limit</u></b>\n",
           { parse_mode: "HTML" })
     actions
       .add(ctx.from, 'text')

@@ -12,11 +12,12 @@ const tokens = require("../helpers/tokens")
 global.bot.api.setMyCommands([
   {command: "start", description: "Begin the robot"},
   {command: "help" , description: "Show commands help"},
-  {command: "show_files", description: "Show your core"},
-  {command: "show_users", description: "Show your core"},
-  {command: "show_tokens", description: "Show your core"},
-  {command: "add_file", description: "Add new file to server"},
-  {command: "add_token", description: "Add new file to server"},
+  {command: "register", description: "Register to server"},
+  {command: "show_files", description: "Show your downloadable files"},
+  // {command: "show_users", description: "Show your core"},
+  // {command: "show_tokens", description: "Show your core"},
+  // {command: "add_file", description: "Add new file to server"},
+  // {command: "add_token", description: "Add new file to server"},
 ]).then();
 
 
@@ -96,7 +97,7 @@ m.menus.users =
   })
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
-      if (users.isUser(user))
+      if (users.isUser(user) && user.props.registered)
         range
           .text(users.name(user), (ctx) => {
             ctx.session.activeUser = user
@@ -180,7 +181,7 @@ m.menus.editFile =
         { parse_mode: "HTML" })
       actions
         .add(ctx.from, 'document')
-        .then(async title =>
+        .then(async document =>
           await files.update(ctx.session.activeFile, document.message, null, null))
     })
   .text('📝️ Title',
@@ -240,7 +241,7 @@ m.menus.tokens =
     (ctx) => m.commands
       .addToken(ctx))
 //
-m.menus.tokens.text = (ctx) =>
+m.menus.tokens.text = () =>
   '<b>Tokens</b>'
 
 global.bot.use(m.menus.adminFiles)
@@ -257,7 +258,8 @@ m.commands.start = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   return ctx.reply(
-    `<b>Welcome <u>${users.name(user)}</u> (ID: <u>${user.key}</u>)</b>`,
+    `<b>Welcome <u>${users.name(user)}</u></b>\n` +
+    ` ● <code>ID: ${user.key}</code>`,
     { parse_mode: "HTML" })
 }
 

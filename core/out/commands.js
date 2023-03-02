@@ -269,7 +269,7 @@ m.commands.register = async function (ctx) {
       'Enter token key'
     )
     actions
-      .add(ctx.from, 'document')
+      .add(ctx.from, 'text')
       .then(async key => {
         const result = await tokens.register(key.message, user)
         //

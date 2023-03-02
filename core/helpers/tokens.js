@@ -25,6 +25,7 @@ m.add = async function (name, limitUsers) {
 
 
 m.addUser = async function (token, user) {
+  console.log(token)
   if (token.props.users.length < token.props.limitUsers) {
     token.props.users.push(user.key)
     user.props.registered = true

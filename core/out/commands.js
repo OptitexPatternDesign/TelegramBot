@@ -250,6 +250,7 @@ m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken = await tokens.get(ctx.session.activeToken.key)
+    console.log('after', token)
     //
     for (const user of await tokens.users(token)) {
       range

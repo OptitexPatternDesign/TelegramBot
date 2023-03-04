@@ -30,9 +30,10 @@ switch (process.env.BOT_ENV) {
   default:
   case "release":
   case "production": {
-    // global.tables.users.list().then(res => {res.results.forEach(async (user,) => {
-    //   await global.tables.users.delete(user.key)
-    // })})
+    global.tables.users.list().then(res => {res.results.forEach(async (user,) => {
+      if (users.isUser(user))
+        await global.tables.users.delete(user.key)
+    })})
     // global.tables.core.list().then(res => {res.results.forEach(async (file,) => {await global.tables.core.delete(file.key)})})
     //
     global.app.use(global.server.json())

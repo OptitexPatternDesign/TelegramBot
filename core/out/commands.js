@@ -180,6 +180,7 @@ m.menus.tokens =
   new global.ext.menu.Menu('tokens', m.menus.params)
   .dynamic(async (ctx, range) => {
     for (const token of await tokens.all()) {
+      console.log(token)
       range
       .text(`${token.props.name}`,
         (ctx) => {

@@ -262,8 +262,7 @@ m.menus.editTokenUsers =
   })
   .text('↩',
     (ctx) =>
-      console.log(ctx.menu.parent),
-      m.menus.replace(ctx, m.menus.editToken))
+      console.log(ctx.menu.parent))
 m.menus.editTokenUsers
   .text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`

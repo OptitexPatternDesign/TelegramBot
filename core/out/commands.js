@@ -70,9 +70,10 @@ m.menus.adminFiles
 m.menus.userFiles =
   new global.ext.menu.Menu('user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const user = await users.check(ctx.from)
+    const user  = await users.check(ctx.from)
+    const token = user.props.registered
     //
-    for (const file of await files.token(user))
+    for (const file of await files.token(token))
       range
       .text(file.props.title,
         (ctx) =>
@@ -250,15 +251,12 @@ m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken = await tokens.get(ctx.session.activeToken.key)
-    console.log('after', token)
     //
     for (const user of await tokens.users(token)) {
       range
       .text(users.name(user),
         async (ctx) => {
-          console.log('delete', token, user)
           await tokens.unregister(user)
-          console.log('deleted', token)
           //
           ctx.menu.update()
         })

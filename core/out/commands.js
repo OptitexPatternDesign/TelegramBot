@@ -254,7 +254,8 @@ m.menus.editTokenUsers =
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken
     //
-    for (const user of await tokens.users(token))
+    for (const user of await tokens.users(token)) {
+      console.log(user)
       range
       .text(users.name(user),
         async (ctx) => {
@@ -263,6 +264,7 @@ m.menus.editTokenUsers =
           ctx.menu.update()
         })
       .row()
+    }
   })
   .text('↩',
     (ctx) =>

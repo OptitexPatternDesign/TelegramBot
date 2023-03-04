@@ -219,7 +219,8 @@ m.menus.editToken =
       m.menus.replace(ctx, m.menus.tokens))
 m.menus.editToken
   .text = (ctx) =>
-  ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>`
+  ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>\n` +
+  ` ● <code>${ctx.session.activeToken.key}</code>`
 
 // +++++++++++++++++++
 m.menus.editTokenFiles =

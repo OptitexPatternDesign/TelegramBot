@@ -287,7 +287,7 @@ m.menus
   .editToken.register(m.menus.editTokenFiles)
 //
 m.menus.editTokenFiles.text = (ctx) =>
-  `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
+  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
 
 
 global.bot.use(m.menus.adminFiles)

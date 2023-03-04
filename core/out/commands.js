@@ -254,15 +254,15 @@ m.menus.editTokenUsers =
       range
       .text(users.name(user),
         async (ctx) => {
-          ctx.session.activeUser = user
+          await tokens.unregister(user)
           //
-          m.menus.show(ctx, m.menus.editUser)
+          ctx.menu.update()
         })
       .row()
   })
   .text('↩',
     (ctx) =>
-      console.log(ctx.menu.parent))
+      m.menus.replace(ctx, m.menus.editToken))
 m.menus.editTokenUsers
   .text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`

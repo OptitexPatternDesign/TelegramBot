@@ -61,6 +61,12 @@ m.deleteUser = async function (token, user) {
 }
 
 
+m.users = async function (token) {
+  return token.props.users
+    .map(i => users.get(i))
+}
+
+
 m.register = async function (key, user) {
   const token = await global.tables.tokens.get(key.text)
   if (token == null)

@@ -250,18 +250,19 @@ m.menus.editTokenUsers =
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken
     //
-    for (const file of await files.all())
+    for (const user of await tokens.users(token))
       range
-      .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
+      .text(users.name(user),
         async (ctx) => {
-          await files.tokenToggle(token, file)
-          // update menu buttons
-          ctx.menu.update()
+          ctx.session.activeUser = user
+          //
+          m.menus.show(ctx, m.menus.editUser)
         })
       .row()
   })
   .text('↩',
     (ctx) =>
+      console.log(ctx.menu.parent),
       m.menus.replace(ctx, m.menus.editToken))
 m.menus.editTokenUsers
   .text = (ctx) =>

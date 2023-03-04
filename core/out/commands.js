@@ -330,7 +330,7 @@ m.commands.register = async function (ctx) {
   //
   if (user.props.registered) {
     await ctx.reply(
-      '✅ <b>Already registered<b>',
+      '✅ <b>Already registered</b>',
       { parse_mode: "HTML" })
   } else {
     await ctx.reply(
@@ -359,15 +359,6 @@ m.commands.register = async function (ctx) {
           }
         }
       })
-  }
-}
-
-m.commands.unregister = async function (ctx) {
-  const user = await users.check(ctx.from)
-  //
-  if (user.props.registered) {
-    await tokens.unregister(user)
-    ctx.reply('ss')
   }
 }
 
@@ -466,7 +457,6 @@ global.bot.command('start', m.commands.start)
 global.bot.command('help' , m.commands.help)
 // user
 global.bot.command('register', m.commands.register)
-global.bot.command('unregister', m.commands.unregister)
 // show
 global.bot.command('show_files' , m.commands.showFiles)
 global.bot.command('show_users' , m.commands.showUsers)

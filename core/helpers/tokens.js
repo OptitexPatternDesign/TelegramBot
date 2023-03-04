@@ -30,12 +30,18 @@ m.addUser = async function (token, user) {
       users: token.props.users.concat(user.key)
     })
     user.set({
-      registered: true
+      registered: token.key
     })
     //
     return token
   }
   return m.errorTokenUsersLimit;
+}
+
+m.deleteUser = async function (token, user) {
+  token.set({
+    users: token.props.users.filter(i => i !== user.key)
+  })
 }
 
 
@@ -45,6 +51,17 @@ m.register = async function (key, user) {
     return m.errorTokenInvalidKey;
   //
   return m.addUser(token, user)
+}
+
+m.unregister = async function (user) {
+  if (user.props.registered) {
+    const token = await global.tables.tokens.get(user.props.registered)
+    //
+    await m.deleteUser(token, user)
+    user.set({
+      registered: null
+    })
+  }
 }
 
 

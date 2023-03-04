@@ -124,6 +124,13 @@ m.menus.editUser =
     (ctx) => m
       .menus.replace(ctx, m.menus.editUserFiles))
   .row()
+  .text('❌ Delete',
+    async (ctx) => {
+      await tokens.unregister(ctx.session.activeUser)
+      //
+      m.menus.replace(ctx, m.menus.users)
+    })
+  .row()
   .text('↩',
     (ctx) => m
       .menus.replace(ctx, m.menus.users))
@@ -219,7 +226,7 @@ m.menus
   .adminFiles.register(m.menus.editFile)
 //
 m.menus.editFile.text = (ctx) =>
-  ` ⚠ <b>You are editing '${ctx.activeFile.props.title}'</b>`
+  ` ⚠ <b>You are editing '${ctx.session.activeFile.props.title}'</b>`
 
 // +++++++++++
 m.menus.tokens =
@@ -353,16 +360,6 @@ m.commands.showTokens = async function (ctx) {
     return m.menus.show(ctx, m.menus.tokens)
 }
 
-m.commands.sendFile = async function (ctx, file) {
-  await ctx.replyWithDocument(file.props.id, {
-    caption:
-      `<b>${file.props.title}</b>\n` +
-      `\n` +
-      `${file.props.description}`,
-    parse_mode: "HTML"
-  })
-}
-
 m.commands.addFile = async function (ctx) {
   const user = await users.check(ctx.from)
   //
@@ -417,9 +414,21 @@ m.commands.addToken = async function (ctx) {
   }
 }
 
+m.commands.sendFile = async function (ctx, file) {
+  await ctx.replyWithDocument(file.props.id, {
+    caption:
+      `<b>${file.props.title}</b>\n` +
+      `\n` +
+      `${file.props.description}`,
+    parse_mode: "HTML"
+  })
+}
+
 
 global.bot.command('start', m.commands.start)
 global.bot.command('help' , m.commands.help)
+// user
+global.bot.command('register', m.commands.register)
 // show
 global.bot.command('show_files' , m.commands.showFiles)
 global.bot.command('show_users' , m.commands.showUsers)
@@ -427,5 +436,3 @@ global.bot.command('show_tokens', m.commands.showTokens)
 // add
 global.bot.command('add_file' , m.commands.addFile)
 global.bot.command('add_token', m.commands.addToken)
-// user
-global.bot.command('register', m.commands.register)

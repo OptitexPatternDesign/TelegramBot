@@ -224,7 +224,7 @@ m.menus.editToken =
       m.menus.replace(ctx, m.menus.editTokenFiles))
   .text('👤 Users',
     async (ctx) =>
-      m.menus.replace(ctx, m.menus.editTokenUsers))
+    console.log('users'))//m.menus.replace(ctx, m.menus.editTokenUsers))
   .row()
   .text('❌ Delete',
     async (ctx) => {

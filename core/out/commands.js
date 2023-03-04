@@ -256,7 +256,7 @@ m.menus
   .tokens.register(m.menus.editToken)
 //
 m.menus.editToken.text = (ctx) =>
-  ` ⚠ <b>You are editing '${ctx.session.activeFile.props.title}'</b>`
+  ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>`
 
 // +++++++++++++++++++
 m.menus.editTokenFiles =

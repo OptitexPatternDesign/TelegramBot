@@ -256,7 +256,9 @@ m.menus.editTokenUsers =
       range
       .text(users.name(user),
         async (ctx) => {
+          console.log('delete', token, user)
           await tokens.unregister(user)
+          console.log('deleted', token)
           //
           ctx.menu.update()
         })

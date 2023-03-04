@@ -43,6 +43,47 @@ m.menus = {
   }
 }
 
+// +++++++++++++++
+m.menus.adminFiles
+  = new global.ext.menu.Menu('admin-files', m.menus.params)
+  .dynamic(async (ctx, range) => {
+    for (const file of await files.all())
+      range
+      .text(file.props.title,
+        (ctx) => {
+          ctx.session.activeFile = file
+          //
+          m.menus.replace(ctx, m.menus.editFile)
+        })
+      .row()
+  })
+  .text('📄 Add new file',
+    (ctx) =>
+      m.commands.addFile(ctx))
+m.menus.adminFiles
+  .text = () =>
+  "📄 <b>Server <u>files</u></b>\n" +
+  " ● <code>Edit file</code> 📄\n" +
+  " ● <code>Add new file</code> 📄\n"
+
+// ++++++++++++++
+m.menus.userFiles =
+  new global.ext.menu.Menu('user-files', m.menus.params)
+  .dynamic(async (ctx, range) => {
+    const user = await users.check(ctx.from)
+    //
+    for (const file of await files.token(user))
+      range
+      .text(file.props.title,
+        (ctx) =>
+          m.commands.sendFile(ctx, file))
+      .row()
+  })
+m.menus.userFiles
+  .text = () =>
+  "📄 <b>Your accessible <u>files</u></b>\n" +
+  "<code>Click on your file to download it, َAnd pay attention to description!</code>\n"
+
 // +++++++++++++
 m.menus.editFile =
   new global.ext.menu.Menu('edit-file', m.menus.params)
@@ -87,51 +128,30 @@ m.menus.editFile =
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.adminFiles))
-//
-m.menus.editFile.text = (ctx) =>
+m.menus.editFile
+  .text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeFile.props.title}'</b>`
 
-// +++++++++++++++
-m.menus.adminFiles
-  = new global.ext.menu.Menu('admin-files', m.menus.params)
+// ++++++++++
+m.menus.users =
+  new global.ext.menu.Menu('users', m.menus.params)
   .dynamic(async (ctx, range) => {
-    for (const file of await files.all())
-      range
-      .text(file.props.title,
-        (ctx) => {
-          ctx.session.activeFile = file
-          //
-          m.menus.replace(ctx, m.menus.editFile)
-        })
-      .row()
+    for (const user of await users.all())
+      if (users.isUser(user) && user.props.registered)
+        range
+        .text(users.name(user),
+          (ctx) => {
+            ctx.session.activeUser  = user
+            ctx.session.activeToken = tokens.get(user.props.registered)
+            // move to new menu
+            m.menus.replace(ctx, m.menus.editUser)
+          })
+        .row()
   })
-  .text('📄 Add new file',
-    (ctx) =>
-      m.commands.addFile(ctx))
-//
-m.menus.adminFiles.register(m.menus.editFile)
-//
-m.menus.adminFiles.text = () =>
-  "📄 <b>Server <u>files</u></b>\n" +
-  " ● <code>Edit file</code> 📄\n" +
-  " ● <code>Add new file</code> 📄\n"
-
-// ++++++++++++++
-m.menus.userFiles =
-  new global.ext.menu.Menu('user-files', m.menus.params)
-  .dynamic(async (ctx, range) => {
-    const user = await users.check(ctx.from)
-    //
-    for (const file of await files.token(user))
-      range
-      .text(file.props.title,
-        (ctx) =>
-          m.commands.sendFile(ctx, file))
-      .row()
-  })
-m.menus.userFiles.text = () =>
-  "📄 <b>Your accessible <u>files</u></b>\n" +
-  "<code>Click on your file to download it, َAnd pay attention to description!</code>\n"
+m.menus.users
+  .text = () =>
+  "👤 <b>All <u>users</u></b>\n" +
+  " ● <code>Change access to files</code> 📄"
 
 // +++++++++++++
 m.menus.editUser =
@@ -150,66 +170,32 @@ m.menus.editUser =
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.users))
-//
-m.menus.editUser.text = (ctx) =>
+m.menus.editUser
+  .text = (ctx) =>
   `<b>You are editing '${users.name(ctx.session.activeUser)}'</b>\n` +
   ` ⚠️ <code>Any change will apply!</code>`
 
-// ++++++++++
-m.menus.users =
-  new global.ext.menu.Menu('users', m.menus.params)
+// +++++++++++
+m.menus.tokens =
+  new global.ext.menu.Menu('tokens', m.menus.params)
   .dynamic(async (ctx, range) => {
-    for (const user of await users.all())
-      if (users.isUser(user) && user.props.registered)
-        range
-        .text(users.name(user),
-          (ctx) => {
-            ctx.session.activeUser  = user
-            ctx.session.activeToken = tokens.get(user.props.registered)
-            // move to new menu
-            m.menus.replace(ctx, m.menus.editUser)
-          })
-        .row()
-  })
-//
-m.menus.users.register(m.menus.editUser)
-//
-m.menus.users.text = () =>
-  "👤 <b>All <u>users</u></b>\n" +
-  " ● <code>Change access to files</code> 📄"
-
-// +++++++++++++++++++
-m.menus.editTokenFiles =
-  new global.ext.menu.Menu('edit-token-files', m.menus.params)
-  .dynamic(async (ctx, range) => {
-    const token = ctx.session.activeToken
-    //
-    for (const file of await files.all())
+    for (const token of await tokens.all()) {
       range
-      .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
-        async (ctx) => {
-          await files.tokenToggle(token, file)
-          // update menu buttons
-          ctx.menu.update()
+      .text(`${token.props.name}`,
+        (ctx) => {
+          ctx.session.activeToken = token
+          // move to new menu
+          m.menus.replace(ctx, m.menus.editToken)
         })
       .row()
+    }
   })
-  .text('↩',
+  .text('🔑 Generate new token',
     (ctx) =>
-      m.menus.replace(ctx, m.menus.editToken))
-//
-m.menus.editTokenFiles.text = (ctx) =>
-  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
-
-// +++++++++++++++++++
-m.menus.editTokenUsers =
-  new global.ext.menu.Menu('edit-token-users', m.menus.params)
-  .text('↩',
-    (ctx) =>
-      m.menus.replace(ctx, m.menus.editToken))
-//
-m.menus.editTokenFiles.text = (ctx) =>
-  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
+      m.commands.addToken(ctx))
+m.menus.tokens
+  .text = () =>
+  '<b>Tokens</b>'
 
 // ++++++++++++++
 m.menus.editToken =
@@ -231,36 +217,47 @@ m.menus.editToken =
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.tokens))
-//
-m.menus.editToken.register(m.menus.editTokenFiles)
-m.menus.editToken.register(m.menus.editTokenUsers)
-//
-m.menus.editToken.text = (ctx) =>
+m.menus.editToken
+  .text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>`
 
-// +++++++++++
-m.menus.tokens =
-  new global.ext.menu.Menu('tokens', m.menus.params)
+// +++++++++++++++++++
+m.menus.editTokenFiles =
+  new global.ext.menu.Menu('edit-token-files', m.menus.params)
   .dynamic(async (ctx, range) => {
-    for (const token of await tokens.all()) {
+    const token = ctx.session.activeToken
+    //
+    for (const file of await files.all())
       range
-      .text(`${token.props.name}`,
-        (ctx) => {
-          ctx.session.activeToken = token
-          // move to new menu
-          m.menus.replace(ctx, m.menus.editToken)
+      .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
+        async (ctx) => {
+          await files.tokenToggle(token, file)
+          // update menu buttons
+          ctx.menu.update()
         })
       .row()
-    }
   })
-  .text('🔑 Generate new token',
+  .text('↩',
     (ctx) =>
-      m.commands.addToken(ctx))
-//
+      m.menus.replace(ctx, m.menus.editToken))
+m.menus.editTokenFiles
+  .text = (ctx) =>
+  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
+
+// +++++++++++++++++++
+m.menus.editTokenUsers =
+  new global.ext.menu.Menu('edit-token-users', m.menus.params)
+  .text('↩',
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.editToken))
+m.menus.editTokenFiles
+  .text = (ctx) =>
+  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
+
+m.menus.editToken.register(m.menus.editTokenFiles)
+m.menus.editToken.register(m.menus.editTokenUsers)
 m.menus.tokens.register(m.menus.editToken)
-//
-m.menus.tokens.text = () =>
-  '<b>Tokens</b>'
+
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)

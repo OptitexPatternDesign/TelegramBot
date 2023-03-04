@@ -159,7 +159,7 @@ m.menus.editUser =
   new global.ext.menu.Menu('edit-user', m.menus.params)
   .text('📄 Files',
     (ctx) =>
-      m.menus.replace(ctx, m.menus.editTokenFiles))
+      m.menus.replace(ctx, m.menus.editUserFiles))
   .row()
   .text('❌ Delete',
     async (ctx) => {
@@ -302,10 +302,11 @@ m.menus.editToken.register(m.menus.editTokenFiles)
 global.bot.use(m.menus.adminFiles)
 m.menus.adminFiles.register(m.menus.editFile)
 //
-global.bot.use(m.menus. userFiles)
+global.bot.use(m.menus.userFiles)
 //
 global.bot.use(m.menus.users)
-m.menus.users.register(m.menus.editUser)
+m.menus.users   .register(m.menus.editUser)
+m.menus.editUser.register(m.menus.editUserFiles)
 
 
 m.commands = {}

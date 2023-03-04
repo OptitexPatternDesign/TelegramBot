@@ -48,16 +48,17 @@ m.menus.adminFiles
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
-        .text(file.props.title, (ctx) => {
+      .text(file.props.title,
+        (ctx) => {
           ctx.session.activeFile = file
           //
           m.menus.replace(ctx, m.menus.editFile)
         })
-        .row()
+      .row()
   })
   .text('📄 Add new file',
-    (ctx) => m.commands
-      .addFile(ctx))
+    (ctx) =>
+      m.commands.addFile(ctx))
 //
 m.menus.adminFiles.text = () =>
   "📄 <b>Server <u>files</u></b>\n" +
@@ -76,101 +77,16 @@ m.menus.userFiles =
   .dynamic(async (ctx, range) => {
     const user = await users.check(ctx.from)
     //
-    for (const file of await files.user(user))
+    for (const file of await files.token(user))
       range
-        .text(file.props.title,
-          (ctx) => m.commands.sendFile(ctx, file))
-        .row()
+      .text(file.props.title,
+        (ctx) =>
+          m.commands.sendFile(ctx, file))
+      .row()
   })
 m.menus.userFiles.text = () =>
   "📄 <b>Your accessible <u>files</u></b>\n" +
   "<code>Click on your file to download it, َAnd pay attention to description!</code>\n"
-
-// ++++++++++
-m.menus.users =
-  new global.ext.menu.Menu('users',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
-  .dynamic(async (ctx, range) => {
-    for (const user of await users.all())
-      if (users.isUser(user) && user.props.registered)
-        range
-          .text(users.name(user), (ctx) => {
-            ctx.session.activeUser = user
-            // move to new menu
-            m.menus.replace(ctx, m.menus.editUser)
-          })
-          .row()
-  })
-//
-m.menus.users.text = () =>
-  "👤 <b>All <u>users</u></b>\n" +
-  " ● <code>Change access to files</code> 📄"
-
-// +++++++++++++
-m.menus.editUser =
-  new global.ext.menu.Menu('edit-user',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
-  .text('📄 Files',
-    (ctx) => m
-      .menus.replace(ctx, m.menus.editUserFiles))
-  .row()
-  .text('❌ Delete',
-    async (ctx) => {
-      await tokens.unregister(ctx.session.activeUser)
-      //
-      m.menus.replace(ctx, m.menus.users)
-    })
-  .row()
-  .text('↩',
-    (ctx) => m
-      .menus.replace(ctx, m.menus.users))
-m.menus
-  .users.register(m.menus.editUser)
-//
-m.menus.editUser.text = (ctx) =>
-  `<b>You are editing '${users.name(ctx.session.activeUser)}'</b>\n` +
-  ` ⚠️ <code>Any change will apply!</code>`
-
-// ++++++++++++++++++
-m.menus.editUserFiles =
-  new global.ext.menu.Menu('edit-user-files',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
-  .dynamic(async (ctx, range) => {
-    const user = ctx.session.activeUser
-    //
-    for (const file of await files.all())
-      range
-        .text(`${file.props.title} ${await files.userContain(user, file) ? '✅' : '❌'}`,
-          async (ctx) => {
-            await files.userToggle(user, file)
-            // update menu buttons
-            ctx.menu.update()
-          })
-        .row()
-  })
-  .text('↩',
-    (ctx) => m
-      .menus.replace(ctx, m.menus.editUser))
-m.menus
-  .editUser.register(m.menus.editUserFiles)
-//
-m.menus.editUserFiles.text = (ctx) =>
-  `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
 
 // +++++++++++++
 m.menus.editFile =
@@ -220,13 +136,70 @@ m.menus.editFile =
     })
   .row()
   .text('↩',
-    (ctx) => m
-      .menus.replace(ctx, m.menus.adminFiles))
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.adminFiles))
 m.menus
   .adminFiles.register(m.menus.editFile)
 //
 m.menus.editFile.text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeFile.props.title}'</b>`
+
+// ++++++++++
+m.menus.users =
+  new global.ext.menu.Menu('users',
+  {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
+  })
+  .dynamic(async (ctx, range) => {
+    for (const user of await users.all())
+      if (users.isUser(user) && user.props.registered)
+        range
+        .text(users.name(user),
+          (ctx) => {
+            ctx.session.activeUser  = user
+            ctx.session.activeToken = tokens.get(user.props.registered)
+            // move to new menu
+            m.menus.replace(ctx, m.menus.editUser)
+          })
+        .row()
+  })
+//
+m.menus.users.text = () =>
+  "👤 <b>All <u>users</u></b>\n" +
+  " ● <code>Change access to files</code> 📄"
+
+// +++++++++++++
+m.menus.editUser =
+  new global.ext.menu.Menu('edit-user',
+  {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
+  })
+  .text('📄 Files',
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.editTokenFiles))
+  .row()
+  .text('❌ Delete',
+    async (ctx) => {
+      await tokens.unregister(ctx.session.activeUser)
+      //
+      m.menus.replace(ctx, m.menus.users)
+    })
+  .row()
+  .text('↩',
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.users))
+m.menus
+  .users.register(m.menus.editUser)
+//
+m.menus.editUser.text = (ctx) =>
+  `<b>You are editing '${users.name(ctx.session.activeUser)}'</b>\n` +
+  ` ⚠️ <code>Any change will apply!</code>`
 
 // +++++++++++
 m.menus.tokens =
@@ -240,16 +213,82 @@ m.menus.tokens =
   .dynamic(async (ctx, range) => {
     for (const token of await tokens.all()) {
       range
-        .text(`${token.props.name}`)
-        .row()
+      .text(`${token.props.name}`,
+        (ctx) => {
+          ctx.session.activeToken = token
+          // move to new menu
+          m.menus.replace(ctx, m.menus.editToken)
+        })
+      .row()
     }
   })
   .text('🔑 Generate new token',
-    (ctx) => m.commands
-      .addToken(ctx))
+    (ctx) =>
+      m.commands.addToken(ctx))
 //
 m.menus.tokens.text = () =>
   '<b>Tokens</b>'
+
+// ++++++++++++++
+m.menus.editToken =
+  new global.ext.menu.Menu('edit-token',
+  {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
+  })
+  .text('📄 Files',
+    async (ctx) =>
+      m.menus.replace(ctx, m.menus.editTokenFiles))
+  .row()
+  .text('❌ Delete',
+    async (ctx) => {
+      await files.delete(ctx.session.activeFile)
+      //
+      m.menus.replace(ctx, m.menus.adminFiles)
+    })
+  .row()
+  .text('↩',
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.tokens))
+m.menus
+  .tokens.register(m.menus.editToken)
+//
+m.menus.editToken.text = (ctx) =>
+  ` ⚠ <b>You are editing '${ctx.session.activeFile.props.title}'</b>`
+
+// +++++++++++++++++++
+m.menus.editTokenFiles =
+  new global.ext.menu.Menu('edit-token-files',
+  {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
+  })
+  .dynamic(async (ctx, range) => {
+    const token = ctx.session.activeToken
+    //
+    for (const file of await files.all())
+      range
+        .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
+          async (ctx) => {
+            await files.tokenToggle(token, file)
+            // update menu buttons
+            ctx.menu.update()
+          })
+        .row()
+  })
+  .text('↩',
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.editUser))
+m.menus
+  .editUser.register(m.menus.editTokenFiles)
+//
+m.menus.editTokenFiles.text = (ctx) =>
+  `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`
+
 
 global.bot.use(m.menus.adminFiles)
 global.bot.use(m.menus. userFiles)

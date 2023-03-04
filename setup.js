@@ -9,13 +9,13 @@ const tokens = require("./core/helpers/tokens")
 
 global.bot.use(global.telegram.session({
   initial: () => ({
-    activeUser: null,
-    activeFile: null
+    activeUser : null,
+    activeFile : null,
+    activeToken: null
   })
 }));
 
 require('./core/out/commands')
-const {isAdmin} = require("./core/helpers/users");
 
 global.bot.on('message:document', (ctx) => {
   const action = actions.get(ctx.from)
@@ -41,14 +41,10 @@ switch (process.env.BOT_ENV) {
     global.app.use(global.server.json())
     global.app.use(global.telegram.webhookCallback(global.bot, 'express'))
     // start the server
-    global.app.listen(global.config.port, () => {
-      console.log("Started the server!")
+    global.app.listen(global.config.port, async () => {
+      console.log("Server has been started...")
       // set public webhook
-      global.bot.api.setWebhook('https://opd-bot.cyclic.app')
-        .then(res => {
-        })
-        .catch(err => {
-        })
+      await global.bot.api.setWebhook('https://opd-bot.cyclic.app')
     })
   } break;
 }

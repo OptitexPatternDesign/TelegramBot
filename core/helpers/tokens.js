@@ -8,6 +8,10 @@ const {generate} = require('randomstring')
 m.errorTokenInvalidKey = 'invalid key'
 m.errorTokenUsersLimit = 'limits reached'
 
+m.get = async function (key) {
+  return global.tables.tokens.get(key)
+}
+
 m.add = async function (name, limitUsers) {
   const key = generate()
   //

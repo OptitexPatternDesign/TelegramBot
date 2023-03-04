@@ -45,10 +45,10 @@ m.delete = async function (file) {
 }
 
 
-m.user = async function (user) {
+m.token = async function (token) {
   let files = []
   //
-  for (const fragment of await user.fragment('files').list())
+  for (const fragment of await token.fragment('files').list())
     for (const [file, status] of Object.entries(fragment.props))
       if (status === m.fileExist)
         files.push(await global.tables.files.get(file))
@@ -56,17 +56,17 @@ m.user = async function (user) {
   return files;
 }
 
-m.userToggle = async function (user, file) {
-  const contain = await m.userContain(user, file)
+m.tokenToggle = async function (token, file) {
+  const contain = await m.tokenContains(token, file)
   //
-  await user.fragment('files').set({
+  await token.fragment('files').set({
     [file.key]: contain? m.fileNotExist : m.fileExist  // reverse file status
   })
   return !contain
 }
 
-m.userContain = async function (user, file) {
-  for (const fragment of await user.fragment('files').get())
+m.tokenContains = async function (token, file) {
+  for (const fragment of await token.fragment('files').get())
     if (fragment.props[file.key] === m.fileExist)
       return true
   return false

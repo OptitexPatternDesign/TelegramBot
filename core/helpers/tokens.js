@@ -62,8 +62,10 @@ m.deleteUser = async function (token, user) {
 
 
 m.users = async function (token) {
-  return token.props.users
-    .map(i => users.get(i))
+  return Promise.all(
+    token.props.users
+      .map(i => users.get(i))
+  )
 }
 
 

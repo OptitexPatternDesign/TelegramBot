@@ -242,7 +242,7 @@ m.menus.editTokenFiles =
       m.menus.replace(ctx, m.menus.editToken))
 m.menus.editTokenFiles
   .text = (ctx) =>
-  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
+  `<b>Change '${users.name(ctx.session.activeToken.props.name)}' files access</b>`
 
 // +++++++++++++++++++
 m.menus.editTokenUsers =
@@ -265,7 +265,7 @@ m.menus.editTokenUsers =
       m.menus.replace(ctx, m.menus.editToken))
 m.menus.editTokenUsers
   .text = (ctx) =>
-  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
+  `<b>Change '${users.name(ctx.session.activeToken.props.name)}' users</b>`
 
 
 global.bot.use(m.menus.tokens)

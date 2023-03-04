@@ -33,13 +33,10 @@ switch (process.env.BOT_ENV) {
   default:
   case "release":
   case "production": {
-    users.all().then(all =>
-      all.forEach(async user => {
-        console.log(user, users.isUser(user))
-        if (users.isUser(user))
-          await global.tables.users.delete(user.key)
-      }))
-    // global.tables.core.list().then(res => {res.results.forEach(async (file,) => {await global.tables.core.delete(file.key)})})
+    // users.all().then(all =>
+    //   all.forEach(async user => {
+    //     await global.tables.users.delete(user.key)
+    //   }))
     //
     global.app.use(global.server.json())
     global.app.use(global.telegram.webhookCallback(global.bot, 'express'))

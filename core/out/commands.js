@@ -204,11 +204,6 @@ m.menus.editTokenFiles.text = (ctx) =>
 // +++++++++++++++++++
 m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
-  .dynamic(async (ctx, range) => {
-    const token = ctx.session.activeToken
-    //
-
-  })
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.editToken))
@@ -224,7 +219,7 @@ m.menus.editToken =
       m.menus.replace(ctx, m.menus.editTokenFiles))
   .text('👤 Users',
     async (ctx) =>
-    console.log('users'))//m.menus.replace(ctx, m.menus.editTokenUsers))
+      m.menus.replace(ctx, m.menus.editTokenUsers))
   .row()
   .text('❌ Delete',
     async (ctx) => {

@@ -186,13 +186,13 @@ m.menus.editTokenFiles =
     //
     for (const file of await files.all())
       range
-        .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
-          async (ctx) => {
-            await files.tokenToggle(token, file)
-            // update menu buttons
-            ctx.menu.update()
-          })
-        .row()
+      .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
+        async (ctx) => {
+          await files.tokenToggle(token, file)
+          // update menu buttons
+          ctx.menu.update()
+        })
+      .row()
   })
   .text('↩',
     (ctx) =>
@@ -207,15 +207,7 @@ m.menus.editTokenUsers =
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken
     //
-    for (const file of await files.all())
-      range
-        .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
-          async (ctx) => {
-            await files.tokenToggle(token, file)
-            // update menu buttons
-            ctx.menu.update()
-          })
-        .row()
+
   })
   .text('↩',
     (ctx) =>

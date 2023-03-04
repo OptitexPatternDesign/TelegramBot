@@ -33,18 +33,19 @@ m.menus = {
   show: function (ctx, menu, text=null) {
     return ctx.reply(text || menu.text(ctx),
       { parse_mode: "HTML", reply_markup: menu })
+  },
+
+  params: {
+    onMenuOutdated: async (ctx) => {
+      await ctx.answerCallbackQuery();
+      await ctx.deleteMessage()
+    }
   }
 }
 
 // +++++++++++++++
 m.menus.adminFiles
-  = new global.ext.menu.Menu('admin-files',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  = new global.ext.menu.Menu('admin-files', m.menus.params)
   .dynamic(async (ctx, range) => {
     for (const file of await files.all())
       range
@@ -60,6 +61,8 @@ m.menus.adminFiles
     (ctx) =>
       m.commands.addFile(ctx))
 //
+m.menus.adminFiles.register(m.menus.editFile)
+//
 m.menus.adminFiles.text = () =>
   "📄 <b>Server <u>files</u></b>\n" +
   " ● <code>Edit file</code> 📄\n" +
@@ -67,13 +70,7 @@ m.menus.adminFiles.text = () =>
 
 // ++++++++++++++
 m.menus.userFiles =
-  new global.ext.menu.Menu('user-files',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  new global.ext.menu.Menu('user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
     const user = await users.check(ctx.from)
     //
@@ -90,13 +87,7 @@ m.menus.userFiles.text = () =>
 
 // +++++++++++++
 m.menus.editFile =
-  new global.ext.menu.Menu('edit-file',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  new global.ext.menu.Menu('edit-file', m.menus.params)
   .text('📄 Document',
     async (ctx) => {
       await ctx.reply(
@@ -138,21 +129,13 @@ m.menus.editFile =
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.adminFiles))
-m.menus
-  .adminFiles.register(m.menus.editFile)
 //
 m.menus.editFile.text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeFile.props.title}'</b>`
 
 // ++++++++++
 m.menus.users =
-  new global.ext.menu.Menu('users',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  new global.ext.menu.Menu('users', m.menus.params)
   .dynamic(async (ctx, range) => {
     for (const user of await users.all())
       if (users.isUser(user) && user.props.registered)
@@ -167,19 +150,15 @@ m.menus.users =
         .row()
   })
 //
+m.menus.users.register(m.menus.editUser)
+//
 m.menus.users.text = () =>
   "👤 <b>All <u>users</u></b>\n" +
   " ● <code>Change access to files</code> 📄"
 
 // +++++++++++++
 m.menus.editUser =
-  new global.ext.menu.Menu('edit-user',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  new global.ext.menu.Menu('edit-user', m.menus.params)
   .text('📄 Files',
     (ctx) =>
       m.menus.replace(ctx, m.menus.editTokenFiles))
@@ -194,8 +173,6 @@ m.menus.editUser =
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.users))
-m.menus
-  .users.register(m.menus.editUser)
 //
 m.menus.editUser.text = (ctx) =>
   `<b>You are editing '${users.name(ctx.session.activeUser)}'</b>\n` +
@@ -203,13 +180,7 @@ m.menus.editUser.text = (ctx) =>
 
 // +++++++++++
 m.menus.tokens =
-  new global.ext.menu.Menu('tokens',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  new global.ext.menu.Menu('tokens', m.menus.params)
   .dynamic(async (ctx, range) => {
     for (const token of await tokens.all()) {
       range
@@ -226,21 +197,20 @@ m.menus.tokens =
     (ctx) =>
       m.commands.addToken(ctx))
 //
+m.menus.tokens.register(m.menus.editToken)
+//
 m.menus.tokens.text = () =>
   '<b>Tokens</b>'
 
 // ++++++++++++++
 m.menus.editToken =
-  new global.ext.menu.Menu('edit-token',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  new global.ext.menu.Menu('edit-token', m.menus.params)
   .text('📄 Files',
     async (ctx) =>
       m.menus.replace(ctx, m.menus.editTokenFiles))
+  .text('👤 Users',
+    async (ctx) =>
+      m.menus.replace(ctx, m.menus.editTokenUsers))
   .row()
   .text('❌ Delete',
     async (ctx) => {
@@ -252,21 +222,16 @@ m.menus.editToken =
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.tokens))
-m.menus
-  .tokens.register(m.menus.editToken)
+//
+m.menus.editToken.register(m.menus.editTokenFiles)
+m.menus.editToken.register(m.menus.editTokenUsers)
 //
 m.menus.editToken.text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>`
 
 // +++++++++++++++++++
 m.menus.editTokenFiles =
-  new global.ext.menu.Menu('edit-token-files',
-  {
-    onMenuOutdated: async (ctx) => {
-      await ctx.answerCallbackQuery();
-      await ctx.deleteMessage()
-    }
-  })
+  new global.ext.menu.Menu('edit-token-files', m.menus.params)
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken
     //
@@ -283,8 +248,29 @@ m.menus.editTokenFiles =
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.editToken))
-m.menus
-  .editToken.register(m.menus.editTokenFiles)
+//
+m.menus.editTokenFiles.text = (ctx) =>
+  `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
+
+// +++++++++++++++++++
+m.menus.editTokenUsers =
+  new global.ext.menu.Menu('edit-token-users', m.menus.params)
+  .dynamic(async (ctx, range) => {
+    const token = ctx.session.activeToken
+    //
+    for (const file of await files.all())
+      range
+        .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
+          async (ctx) => {
+            await files.tokenToggle(token, file)
+            // update menu buttons
+            ctx.menu.update()
+          })
+        .row()
+  })
+  .text('↩',
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.editToken))
 //
 m.menus.editTokenFiles.text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`

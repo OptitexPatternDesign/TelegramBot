@@ -71,7 +71,7 @@ m.menus.userFiles =
   new global.ext.menu.Menu('user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
     const user  = await users.check(ctx.from)
-    const token = user.props.registered
+    const token = await tokens.get(user.props.registered)
     //
     for (const file of await files.token(token))
       range

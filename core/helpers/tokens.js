@@ -25,6 +25,7 @@ m.add = async function (name, limitUsers) {
     //
     users: []
   })
+  await record.fragment('files').set({})
   //
   return record
 }

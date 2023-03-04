@@ -55,6 +55,7 @@ m.addUser = async function (token, user) {
 }
 
 m.deleteUser = async function (token, user) {
+  console.log(token)
   token.set({
     users: token.props.users.filter(i => i !== user.key)
   })
@@ -65,7 +66,6 @@ m.users = async function (token) {
   return Promise.all(
     token.props.users
       .map(i => users.get(i))
-      .filter(i => i.props.registered)
   )
 }
 

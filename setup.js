@@ -2,7 +2,9 @@ const global = require("./core/global")
 
 const actions = require("./core/actions")
 
-const users = require("./core/helpers/users")
+const users  = require("./core/helpers/users")
+const files  = require("./core/helpers/files")
+const tokens = require("./core/helpers/tokens")
 
 
 global.bot.use(global.telegram.session({
@@ -13,6 +15,7 @@ global.bot.use(global.telegram.session({
 }));
 
 require('./core/out/commands')
+const {isAdmin} = require("./core/helpers/users");
 
 global.bot.on('message:document', (ctx) => {
   const action = actions.get(ctx.from)
@@ -30,11 +33,12 @@ switch (process.env.BOT_ENV) {
   default:
   case "release":
   case "production": {
-    global.tables.users.list().then(res => {res.results.forEach(async (user,) => {
-      console.log(user, users.isUser(user))
-      if (users.isUser(user))
-        await global.tables.users.delete(user.key)
-    })})
+    users.all().then(all =>
+      all.forEach(async user => {
+        console.log(user, users.isUser(user))
+        if (users.isUser(user))
+          await global.tables.users.delete(user.key)
+      }))
     // global.tables.core.list().then(res => {res.results.forEach(async (file,) => {await global.tables.core.delete(file.key)})})
     //
     global.app.use(global.server.json())

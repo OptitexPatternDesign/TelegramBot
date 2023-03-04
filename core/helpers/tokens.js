@@ -65,6 +65,7 @@ m.users = async function (token) {
   return Promise.all(
     token.props.users
       .map(i => users.get(i))
+      .filter(i => i.props.registered)
   )
 }
 

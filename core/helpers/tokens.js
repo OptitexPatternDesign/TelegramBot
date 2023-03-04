@@ -2,6 +2,8 @@ const m = exports
 //
 const global = require("./../global")
 //
+const users  = require("../helpers/users")
+//
 const {generate} = require('randomstring')
 
 
@@ -9,7 +11,7 @@ m.errorTokenInvalidKey = 'invalid key'
 m.errorTokenUsersLimit = 'limits reached'
 
 m.get = async function (key) {
-  return global.tables.tokens.get(key)
+  return await global.tables.tokens.get(key)
 }
 
 m.add = async function (name, limitUsers) {
@@ -25,6 +27,16 @@ m.add = async function (name, limitUsers) {
   })
   //
   return record
+}
+
+m.delete = async function (token) {
+  for (const userKey of token.props.users) {
+    const user = await users.get(userKey)
+    user.set({
+      registered: null
+    })
+  }
+  global.tables.tokens.delete(token.key)
 }
 
 

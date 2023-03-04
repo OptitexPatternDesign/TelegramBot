@@ -1,9 +1,9 @@
 const m = exports
 //
 const global = require("../global")
-
+//
 const actions = require("../actions")
-
+//
 const users  = require("../helpers/users")
 const files  = require("../helpers/files")
 const tokens = require("../helpers/tokens")
@@ -244,9 +244,9 @@ m.menus.editToken =
   .row()
   .text('❌ Delete',
     async (ctx) => {
-      await files.delete(ctx.session.activeFile)
+      await tokens.delete(ctx.session.activeToken)
       //
-      m.menus.replace(ctx, m.menus.adminFiles)
+      m.menus.replace(ctx, m.menus.tokens)
     })
   .row()
   .text('↩',
@@ -284,7 +284,7 @@ m.menus.editTokenFiles =
     (ctx) =>
       m.menus.replace(ctx, m.menus.editUser))
 m.menus
-  .editUser.register(m.menus.editTokenFiles)
+  .editToken.register(m.menus.editTokenFiles)
 //
 m.menus.editTokenFiles.text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeUser)}' access to files</b>`

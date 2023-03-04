@@ -14,6 +14,10 @@ m.check = async function (who) {
   return user
 }
 
+m.get = async function (key) {
+  return await global.tables.users.get(key)
+}
+
 m.add = async function (who) {
   const record = await global.tables.users.set(who.id.toString(), {
     id  : who.id,

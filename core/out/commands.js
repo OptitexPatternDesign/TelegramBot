@@ -179,6 +179,7 @@ m.menus.editUser
 m.menus.tokens =
   new global.ext.menu.Menu('tokens', m.menus.params)
   .dynamic(async (ctx, range) => {
+    console.log("asdf")
     for (const token of await tokens.all()) {
       console.log(token)
       range
@@ -211,6 +212,7 @@ m.menus.editToken =
   .text('❌ Delete',
     async (ctx) => {
       await tokens.delete(ctx.session.activeToken)
+      console.log(await tokens.all())
       //
       m.menus.replace(ctx, m.menus.tokens)
     })

@@ -282,7 +282,7 @@ m.menus.editTokenFiles =
   })
   .text('↩',
     (ctx) =>
-      m.menus.replace(ctx, m.menus.editUser))
+      m.menus.replace(ctx, m.menus.editToken))
 m.menus
   .editToken.register(m.menus.editTokenFiles)
 //

@@ -55,9 +55,8 @@ m.addUser = async function (token, user) {
 }
 
 m.deleteUser = async function (token, user) {
-  console.log(token)
   token.set({
-    users: token.props.users.filter(i => i !== user.props.id)
+    users: token.props.users.filter(i => i !== user.key)
   })
 }
 

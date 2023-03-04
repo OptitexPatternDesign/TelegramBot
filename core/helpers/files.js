@@ -6,6 +6,10 @@ const global = require("./../global")
 m.fileExist    = '+'
 m.fileNotExist = '-'
 
+m.get = async function (key) {
+  return await global.tables.files.get(key)
+}
+
 m.add = async function (document, title, description) {
   const record = await global.tables.files.set(document.document.file_unique_id, {
            id: document.document.file_id,

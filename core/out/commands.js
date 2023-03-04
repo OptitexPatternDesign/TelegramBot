@@ -226,7 +226,7 @@ m.menus.editToken
 m.menus.editTokenFiles =
   new global.ext.menu.Menu('edit-token-files', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const token = ctx.session.activeToken
+    const token = ctx.session.activeToken = await tokens.get(ctx.session.activeToken.key)
     //
     for (const file of await files.all())
       range
@@ -249,10 +249,9 @@ m.menus.editTokenFiles
 m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const token = ctx.session.activeToken
+    const token = ctx.session.activeToken = await tokens.get(ctx.session.activeToken.key)
     //
     for (const user of await tokens.users(token)) {
-      console.log(user)
       range
       .text(users.name(user),
         async (ctx) => {

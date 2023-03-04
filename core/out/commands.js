@@ -247,24 +247,39 @@ m.menus.editTokenFiles
 // +++++++++++++++++++
 m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
+  .dynamic(async (ctx, range) => {
+    const token = ctx.session.activeToken
+    //
+    for (const file of await files.all())
+      range
+      .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
+        async (ctx) => {
+          await files.tokenToggle(token, file)
+          // update menu buttons
+          ctx.menu.update()
+        })
+      .row()
+  })
   .text('↩',
     (ctx) =>
       m.menus.replace(ctx, m.menus.editToken))
-m.menus.editTokenFiles
+m.menus.editTokenUsers
   .text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeToken)}' files access</b>`
 
-m.menus.editToken.register(m.menus.editTokenFiles)
+
+global.bot.use(m.menus.tokens)
+m.menus.tokens   .register(m.menus.editToken)
 m.menus.editToken.register(m.menus.editTokenUsers)
-m.menus.tokens.register(m.menus.editToken)
-
-
+m.menus.editToken.register(m.menus.editTokenFiles)
+//
 global.bot.use(m.menus.adminFiles)
+m.menus.adminFiles.register(m.menus.editFile)
+//
 global.bot.use(m.menus. userFiles)
 //
 global.bot.use(m.menus.users)
-//
-global.bot.use(m.menus.tokens)
+m.menus.users.register(m.menus.editUser)
 
 
 m.commands = {}

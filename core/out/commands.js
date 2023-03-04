@@ -176,6 +176,29 @@ m.menus.editUser
   `<b>You are editing '${users.name(ctx.session.activeUser)}'</b>\n` +
   ` ⚠️ <code>Any change will apply!</code>`
 
+// ++++++++++++++++++
+m.menus.editUserFiles =
+  new global.ext.menu.Menu('edit-user-files', m.menus.params)
+  .dynamic(async (ctx, range) => {
+    const token = ctx.session.activeToken
+    //
+    for (const file of await files.all())
+      range
+      .text(`${file.props.title} ${await files.tokenContains(token, file) ? '✅' : '❌'}`,
+        async (ctx) => {
+          await files.tokenToggle(token, file)
+          // update menu buttons
+          ctx.menu.update()
+        })
+      .row()
+  })
+  .text('↩',
+    (ctx) =>
+      m.menus.replace(ctx, m.menus.editUser))
+m.menus.editUserFiles
+  .text = (ctx) =>
+  `<b>Change '${users.name(ctx.session.activeUser)}' files access</b>`
+
 // +++++++++++
 m.menus.tokens =
   new global.ext.menu.Menu('tokens', m.menus.params)
@@ -227,7 +250,7 @@ m.menus.editToken
 m.menus.editTokenFiles =
   new global.ext.menu.Menu('edit-token-files', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const token = ctx.session.activeToken = await tokens.get(ctx.session.activeToken.key)
+    const token = ctx.session.activeToken // = await tokens.get(ctx.session.activeToken.key)
     //
     for (const file of await files.all())
       range
@@ -250,7 +273,7 @@ m.menus.editTokenFiles
 m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const token = ctx.session.activeToken = await tokens.get(ctx.session.activeToken.key)
+    const token = ctx.session.activeToken // = await tokens.get(ctx.session.activeToken.key)
     //
     for (const user of await tokens.users(token)) {
       range

@@ -13,14 +13,14 @@ m.get = async function (key) {
 
 m.add = async function (document, title, description) {
   const record = await global.tables.files.set(document.document.file_unique_id, {
-           id: document.document.file_id,
-    unique_id: document.document.file_unique_id,
+           id: document.file_id,
+    unique_id: document.file_unique_id,
     //
-    name: document.document.name,
-    type: document.document.mime_type,
+    name: document.name,
+    type: document.mime_type,
     //
-    title      : title.text,
-    description: description.text
+    title      : title,
+    description: description
   })
   //
   return record

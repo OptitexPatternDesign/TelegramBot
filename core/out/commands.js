@@ -427,35 +427,35 @@ m.commands.showTokens = async function (ctx) {
     return m.menus.show(ctx, m.menus.tokens)
 }
 
-m.commands.addFile = async function (ctx) {
-  const user = await users.check(ctx.from)
+m.commands.readFile = async function read_file(conversation, ctx) {
+  // read file document
+  await ctx.reply(
+    "📄 <b>Send <u>document</u></b>\n" +
+    " ● <code>Drag & drop your file</code>\n" +
+    " ● <code>Forward it</code>",
+    { parse_mode: "HTML" })
+  const { message : { document : document } } =
+    await conversation.waitFor('message:document')
+  // read file title
+  await ctx.reply(
+    "📝️ <b>Send <u>title</u></b>\n" +
+    " ● <code>Make sure it's correct!</code>",
+    { parse_mode: "HTML" })
+  const { message : { document : title } } =
+    await conversation.waitFor('message:text')
+  // read file description
+  await ctx.reply(
+    "📝️ <b>Send <u>description</u></b>\n" +
+    " ● <code>Make sure it's correct!</code>",
+    { parse_mode: "HTML" })
+  const { message : { document : description } } =
+    await conversation.waitFor('message:text')
+  // add file
+  await files.add(document, title, description)
   //
-  if (users.isAdmin(user)) {
-    await ctx.reply(
-      "📄 <b>Send <u>document</u></b>\n" +
-      " ● <code>Drag & drop your file</code>\n" +
-      " ● <code>Forward it</code>",
-      { parse_mode: "HTML" })
-    actions
-      .add(ctx.from, 'document')
-      .then(async document => {
-        await ctx.reply(
-          "📝️ <b>Send <u>title</u></b>\n" +
-          " ● <code>Make sure it's correct!</code>",
-          { parse_mode: "HTML" })
-    actions
-      .add(ctx.from, 'text')
-      .then(async title => {
-        await ctx.reply(
-          "📝️ <b>Send <u>description</u></b>\n" +
-          " ● <code>Make sure it's correct!</code>",
-          { parse_mode: "HTML" })
-    actions
-      .add(ctx.from, 'text')
-      .then(async description => {
-        await files.add(document.message, title.message, description.message)
-      })})})
-  }
+  await ctx.reply(
+    `✅ <code>Add successfully</code>`,
+    { parse_mode: "HTML" })
 }
 
 m.commands.readToken = async function read_token(conversation, ctx) {
@@ -463,38 +463,34 @@ m.commands.readToken = async function read_token(conversation, ctx) {
   await ctx.reply(
       "🔑 <b>Set <u>token name</u></b>\n",
       { parse_mode: "HTML" })
-  const name = await conversation.waitFor("message:text");
+  const { message : { text : name} }
+    = await conversation.waitFor("message:text");
   // read token users limit
   await ctx.reply(
     "🔑 <b>Set <u>users limit</u></b>\n",
     { parse_mode: "HTML" })
-  const limitUsers = await conversation.waitFor("message:text");
+  const { message : { text : limitUsers} }
+    = await conversation.waitFor("message:text");
   // add token
-  console.log(limitUsers.message.text, name)
-  const result = await tokens.add(name.message.text, limitUsers.message.text)
+  const result = await tokens.add(name, limitUsers)
   // show token key
-  await ctx.reply(result.key)
+  await ctx.reply(
+    `<b>Key: </b><code>${result.key}</code>`,
+    { parse_mode: "HTML" })
+}
+
+m.commands.addFile = async function (ctx) {
+  const user = await users.check(ctx.from)
+  //
+  if (users.isAdmin(user))
+    await ctx.conversation.enter('read_file')
 }
 
 m.commands.addToken = async function (ctx) {
   const user = await users.check(ctx.from)
   //
-  if (users.isAdmin(user)) {
+  if (users.isAdmin(user))
     await ctx.conversation.enter('read_token')
-    // actions
-    //   .add(ctx.from, 'text')
-    //   .then(async name => {
-    //     await ctx.reply(
-    //       "🔑 <b>Set <u>users limit</u></b>\n",
-    //       { parse_mode: "HTML" })
-    // actions
-    //   .add(ctx.from, 'text')
-    //   .then(async limitUsers => {
-    //     const result = await tokens.add(name.message, limitUsers.message)
-    //     //
-    //     await ctx.reply(result.key)
-    //   })})
-  }
 }
 
 m.commands.sendFile = async function (ctx, file) {

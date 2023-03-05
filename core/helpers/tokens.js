@@ -20,9 +20,9 @@ m.add = async function (name, limitUsers) {
   //
   const record = await global.tables.tokens.set(key, {
     id  : key,
-    name: name.text,
+    name: name,
     //
-    limitUsers: parseInt(limitUsers.text),
+    limitUsers: parseInt(limitUsers),
     //
     users: []
   })

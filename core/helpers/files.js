@@ -12,7 +12,7 @@ m.get = async function (key) {
 }
 
 m.add = async function (document, title, description) {
-  const record = await global.tables.files.set(document.document.file_unique_id, {
+  const record = await global.tables.files.set(document.file_unique_id, {
            id: document.file_id,
     unique_id: document.file_unique_id,
     //
@@ -29,19 +29,19 @@ m.add = async function (document, title, description) {
 m.update = async function (file, document=null, title=null, description=null) {
   if (document)
     file.set({
-             id: document.document.file_id,
-      unique_id: document.document.file_unique_id,
+             id: document.file_id,
+      unique_id: document.file_unique_id,
       //
-      name: document.document.name,
-      type: document.document.mime_type,
+      name: document.name,
+      type: document.mime_type,
     })
   if (title)
     file.set({
-      title: title.text
+      title: title
     })
   if (description)
     file.set({
-      description: description.text
+      description: description
     })
 }
 

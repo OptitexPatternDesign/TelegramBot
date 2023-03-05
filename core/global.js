@@ -26,9 +26,6 @@ m.tables = {
     tokens: m.db.collection('tokens'),
 }
 
-m.actions = {
-}
-
 m.admins = [
   86915035,
   379343384

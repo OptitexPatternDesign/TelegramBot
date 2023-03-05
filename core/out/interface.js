@@ -2,8 +2,6 @@ const m = exports
 //
 const global = require("../global")
 //
-const actions = require("../actions")
-//
 const users  = require("../helpers/users")
 const files  = require("../helpers/files")
 const tokens = require("../helpers/tokens")
@@ -104,35 +102,14 @@ m.menus.userFiles
 m.menus.editFile =
   new global.ext.menu.Menu('edit-file', m.menus.params)
   .text('📄 Document',
-    async (ctx) => {
-      await ctx.reply(
-        "📄 <b>Update <u>file document</u></b>\n",
-        { parse_mode: "HTML" })
-      actions
-        .add(ctx.from, 'document')
-        .then(async document =>
-          await files.update(ctx.session.activeFile, document.message, null, null))
-    })
+    async (ctx) =>
+      await ctx.conversation.enter('change_file_document'))
   .text('📝️ Title',
-    async (ctx) => {
-      await ctx.reply(
-        "📄 <b>Update <u>file title</u></b>\n",
-        { parse_mode: "HTML" })
-      actions
-        .add(ctx.from, 'text')
-        .then(async title =>
-          await files.update(ctx.session.activeFile, null, title.message, null))
-    })
+    async (ctx) =>
+      await ctx.conversation.enter('change_file_title'))
   .text('📝️ Description',
-    async (ctx) => {
-      await ctx.reply(
-        "📄 <b>Update <u>file description</u></b>\n",
-        { parse_mode: "HTML" })
-      actions
-        .add(ctx.from, 'text')
-        .then(async description =>
-          await files.update(ctx.session.activeFile, null, null, description.message))
-    })
+    async (ctx) =>
+      await ctx.conversation.enter('change_file_description'))
   .row()
   .text('❌ Delete',
     async (ctx) => {
@@ -218,6 +195,7 @@ m.menus.editUserFiles
 m.menus.tokens =
   new global.ext.menu.Menu('tokens', m.menus.params)
   .dynamic(async (ctx, range) => {
+    console.log(await tokens.all())
     for (const token of await tokens.all()) {
       range
       .text(`${token.props.name}`,
@@ -326,6 +304,134 @@ m.menus.users   .register(m.menus.editUser)
 m.menus.editUser.register(m.menus.editUserFiles)
 
 
+// conversation
+//
+global.bot.use(
+  global.ext.conversation.createConversation(
+    async function read_file(conversation, ctx) {
+      // read file document
+      await ctx.reply(
+        "📄 <b>Send <u>document</u></b>\n" +
+        " ● <code>Drag & drop your file</code>\n" +
+        " ● <code>Forward it</code>",
+        { parse_mode: "HTML" })
+      const { message : { document : document } } =
+        await conversation.waitFor('message:document')
+      // read file title
+      await ctx.reply(
+        "📝️ <b>Send <u>title</u></b>\n" +
+        " ● <code>Make sure it's correct!</code>",
+        { parse_mode: "HTML" })
+      const { message : { text : title } } =
+        await conversation.waitFor('message:text')
+      // read file description
+      await ctx.reply(
+        "📝️ <b>Send <u>description</u></b>\n" +
+        " ● <code>Make sure it's correct!</code>",
+        { parse_mode: "HTML" })
+      const { message : { text : description } } =
+        await conversation.waitFor('message:text')
+      // add file
+      await files.add(document, title, description)
+      //
+      await ctx.reply(
+        `✅ <b>Added successfully</b>`,
+        { parse_mode: "HTML" })
+    }
+  ));
+global.bot.use(
+  global.ext.conversation.createConversation(
+    async function read_token(conversation, ctx) {
+      // read token name
+      await ctx.reply(
+          "🔑 <b>Set <u>token name</u></b>\n",
+          { parse_mode: "HTML" })
+      const { message : { text : name} }
+        = await conversation.waitFor("message:text");
+      // read token users limit
+      await ctx.reply(
+        "🔑 <b>Set <u>users limit</u></b>\n",
+        { parse_mode: "HTML" })
+      const { message : { text : limitUsers} }
+        = await conversation.waitFor("message:text");
+      // add token
+      const result = await tokens.add(name, limitUsers)
+      // show token key
+      await ctx.reply(
+        `<b>Key: </b><code>${result.key}</code>`,
+        { parse_mode: "HTML" })
+    }
+  ));
+global.bot.use(
+  global.ext.conversation.createConversation(
+    async function change_file_document(conversation, ctx) {
+      await ctx.reply(
+        "📄 <b>Update <u>file document</u></b>\n",
+        { parse_mode: "HTML" })
+      const { message : { document : document } } =
+        await conversation.waitFor('message:document')
+      //
+      await files.update(ctx.session.activeFile, document, null, null)
+    }
+  ));
+global.bot.use(
+  global.ext.conversation.createConversation(
+    async function change_file_title(conversation, ctx) {
+      await ctx.reply(
+        "📄 <b>Update <u>file title</u></b>\n",
+        { parse_mode: "HTML" })
+      const { message : { text : title } } =
+        await conversation.waitFor('message:text')
+      //
+      await files.update(ctx.session.activeFile, null, title, null)
+    }
+  ));
+global.bot.use(
+  global.ext.conversation.createConversation(
+    async function change_file_description(conversation, ctx) {
+      await ctx.reply(
+        "📄 <b>Update <u>file description</u></b>\n",
+        { parse_mode: "HTML" })
+      const { message : { text : description } } =
+        await conversation.waitFor('message:text')
+      //
+      await files.update(ctx.session.activeFile, null, null, description)
+    }
+  ));
+global.bot.use(
+  global.ext.conversation.createConversation(
+    async function register(conversation, ctx) {
+      const user = await users.check(ctx.from)
+      //
+      await ctx.reply(
+        '<b>Enter <u>token key</u></b>',
+        { parse_mode: "HTML" })
+      const { message : { text : key } } =
+        await conversation.waitFor('message:text')
+      //
+      const result = await tokens.register(key, user)
+      //
+      switch (result) {
+        case tokens.errorTokenInvalidKey: {
+          await ctx.reply(
+            '❌ <b>Invalid token!</b>',
+            { parse_mode: "HTML" })
+        } break
+        case tokens.errorTokenUsersLimit: {
+          await ctx.reply(
+            '❌ <b>Reached users limit!</b>',
+            { parse_mode: "HTML" })
+        } break
+        default: {
+          await ctx.reply(
+            '✅ <b>Successfully registered</b>',
+            { parse_mode: "HTML" })
+        }
+      }
+    }
+  ));
+
+
 m.commands = {}
 
 m.commands.start = async function (ctx) {
@@ -371,34 +477,8 @@ m.commands.register = async function (ctx) {
     await ctx.reply(
       '✅ <b>Already registered</b>',
       { parse_mode: "HTML" })
-  } else {
-    await ctx.reply(
-      '<b>Enter <u>token key</u></b>',
-      { parse_mode: "HTML" })
-    actions
-      .add(ctx.from, 'text')
-      .then(async key => {
-        const result = await tokens.register(key.message, user)
-        //
-        switch (result) {
-          case tokens.errorTokenInvalidKey: {
-            await ctx.reply(
-              '❌ <b>Invalid token!</b>',
-              { parse_mode: "HTML" })
-          } break
-          case tokens.errorTokenUsersLimit: {
-            await ctx.reply(
-              '❌ <b>Reached users limit!</b>',
-              { parse_mode: "HTML" })
-          } break
-          default: {
-            await ctx.reply(
-              '✅ <b>Successfully registered</b>',
-              { parse_mode: "HTML" })
-          }
-        }
-      })
-  }
+  } else
+    await ctx.conversation.enter('register')
 }
 
 m.commands.showFiles = async function (ctx) {
@@ -427,59 +507,6 @@ m.commands.showTokens = async function (ctx) {
     return m.menus.show(ctx, m.menus.tokens)
 }
 
-m.commands.readFile = async function read_file(conversation, ctx) {
-  // read file document
-  await ctx.reply(
-    "📄 <b>Send <u>document</u></b>\n" +
-    " ● <code>Drag & drop your file</code>\n" +
-    " ● <code>Forward it</code>",
-    { parse_mode: "HTML" })
-  const { message : { document : document } } =
-    await conversation.waitFor('message:document')
-  // read file title
-  await ctx.reply(
-    "📝️ <b>Send <u>title</u></b>\n" +
-    " ● <code>Make sure it's correct!</code>",
-    { parse_mode: "HTML" })
-  const { message : { text : title } } =
-    await conversation.waitFor('message:text')
-  // read file description
-  await ctx.reply(
-    "📝️ <b>Send <u>description</u></b>\n" +
-    " ● <code>Make sure it's correct!</code>",
-    { parse_mode: "HTML" })
-  const { message : { text : description } } =
-    await conversation.waitFor('message:text')
-  // add file
-  console.log(document, title, description)
-  await files.add(document, title, description)
-  //
-  await ctx.reply(
-    `✅ <code>Add successfully</code>`,
-    { parse_mode: "HTML" })
-}
-
-m.commands.readToken = async function read_token(conversation, ctx) {
-  // read token name
-  await ctx.reply(
-      "🔑 <b>Set <u>token name</u></b>\n",
-      { parse_mode: "HTML" })
-  const { message : { text : name} }
-    = await conversation.waitFor("message:text");
-  // read token users limit
-  await ctx.reply(
-    "🔑 <b>Set <u>users limit</u></b>\n",
-    { parse_mode: "HTML" })
-  const { message : { text : limitUsers} }
-    = await conversation.waitFor("message:text");
-  // add token
-  const result = await tokens.add(name, limitUsers)
-  // show token key
-  await ctx.reply(
-    `<b>Key: </b><code>${result.key}</code>`,
-    { parse_mode: "HTML" })
-}
-
 m.commands.addFile = async function (ctx) {
   const user = await users.check(ctx.from)
   //
@@ -504,10 +531,6 @@ m.commands.sendFile = async function (ctx, file) {
   })
 }
 
-
-// conversation
-global.bot.use(global.ext.conversation.createConversation(m.commands.readFile));
-global.bot.use(global.ext.conversation.createConversation(m.commands.readToken));
 //
 global.bot.command('start', m.commands.start)
 global.bot.command('help' , m.commands.help)

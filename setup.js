@@ -1,7 +1,5 @@
 const global = require("./core/global")
 
-const actions = require("./core/actions")
-
 // const users  = require("./core/helpers/users")
 // const files  = require("./core/helpers/files")
 // const tokens = require("./core/helpers/tokens")
@@ -18,19 +16,8 @@ global.bot.use(global.telegram.session({
 // Install conversations handler
 global.bot.use(global.ext.conversation.conversations())
 
-require('./core/out/commands')
-
-global.bot.on('message:document', (ctx) => {
-  const action = actions.get(ctx.from)
-  if (action && action.type === 'document')
-    action.trigger(ctx)
-})
-
-global.bot.on('message:text', (ctx) => {
-  const action = actions.get(ctx.from)
-  if (action && action.type === 'text')
-    action.trigger(ctx)
-})
+// Install bot interface
+require('./core/out/interface')
 
 switch (process.env.BOT_ENV) {
   default:

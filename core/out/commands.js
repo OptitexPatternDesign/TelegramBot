@@ -434,24 +434,24 @@ m.commands.readFile = async function read_file(conversation, ctx) {
     " ● <code>Drag & drop your file</code>\n" +
     " ● <code>Forward it</code>",
     { parse_mode: "HTML" })
-  const { msg : { document : document } } =
+  const { message : { document : document } } =
     await conversation.waitFor('message:document')
-  console.log(document)
   // read file title
   await ctx.reply(
     "📝️ <b>Send <u>title</u></b>\n" +
     " ● <code>Make sure it's correct!</code>",
     { parse_mode: "HTML" })
-  const { message : { document : title } } =
+  const { message : { text : title } } =
     await conversation.waitFor('message:text')
   // read file description
   await ctx.reply(
     "📝️ <b>Send <u>description</u></b>\n" +
     " ● <code>Make sure it's correct!</code>",
     { parse_mode: "HTML" })
-  const { message : { document : description } } =
+  const { message : { text : description } } =
     await conversation.waitFor('message:text')
   // add file
+  console.log(document, title, description)
   await files.add(document, title, description)
   //
   await ctx.reply(

@@ -470,6 +470,7 @@ m.commands.readToken = async function read_token(conversation, ctx) {
     { parse_mode: "HTML" })
   const { msg: { limitUsers } } = await conversation.waitFor("message:text");
   // add token
+  console.log(limitUsers, name)
   const result = await tokens.add(name, limitUsers)
   // show token key
   await ctx.reply(result.key)

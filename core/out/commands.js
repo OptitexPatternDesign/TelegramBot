@@ -256,7 +256,8 @@ m.menus.editToken =
 m.menus.editToken
   .text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>\n` +
-  ` ● <code>${ctx.session.activeToken.key}</code>`
+  ` ● <code>${ctx.session.activeToken.key}</code>\n` +
+  ` ● <code>${ctx.session.activeToken.props.users.length} / ${ctx.session.activeToken.props.limitUsers}</code>\n`
 
 // +++++++++++++++++++
 m.menus.editTokenFiles =

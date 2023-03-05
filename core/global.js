@@ -4,7 +4,8 @@ const telegram = exports.telegram = require('grammy')
 const server   = exports.server   = require('express')
 
 m.ext = {
-  menu: require("@grammyjs/menu")
+  menu        : require("@grammyjs/menu"),
+  conversation: require("@grammyjs/conversations")
 }
 
 m.config = {

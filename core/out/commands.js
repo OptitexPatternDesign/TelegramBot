@@ -459,18 +459,26 @@ m.commands.addFile = async function (ctx) {
 }
 
 m.commands.readToken = async function read_token(conversation, ctx) {
-  await ctx.reply("Hi! And Bye!");
-  const { msg: { document } } = await conversation.waitFor("message:document");
-  console.log(document)
+  // read token name
+  await ctx.reply(
+      "🔑 <b>Set <u>token name</u></b>\n",
+      { parse_mode: "HTML" })
+  const { msg: { name } } = await conversation.waitFor("message:text");
+  // read token users limit
+  await ctx.reply(
+    "🔑 <b>Set <u>users limit</u></b>\n",
+    { parse_mode: "HTML" })
+  const { msg: { limitUsers } } = await conversation.waitFor("message:text");
+  // add token
+  const result = await tokens.add(name.message, limitUsers.message)
+  // show token key
+  await ctx.reply(result.key)
 }
 
 m.commands.addToken = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user)) {
-    await ctx.reply(
-      "🔑 <b>Set <u>token name</u></b>\n",
-      { parse_mode: "HTML" })
     await ctx.conversation.enter('read_token')
     // actions
     //   .add(ctx.from, 'text')

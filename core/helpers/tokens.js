@@ -31,9 +31,6 @@ m.add = async function (name, limitUsers) {
 }
 
 m.delete = async function (token) {
-  if (token instanceof String)
-    token = m.get(token)
-  //
   for (const userKey of token.props.users) {
     const user = await users.get(userKey)
     user.set({

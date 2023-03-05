@@ -22,6 +22,18 @@ global.bot.api.setMyCommands([
 ]).then();
 
 
+async function updateSession(ctx, key=null) {
+  switch (key) {
+    case 'token': if (ctx.session.activeToken)
+      return ctx.session.activeToken = await tokens.get(ctx.session.activeToken.key)
+      break
+    case 'user': if (ctx.session.activeUser)
+      return ctx.session.activeUser = await users.get(ctx.session.activeUser.key)
+      break
+  }
+}
+
+
 m.menus = {
   replace: function (ctx, menu, text=null) {
     ctx.menu.nav(menu.id)
@@ -143,7 +155,7 @@ m.menus.users =
         .text(users.name(user),
           async (ctx) => {
             ctx.session.activeUser  = user
-            ctx.session.activeToken = user.props.registered
+            ctx.session.activeToken = await tokens.get(user.props.registered)
             // move to new menu
             m.menus.replace(ctx, m.menus.editUser)
           })
@@ -180,7 +192,7 @@ m.menus.editUser
 m.menus.editUserFiles =
   new global.ext.menu.Menu('edit-user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const token = await tokens.get(ctx.session.activeToken)
+    const token = ctx.session.activeToken
     //
     for (const file of await files.all())
       range
@@ -207,7 +219,7 @@ m.menus.tokens =
       range
       .text(`${token.props.name}`,
         (ctx) => {
-          ctx.session.activeToken = token.key
+          ctx.session.activeToken = token
           // move to new menu
           m.menus.replace(ctx, m.menus.editToken)
         })
@@ -242,19 +254,15 @@ m.menus.editToken =
     (ctx) =>
       m.menus.replace(ctx, m.menus.tokens))
 m.menus.editToken
-  .text = async (ctx) => {
-    const token = await tokens.get(ctx.session.activeToken)
-    //
-    return (
-      ` ⚠ <b>You are editing '${token.props.name}'</b>\n` +
-      ` ● <code>${token.key}</code>`)
-  }
+  .text = (ctx) =>
+  ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>\n` +
+  ` ● <code>${ctx.session.activeToken.key}</code>`
 
 // +++++++++++++++++++
 m.menus.editTokenFiles =
   new global.ext.menu.Menu('edit-token-files', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const token = await tokens.get(ctx.session.activeToken)
+    const token = await updateSession(ctx, 'token')
     //
     for (const file of await files.all())
       range
@@ -270,27 +278,20 @@ m.menus.editTokenFiles =
     (ctx) =>
       m.menus.replace(ctx, m.menus.editToken))
 m.menus.editTokenFiles
-  .text = async (ctx) => {
-    const token = await tokens.get(ctx.session.activeToken)
-    //
-    return (
-      `<b>Change '${token.props.name}' files access</b>`)
-  }
-
+  .text = (ctx) =>
+  `<b>Change '${ctx.session.activeToken.props.name}' files access</b>`
 
 // +++++++++++++++++++
 m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
   .dynamic(async (ctx, range) => {
-    const token = await tokens.get(ctx.session.activeToken)
+    const token = await updateSession(ctx, 'token')
     //
     for (const user of await tokens.users(token)) {
       range
       .text(users.name(user),
         async (ctx) => {
-          console.log('before', await tokens.all())
           await tokens.unregister(user)
-          console.log('after', await tokens.all())
           //
           ctx.menu.update()
         })
@@ -301,12 +302,8 @@ m.menus.editTokenUsers =
     (ctx) =>
       m.menus.replace(ctx, m.menus.editToken))
 m.menus.editTokenUsers
-  .text = async (ctx) => {
-    const token = await tokens.get(ctx.session.activeToken)
-    //
-    return (
-      `<b>Change '${token.props.name}' users</b>`)
-  }
+  .text = (ctx) =>
+  `<b>Change '${ctx.session.activeToken.props.name}' users</b>`
 
 
 global.bot.use(m.menus.tokens)

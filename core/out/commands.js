@@ -181,6 +181,7 @@ m.menus.editUserFiles =
   new global.ext.menu.Menu('edit-user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken
+    console.log(token, ctx.session)
     //
     for (const file of await files.all())
       range

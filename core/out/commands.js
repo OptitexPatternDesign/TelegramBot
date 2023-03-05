@@ -505,6 +505,7 @@ m.commands.sendFile = async function (ctx, file) {
 
 
 // conversation
+global.bot.use(global.ext.conversation.createConversation(m.commands.readFile));
 global.bot.use(global.ext.conversation.createConversation(m.commands.readToken));
 //
 global.bot.command('start', m.commands.start)

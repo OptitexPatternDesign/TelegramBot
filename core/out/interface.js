@@ -5,7 +5,6 @@ const global = require("../global")
 const users  = require("../helpers/users")
 const files  = require("../helpers/files")
 const tokens = require("../helpers/tokens")
-const {conversations} = require("@grammyjs/conversations");
 
 
 global.bot.api.setMyCommands([

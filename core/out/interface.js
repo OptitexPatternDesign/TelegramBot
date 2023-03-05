@@ -195,7 +195,6 @@ m.menus.editUserFiles
 m.menus.tokens =
   new global.ext.menu.Menu('tokens', m.menus.params)
   .dynamic(async (ctx, range) => {
-    console.log(await tokens.all())
     for (const token of await tokens.all()) {
       range
       .text(`${token.props.name}`,

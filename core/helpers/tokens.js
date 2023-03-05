@@ -32,13 +32,13 @@ m.add = async function (name, limitUsers) {
 }
 
 m.delete = async function (token) {
-  for (const userKey of token.props.users) {
-    const user = await users.get(userKey)
-    user.set({
-      registered: null
+  for (const userKey of token.props.users)
+    users.get(userKey).then(user => {
+      user.set({
+        registered: null
+      })
     })
-  }
-  global.tables.tokens.delete(token.key)
+  await global.tables.tokens.delete(token.key)
 }
 
 

@@ -181,7 +181,6 @@ m.menus.editUserFiles =
   new global.ext.menu.Menu('edit-user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
     const token = ctx.session.activeToken
-    console.log(token, ctx.session)
     //
     for (const file of await files.all())
       range
@@ -280,7 +279,9 @@ m.menus.editTokenUsers =
       range
       .text(users.name(user),
         async (ctx) => {
+          console.log('before', await tokens.all())
           await tokens.unregister(user)
+          console.log('after', await tokens.all())
           //
           ctx.menu.update()
         })

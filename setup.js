@@ -2,9 +2,9 @@ const global = require("./core/global")
 
 const actions = require("./core/actions")
 
-const users  = require("./core/helpers/users")
-const files  = require("./core/helpers/files")
-const tokens = require("./core/helpers/tokens")
+// const users  = require("./core/helpers/users")
+// const files  = require("./core/helpers/files")
+// const tokens = require("./core/helpers/tokens")
 
 
 // Install the session
@@ -16,7 +16,7 @@ global.bot.use(global.telegram.session({
   })
 }));
 // Install conversations handler
-global.bot.user(global.ext.conversation.conversations())
+global.bot.use(global.ext.conversation.conversations())
 
 require('./core/out/commands')
 

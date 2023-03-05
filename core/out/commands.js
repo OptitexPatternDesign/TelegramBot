@@ -141,9 +141,9 @@ m.menus.users =
       if (users.isUser(user) && user.props.registered)
         range
         .text(users.name(user),
-          (ctx) => {
+          async (ctx) => {
             ctx.session.activeUser  = user
-            ctx.session.activeToken = tokens.get(user.props.registered)
+            ctx.session.activeToken = await tokens.get(user.props.registered)
             // move to new menu
             m.menus.replace(ctx, m.menus.editUser)
           })

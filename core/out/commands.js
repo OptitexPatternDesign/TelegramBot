@@ -458,7 +458,7 @@ m.commands.addFile = async function (ctx) {
   }
 }
 
-m.commands.readToken = async function (conversation, ctx) {
+m.commands.readToken = async function read_token(conversation, ctx) {
   await ctx.reply("Hi! And Bye!");
   const { msg: { document } } = await conversation.waitFor("message:document");
   console.log(document)
@@ -471,7 +471,7 @@ m.commands.addToken = async function (ctx) {
     await ctx.reply(
       "🔑 <b>Set <u>token name</u></b>\n",
       { parse_mode: "HTML" })
-    await ctx.conversation.enter('readToken')
+    await ctx.conversation.enter('read_token')
     // actions
     //   .add(ctx.from, 'text')
     //   .then(async name => {

@@ -15,6 +15,8 @@ global.bot.use(global.telegram.session({
     activeToken: null
   })
 }));
+// Install conversations handler
+global.bot.user(global.ext.conversation.conversations())
 
 require('./core/out/commands')
 

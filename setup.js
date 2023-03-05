@@ -7,6 +7,7 @@ const files  = require("./core/helpers/files")
 const tokens = require("./core/helpers/tokens")
 
 
+// Install the session
 global.bot.use(global.telegram.session({
   initial: () => ({
     activeUser : null,

@@ -6,6 +6,7 @@ const global = require("./../global")
 m.fileExist    = '+'
 m.fileNotExist = '-'
 
+
 m.get = async function (key) {
   return await global.tables.files.get(key)
 }

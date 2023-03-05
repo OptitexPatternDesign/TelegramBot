@@ -33,6 +33,9 @@ async function updateSession(ctx, key=null) {
   }
 }
 
+async function checkUser(ctx) {
+}
+
 
 m.menus = {
   replace: function (ctx, menu, text=null) {
@@ -256,8 +259,8 @@ m.menus.editToken =
 m.menus.editToken
   .text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeToken.props.name}'</b>\n` +
-  ` ● <code>${ctx.session.activeToken.key}</code>\n` +
-  ` ● <code>${ctx.session.activeToken.props.users.length} / ${ctx.session.activeToken.props.limitUsers}</code>\n`
+  ` ● <b>Key: </b><code>${ctx.session.activeToken.key}</code>\n` +
+  ` ● <b>Users: </b><code>${ctx.session.activeToken.props.users.length} / ${ctx.session.activeToken.props.limitUsers}</code>\n`
 
 // +++++++++++++++++++
 m.menus.editTokenFiles =
@@ -307,6 +310,7 @@ m.menus.editTokenUsers
   `<b>Change '${ctx.session.activeToken.props.name}' users</b>`
 
 
+// set menus
 global.bot.use(m.menus.tokens)
 m.menus.tokens   .register(m.menus.editToken)
 m.menus.editToken.register(m.menus.editTokenUsers)
@@ -454,6 +458,12 @@ m.commands.addFile = async function (ctx) {
   }
 }
 
+m.commands.readToken = async function (conversation, ctx) {
+  await ctx.reply("Hi! And Bye!");
+  const { msg: { document } } = await conversation.waitFor("message:document");
+  console.log(document)
+}
+
 m.commands.addToken = async function (ctx) {
   const user = await users.check(ctx.from)
   //
@@ -461,19 +471,20 @@ m.commands.addToken = async function (ctx) {
     await ctx.reply(
       "🔑 <b>Set <u>token name</u></b>\n",
       { parse_mode: "HTML" })
-    actions
-      .add(ctx.from, 'text')
-      .then(async name => {
-        await ctx.reply(
-          "🔑 <b>Set <u>users limit</u></b>\n",
-          { parse_mode: "HTML" })
-    actions
-      .add(ctx.from, 'text')
-      .then(async limitUsers => {
-        const result = await tokens.add(name.message, limitUsers.message)
-        //
-        await ctx.reply(result.key)
-      })})
+    await ctx.conversation.enter('readToken')
+    // actions
+    //   .add(ctx.from, 'text')
+    //   .then(async name => {
+    //     await ctx.reply(
+    //       "🔑 <b>Set <u>users limit</u></b>\n",
+    //       { parse_mode: "HTML" })
+    // actions
+    //   .add(ctx.from, 'text')
+    //   .then(async limitUsers => {
+    //     const result = await tokens.add(name.message, limitUsers.message)
+    //     //
+    //     await ctx.reply(result.key)
+    //   })})
   }
 }
 

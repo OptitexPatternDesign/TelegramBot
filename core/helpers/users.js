@@ -6,13 +6,6 @@ const global = require("./../global")
 m.typeUser  = 'user'
 m.typeAdmin = 'admin'
 
-m.check = async function (who) {
-  let user = await global.tables.users.get(who.id.toString())
-  if (user == null)  // create user if not exists
-    user = await m.add(who)
-  //
-  return user
-}
 
 m.get = async function (key) {
   return await global.tables.users.get(key)
@@ -29,6 +22,14 @@ m.add = async function (who) {
   })
   //
   return record
+}
+
+m.check = async function (who) {
+  let user = await global.tables.users.get(who.id.toString())
+  if (user == null)  // create user if not exists
+    user = await m.add(who)
+  //
+  return user
 }
 
 

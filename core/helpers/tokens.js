@@ -2,7 +2,7 @@ const m = exports
 //
 const global = require("./../global")
 //
-const users  = require("../helpers/users")
+const users = require("../helpers/users")
 //
 const {generate} = require('randomstring')
 

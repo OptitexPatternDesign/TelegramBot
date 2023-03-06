@@ -3,16 +3,18 @@ const m = exports
 const global = require("./../global")
 
 
+m.table = global.tables.files
+
 m.fileExist    = '+'
 m.fileNotExist = '-'
 
 
 m.get = async function (key) {
-  return await global.tables.files.get(key)
+  return await m.table.get(key)
 }
 
 m.add = async function (document, title, description) {
-  const record = await global.tables.files.set(document.file_unique_id, {
+  const record = await m.table.set(document.file_unique_id, {
            id: document.file_id,
     unique_id: document.file_unique_id,
     //
@@ -46,7 +48,7 @@ m.update = async function (file, document=null, title=null, description=null) {
 }
 
 m.delete = async function (file) {
-  await global.tables.files.delete(file.key)
+  await m.table.delete(file.key)
 }
 
 
@@ -80,7 +82,7 @@ m.tokenContains = async function (token, file) {
 
 m.all = async function () {
   return Promise.all(
-    (await global.tables.files.list())
+    (await m.table.list())
       .results
       .map(file => m.get(file.key))
   )

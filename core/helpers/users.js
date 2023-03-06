@@ -3,10 +3,10 @@ const m = exports
 const global = require("./../global")
 
 
+m.table = global.tables.users
+
 m.typeUser  = 'user'
 m.typeAdmin = 'admin'
-
-m.table = global.tables.users
 
 
 m.get = async function (key) {

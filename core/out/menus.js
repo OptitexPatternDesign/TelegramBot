@@ -38,6 +38,7 @@ m.adminFiles
       range
       .text(file.props.title,
         (ctx) => {
+          console.log(file, file.set)
           ctx.session.activeFile = file
           //
           m.replace(ctx, m.editFile)

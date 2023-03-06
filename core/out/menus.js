@@ -18,15 +18,15 @@ m.params = {
 }
 
 
-m.show = function (ctx, menu, text=null) {
-  return ctx.reply(text || menu.text(ctx),
+m.show = async function (ctx, menu, text=null) {
+  return ctx.reply(text || await menu.text(ctx),
     { parse_mode: "HTML", reply_markup: menu })
 }
 
-m.replace = function (ctx, menu, text=null) {
+m.replace = async function (ctx, menu, text=null) {
   ctx.menu.nav(menu.id)
   // change menu text
-  ctx.editMessageText(text || menu.text(ctx),
+  ctx.editMessageText(text || await menu.text(ctx),
     { parse_mode: "HTML" })
 }
 
@@ -37,10 +37,10 @@ m.adminFiles
     for (const file of await files.all())
       range
       .text(file.props.title,
-        (ctx) => {
+        async (ctx) => {
           ctx.session.activeFile = file.key
           //
-          m.replace(ctx, m.editFile)
+          await m.replace(ctx, m.editFile)
         })
       .row()
   })
@@ -85,17 +85,17 @@ m.editFile =
   .row()
   .text('❌ Delete',
     async (ctx) => {
-      await files.delete(sessions.get(ctx, 'file'))
+      await files.delete(await sessions.get(ctx, 'file'))
       //
-      m.replace(ctx, m.adminFiles)
+      await m.replace(ctx, m.adminFiles)
     })
   .row()
   .text('↩',
-    (ctx) =>
-      m.replace(ctx, m.adminFiles))
+    async (ctx) =>
+      await m.replace(ctx, m.adminFiles))
 m.editFile
-  .text = (ctx) => {
-  const file = sessions.get(ctx, 'file')
+  .text = async (ctx) => {
+  const file = await sessions.get(ctx, 'file')
   return (
     ` ⚠ <b>You are editing '${file.props.title}'</b>`)}
 
@@ -110,7 +110,7 @@ m.users =
             ctx.session.activeUser  = user.key
             ctx.session.activeToken = user.props.registered
             // move to new menu
-            m.replace(ctx, m.editUser)
+            await m.replace(ctx, m.editUser)
           })
         .row()
   })
@@ -122,22 +122,22 @@ m.users
 m.editUser =
   new global.ext.menu.Menu('edit-user', m.params)
   .text('📄 Files',
-    (ctx) =>
-      m.replace(ctx, m.editUserFiles))
+    async (ctx) =>
+      await m.replace(ctx, m.editUserFiles))
   .row()
   .text('❌ Delete',
     async (ctx) => {
-      await tokens.unregister(sessions.get(ctx, 'user'))
+      await tokens.unregister(await sessions.get(ctx, 'user'))
       //
-      m.replace(ctx, m.users)
+      await m.replace(ctx, m.users)
     })
   .row()
   .text('↩',
-    (ctx) =>
-      m.replace(ctx, m.users))
+    async (ctx) =>
+      await m.replace(ctx, m.users))
 m.editUser
-  .text = (ctx) => {
-  const user = sessions.get(ctx, 'user')
+  .text = async (ctx) => {
+  const user = await sessions.get(ctx, 'user')
   return (
     `<b>You are editing '${users.name(user)}'</b>\n` +
     ` ⚠️ <code>Any change will apply!</code>`)}
@@ -145,7 +145,7 @@ m.editUser
 m.editUserFiles =
   new global.ext.menu.Menu('edit-user-files', m.params)
   .dynamic(async (ctx, range) => {
-    const token = await sessions.update(ctx, 'token')
+    const token = await sessions.get(ctx, 'token')
     //
     for (const file of await files.all())
       range
@@ -158,11 +158,11 @@ m.editUserFiles =
       .row()
   })
   .text('↩',
-    (ctx) =>
-      m.replace(ctx, m.editUser))
+    async (ctx) =>
+      await m.replace(ctx, m.editUser))
 m.editUserFiles
-  .text = (ctx) => {
-  const user = sessions.get(ctx, 'user')
+  .text = async (ctx) => {
+  const user = await sessions.get(ctx, 'user')
   return (
     `<b>Change '${users.name(user)}' files access</b>`)}
 
@@ -172,10 +172,10 @@ m.tokens =
     for (const token of await tokens.all()) {
       range
       .text(`${token.props.name}`,
-        (ctx) => {
+        async (ctx) => {
           ctx.session.activeToken = token.key
           // move to new menu
-          m.replace(ctx, m.editToken)
+          await m.replace(ctx, m.editToken)
         })
       .row()
     }
@@ -191,24 +191,24 @@ m.editToken =
   new global.ext.menu.Menu('edit-token', m.params)
   .text('📄 Files',
     async (ctx) =>
-      m.replace(ctx, m.editTokenFiles))
+      await m.replace(ctx, m.editTokenFiles))
   .text('👤 Users',
     async (ctx) =>
-      m.replace(ctx, m.editTokenUsers))
+      await m.replace(ctx, m.editTokenUsers))
   .row()
   .text('❌ Delete',
     async (ctx) => {
-      await tokens.delete(sessions.get(ctx, 'token'))
+      await tokens.delete(await sessions.get(ctx, 'token'))
       //
-      m.replace(ctx, m.tokens)
+      await m.replace(ctx, m.tokens)
     })
   .row()
   .text('↩',
-    (ctx) =>
-      m.replace(ctx, m.tokens))
+    async (ctx) =>
+      await m.replace(ctx, m.tokens))
 m.editToken
-  .text = (ctx) => {
-  const token = sessions.get(ctx, 'token')
+  .text = async (ctx) => {
+  const token = await sessions.get(ctx, 'token')
   return (
     ` ⚠ <b>You are editing '${token.props.name}'</b>\n` +
     ` ● <b>Key: </b><code>${token.key}</code>\n` +
@@ -217,7 +217,7 @@ m.editToken
 m.editTokenFiles =
   new global.ext.menu.Menu('edit-token-files', m.params)
   .dynamic(async (ctx, range) => {
-    const token = await sessions.update(ctx, 'token')
+    const token = await sessions.get(ctx, 'token')
     //
     for (const file of await files.all())
       range
@@ -230,18 +230,18 @@ m.editTokenFiles =
       .row()
   })
   .text('↩',
-    (ctx) =>
-      m.replace(ctx, m.editToken))
+    async (ctx) =>
+      await m.replace(ctx, m.editToken))
 m.editTokenFiles
-  .text = (ctx) => {
-  const token = sessions.get(ctx, 'token')
+  .text = async (ctx) => {
+  const token = await sessions.get(ctx, 'token')
   return (
     `<b>Change '${token.props.name}' files access</b>`)}
 
 m.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.params)
   .dynamic(async (ctx, range) => {
-    const token = await sessions.update(ctx, 'token')
+    const token = await sessions.get(ctx, 'token')
     //
     for (const user of await tokens.users(token)) {
       range
@@ -255,11 +255,11 @@ m.editTokenUsers =
     }
   })
   .text('↩',
-    (ctx) =>
-      m.replace(ctx, m.editToken))
+    async (ctx) =>
+      await m.replace(ctx, m.editToken))
 m.editTokenUsers
-  .text = (ctx) => {
-  const token = sessions.get(ctx, 'token')
+  .text = async (ctx) => {
+  const token = await sessions.get(ctx, 'token')
   return (
     `<b>Change '${token.props.name}' users</b>`)}
 

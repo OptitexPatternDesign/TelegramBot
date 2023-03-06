@@ -58,11 +58,11 @@ m.showFiles = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return menus.show(ctx, menus.adminFiles)
+    return await menus.show(ctx, menus.adminFiles)
   else {
     if (!user.props.registered)
       return m.register(ctx)
-    return menus.show(ctx, menus.userFiles)
+    return await menus.show(ctx, menus.userFiles)
   }
 }
 
@@ -70,14 +70,14 @@ m.showUsers = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return menus.show(ctx, menus.users)
+    return await menus.show(ctx, menus.users)
 }
 
 m.showTokens = async function (ctx) {
   const user = await users.check(ctx.from)
   //
   if (users.isAdmin(user))
-    return menus.show(ctx, menus.tokens)
+    return await menus.show(ctx, menus.tokens)
 }
 
 m.addFile = async function (ctx) {

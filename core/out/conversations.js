@@ -70,7 +70,7 @@ m.changeFileDocument = async function
   const { message : { document : document } } =
     await conversation.waitFor('message:document')
   //
-  await files.update(sessions.get(ctx, 'file'), document, null, null)
+  await files.update(await sessions.get(ctx, 'file'), document, null, null)
 }
 
 m.changeFileTitle = async function
@@ -81,7 +81,7 @@ m.changeFileTitle = async function
   const { message : { text : title } } =
     await conversation.waitFor('message:text')
   //
-  await files.update(sessions.get(ctx, 'file'), null, title, null)
+  await files.update(await sessions.get(ctx, 'file'), null, title, null)
 }
 
 m.changeFileDescription = async function
@@ -92,7 +92,7 @@ m.changeFileDescription = async function
   const { message : { text : description } } =
     await conversation.waitFor('message:text')
   //
-  await files.update(sessions.get(ctx, 'file'), null, null, description)
+  await files.update(await sessions.get(ctx, 'file'), null, null, description)
 }
 
 m.register = async function

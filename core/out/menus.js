@@ -18,16 +18,16 @@ m.params = {
 }
 
 
+m.show = function (ctx, menu, text=null) {
+  return ctx.reply(text || menu.text(ctx),
+    { parse_mode: "HTML", reply_markup: menu })
+}
+
 m.replace = function (ctx, menu, text=null) {
   ctx.menu.nav(menu.id)
   // change menu text
   ctx.editMessageText(text || menu.text(ctx),
     { parse_mode: "HTML" })
-}
-
-m.show = function (ctx, menu, text=null) {
-  return ctx.reply(text || menu.text(ctx),
-    { parse_mode: "HTML", reply_markup: menu })
 }
 
 

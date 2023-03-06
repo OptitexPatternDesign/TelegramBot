@@ -56,7 +56,7 @@ m.token = async function (token) {
   for (const fragment of await token.fragment('files').list())
     for (const [file, status] of Object.entries(fragment.props))
       if (status === m.fileExist)
-        files.push(await global.tables.files.get(file))
+        files.push(await m.get(file))
   //
   return files;
 }
@@ -82,6 +82,6 @@ m.all = async function () {
   return Promise.all(
     (await global.tables.files.list())
       .results
-      .map(file => global.tables.files.get(file.key))
+      .map(file => m.get(file.key))
   )
 }

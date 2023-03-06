@@ -6,13 +6,15 @@ const global = require("./../global")
 m.typeUser  = 'user'
 m.typeAdmin = 'admin'
 
+m.table = global.tables.users
+
 
 m.get = async function (key) {
-  return await global.tables.users.get(key)
+  return await m.table.get(key)
 }
 
 m.add = async function (who) {
-  const record = await global.tables.users.set(who.id.toString(), {
+  const record = await m.table.set(who.id.toString(), {
     id  : who.id,
     type: global.admins.includes(who.id) ? m.typeAdmin : m.typeUser,
     //
@@ -25,7 +27,7 @@ m.add = async function (who) {
 }
 
 m.check = async function (who) {
-  let user = await global.tables.users.get(who.id.toString())
+  let user = await m.get(who.id.toString())
   if (user == null)  // create user if not exists
     user = await m.add(who)
   //
@@ -53,8 +55,8 @@ m.isAdmin = function (user) {
 
 m.all = async function () {
   return Promise.all(
-    (await global.tables.users.list())
+    (await m.table.list())
       .results
-      .map(user => global.tables.users.get(user.key))
+      .map(user => m.get(user.key))
   )
 }

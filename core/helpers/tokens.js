@@ -7,18 +7,20 @@ const users  = require("../helpers/users")
 const {generate} = require('randomstring')
 
 
+m.table = global.tables.tokens
+
 m.errorTokenInvalidKey = 'invalid key'
 m.errorTokenUsersLimit = 'limits reached'
 
 
 m.get = async function (key) {
-  return await global.tables.tokens.get(key)
+  return await m.table.get(key)
 }
 
 m.add = async function (name, limitUsers) {
   const key = generate()
   //
-  const record = await global.tables.tokens.set(key, {
+  const record = await m.table.set(key, {
     id  : key,
     name: name,
     //
@@ -38,7 +40,7 @@ m.delete = async function (token) {
         registered: null
       })
     })
-  await global.tables.tokens.delete(token.key)
+  await m.table.delete(token.key)
 }
 
 
@@ -72,7 +74,7 @@ m.users = async function (token) {
 
 
 m.register = async function (key, user) {
-  const token = await global.tables.tokens.get(key)
+  const token = await m.get(key)
   if (token == null)
     return m.errorTokenInvalidKey;
   //
@@ -81,7 +83,7 @@ m.register = async function (key, user) {
 
 m.unregister = async function (user) {
   if (user.props.registered) {
-    const token = await global.tables.tokens.get(user.props.registered)
+    const token = await m.get(user.props.registered)
     //
     await m.deleteUser(token, user)
     user.set({
@@ -93,8 +95,8 @@ m.unregister = async function (user) {
 
 m.all = async function () {
   return Promise.all(
-    (await global.tables.tokens.list())
+    (await m.table.list())
       .results
-      .map(file => global.tables.tokens.get(file.key))
+      .map(file => m.get(file.key))
   )
 }

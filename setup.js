@@ -5,7 +5,7 @@ const global = require("./core/global")
 // const tokens = require("./core/helpers/tokens")
 
 
-// Install the session
+// :: Install 'Session'
 global.bot.use(global.telegram.session({
   initial: () => ({
     activeUser : null,
@@ -13,10 +13,10 @@ global.bot.use(global.telegram.session({
     activeToken: null
   })
 }));
-// Install conversations handler
+// :: Install 'Conversations Handler'
 global.bot.use(global.ext.conversation.conversations())
 
-// Install bot interface
+// :: Install 'Interface'
 require('./core/out/interface')
 
 switch (process.env.BOT_ENV) {

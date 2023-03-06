@@ -2,6 +2,7 @@ const m = exports
 //
 const tokens = require("../helpers/tokens");
 const users  = require("../helpers/users");
+const files  = require("../helpers/files");
 
 /*
  * Update session and return properties
@@ -15,7 +16,7 @@ m.get = async function (ctx, key=null) {
       return await users.get(ctx.session.activeUser)
       break
     case 'file': if (ctx.session.activeFile)
-      return await users.get(ctx.session.activeFile)
+      return await files.get(ctx.session.activeFile)
       break
   }
 }

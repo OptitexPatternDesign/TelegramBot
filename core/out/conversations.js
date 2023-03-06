@@ -2,9 +2,10 @@ const m = exports
 //
 const global = require("../global");
 //
-const files  = require("../helpers/files");
-const tokens = require("../helpers/tokens");
-const users  = require("../helpers/users");
+const files    = require("../helpers/files");
+const tokens   = require("../helpers/tokens");
+const users    = require("../helpers/users");
+const sessions = require("../helpers/sessions");
 
 
 m.readFile = async function
@@ -69,7 +70,7 @@ m.changeFileDocument = async function
   const { message : { document : document } } =
     await conversation.waitFor('message:document')
   //
-  await files.update(ctx.session.activeFile, document, null, null)
+  await files.update(sessions.get(ctx, 'file'), document, null, null)
 }
 
 m.changeFileTitle = async function
@@ -80,8 +81,7 @@ m.changeFileTitle = async function
   const { message : { text : title } } =
     await conversation.waitFor('message:text')
   //
-  console.log(ctx.session.activeFile, ctx.session.activeFile.set)
-  await files.update(ctx.session.activeFile, null, title, null)
+  await files.update(sessions.get(ctx, 'file'), null, title, null)
 }
 
 m.changeFileDescription = async function
@@ -92,7 +92,7 @@ m.changeFileDescription = async function
   const { message : { text : description } } =
     await conversation.waitFor('message:text')
   //
-  await files.update(ctx.session.activeFile, null, null, description)
+  await files.update(sessions.get(ctx, 'file'), null, null, description)
 }
 
 m.register = async function

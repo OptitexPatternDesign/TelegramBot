@@ -81,6 +81,7 @@ m.changeFileTitle = async function
   const { message : { text : title } } =
     await conversation.waitFor('message:text')
   //
+  console.log(ctx.session, ctx.session.activeFile)
   await files.update(await sessions.get(ctx, 'file'), null, title, null)
 }
 

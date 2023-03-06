@@ -96,7 +96,6 @@ m.editFile =
 m.editFile
   .text = async (ctx) => {
   const file = await sessions.get(ctx, 'file')
-  console.log(file)
   return (
     ` ⚠ <b>You are editing '${file.props.title}'</b>`)}
 

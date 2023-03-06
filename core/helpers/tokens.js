@@ -72,7 +72,7 @@ m.users = async function (token) {
 
 
 m.register = async function (key, user) {
-  const token = await global.tables.tokens.get(key.text)
+  const token = await global.tables.tokens.get(key)
   if (token == null)
     return m.errorTokenInvalidKey;
   //

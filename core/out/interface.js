@@ -440,7 +440,7 @@ m.commands.help = async function (ctx) {
       " ● /show_tokens<code> - Show all generate tokens</code>\n" +
       "\n" +
       "<b>Files</b>\n" +
-      " ● /add_files<code>  - Add new file to servers</code>\n" +
+      " ● /add_file<code>  - Add new file to servers</code>\n" +
       " ● /show_files<code> - Show all server files</code>\n" +
       "\n" +
       "<b>Users</b>\n" +

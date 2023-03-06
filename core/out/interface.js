@@ -12,11 +12,6 @@ global.bot.api.setMyCommands([
   {command: "help" , description: "Show commands help"},
   {command: "register", description: "Register to server"},
   {command: "show_files", description: "Show your downloadable files"},
-  // admin related
-  // {command: "show_users", description: "Show your core"},
-  // {command: "show_tokens", description: "Show your core"},
-  // {command: "add_file", description: "Add new file to server"},
-  // {command: "add_token", description: "Add new file to server"},
 ]).then();
 
 
@@ -428,11 +423,11 @@ conversations.register = async function
 global.bot.use(global.ext.conversation.createConversation(conversations.readFile));
 global.bot.use(global.ext.conversation.createConversation(conversations.readToken));
 //
-global.bot.use(global.ext.conversation.createConversation(conversations.changeFileDocument));
-global.bot.use(global.ext.conversation.createConversation(conversations.changeFileTitle));
-global.bot.use(global.ext.conversation.createConversation(conversations.changeFileDescription));
-//
-global.bot.use(global.ext.conversation.createConversation(conversations.register));
+// global.bot.use(global.ext.conversation.createConversation(conversations.changeFileDocument));
+// global.bot.use(global.ext.conversation.createConversation(conversations.changeFileTitle));
+// global.bot.use(global.ext.conversation.createConversation(conversations.changeFileDescription));
+// //
+// global.bot.use(global.ext.conversation.createConversation(conversations.register));
 
 
 m.commands = {}

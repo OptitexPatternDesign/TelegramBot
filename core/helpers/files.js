@@ -48,7 +48,7 @@ m.update = async function (file, document=null, title=null, description=null) {
 }
 
 m.delete = async function (file) {
-  await m.table.delete(file)
+  await m.table.delete(file.key)
 }
 
 

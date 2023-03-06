@@ -8,13 +8,16 @@ const tokens = require("../helpers/tokens")
 
 
 global.bot.api.setMyCommands([
-  {command: "start", description: "Begin the robot"},
-  {command: "help" , description: "Show commands help"},
-  {command: "register", description: "Register to server"},
-  {command: "show_files", description: "Show your downloadable files"},
+  {command: "start"         , description: "Begin the robot"},
+  {command: "help"          , description: "Show commands help"},
+  {command: "register"      , description: "Register to server"},
+  {command: "show_files"    , description: "Show your downloadable files"},
 ]).then();
 
 
+/*
+ * Update session and return properties
+ */
 async function updateSession(ctx, key=null) {
   switch (key) {
     case 'token': if (ctx.session.activeToken)
@@ -27,9 +30,9 @@ async function updateSession(ctx, key=null) {
 }
 
 
-const conversations = {}
+m.conversations = {}
 
-conversations.readFile = async function
+m.conversations.readFile = async function
   read_file(conversation, ctx) {
   // read file document
   await ctx.reply(
@@ -61,7 +64,7 @@ conversations.readFile = async function
     { parse_mode: "HTML" })
 }
 
-conversations.readToken = async function
+m.conversations.readToken = async function
   read_token(conversation, ctx) {
   // read token name
   await ctx.reply(
@@ -83,7 +86,7 @@ conversations.readToken = async function
     { parse_mode: "HTML" })
 }
 
-conversations.changeFileDocument = async function
+m.conversations.changeFileDocument = async function
   change_file_document(conversation, ctx) {
   await ctx.reply(
     "📄 <b>Update <u>file document</u></b>\n",
@@ -94,7 +97,7 @@ conversations.changeFileDocument = async function
   await files.update(ctx.session.activeFile, document, null, null)
 }
 
-conversations.changeFileTitle = async function
+m.conversations.changeFileTitle = async function
   change_file_title(conversation, ctx) {
   await ctx.reply(
     "📄 <b>Update <u>file title</u></b>\n",
@@ -105,7 +108,7 @@ conversations.changeFileTitle = async function
   await files.update(ctx.session.activeFile, null, title, null)
 }
 
-conversations.changeFileDescription = async function
+m.conversations.changeFileDescription = async function
   change_file_description(conversation, ctx) {
   await ctx.reply(
     "📄 <b>Update <u>file description</u></b>\n",
@@ -116,7 +119,7 @@ conversations.changeFileDescription = async function
   await files.update(ctx.session.activeFile, null, null, description)
 }
 
-conversations.register = async function
+m.conversations.register = async function
   register(conversation, ctx) {
   const user = await users.check(ctx.from)
   //
@@ -147,14 +150,15 @@ conversations.register = async function
   }
 }
 
-global.bot.use(global.ext.conversation.createConversation(conversations.readFile));
-global.bot.use(global.ext.conversation.createConversation(conversations.readToken));
+// :: Install 'Conversations'
+global.bot.use(global.ext.conversation.createConversation(m.conversations.readFile));
+global.bot.use(global.ext.conversation.createConversation(m.conversations.readToken));
 //
-// global.bot.use(global.ext.conversation.createConversation(conversations.changeFileDocument));
-// global.bot.use(global.ext.conversation.createConversation(conversations.changeFileTitle));
-// global.bot.use(global.ext.conversation.createConversation(conversations.changeFileDescription));
-// //
-// global.bot.use(global.ext.conversation.createConversation(conversations.register));
+global.bot.use(global.ext.conversation.createConversation(m.conversations.changeFileDocument));
+global.bot.use(global.ext.conversation.createConversation(m.conversations.changeFileTitle));
+global.bot.use(global.ext.conversation.createConversation(m.conversations.changeFileDescription));
+//
+global.bot.use(global.ext.conversation.createConversation(m.conversations.register));
 
 
 m.menus = {
@@ -178,7 +182,6 @@ m.menus = {
   }
 }
 
-// +++++++++++++++
 m.menus.adminFiles
   = new global.ext.menu.Menu('admin-files', m.menus.params)
   .dynamic(async (ctx, range) => {
@@ -201,7 +204,6 @@ m.menus.adminFiles
   " ● <code>Edit file</code> 📄\n" +
   " ● <code>Add new file</code> 📄\n"
 
-// ++++++++++++++
 m.menus.userFiles =
   new global.ext.menu.Menu('user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
@@ -220,7 +222,6 @@ m.menus.userFiles
   "📄 <b>Your accessible <u>files</u></b>\n" +
   "<code>Click on your file to download it, َAnd pay attention to description!</code>\n"
 
-// +++++++++++++
 m.menus.editFile =
   new global.ext.menu.Menu('edit-file', m.menus.params)
   .text('📄 Document',
@@ -247,7 +248,6 @@ m.menus.editFile
   .text = (ctx) =>
   ` ⚠ <b>You are editing '${ctx.session.activeFile.props.title}'</b>`
 
-// ++++++++++
 m.menus.users =
   new global.ext.menu.Menu('users', m.menus.params)
   .dynamic(async (ctx, range) => {
@@ -268,7 +268,6 @@ m.menus.users
   "👤 <b>All <u>users</u></b>\n" +
   " ● <code>Change access to files</code> 📄"
 
-// +++++++++++++
 m.menus.editUser =
   new global.ext.menu.Menu('edit-user', m.menus.params)
   .text('📄 Files',
@@ -290,7 +289,6 @@ m.menus.editUser
   `<b>You are editing '${users.name(ctx.session.activeUser)}'</b>\n` +
   ` ⚠️ <code>Any change will apply!</code>`
 
-// ++++++++++++++++++
 m.menus.editUserFiles =
   new global.ext.menu.Menu('edit-user-files', m.menus.params)
   .dynamic(async (ctx, range) => {
@@ -313,7 +311,6 @@ m.menus.editUserFiles
   .text = (ctx) =>
   `<b>Change '${users.name(ctx.session.activeUser)}' files access</b>`
 
-// +++++++++++
 m.menus.tokens =
   new global.ext.menu.Menu('tokens', m.menus.params)
   .dynamic(async (ctx, range) => {
@@ -335,7 +332,6 @@ m.menus.tokens
   .text = () =>
   '<b>Tokens</b>'
 
-// ++++++++++++++
 m.menus.editToken =
   new global.ext.menu.Menu('edit-token', m.menus.params)
   .text('📄 Files',
@@ -361,7 +357,6 @@ m.menus.editToken
   ` ● <b>Key: </b><code>${ctx.session.activeToken.key}</code>\n` +
   ` ● <b>Users: </b><code>${ctx.session.activeToken.props.users.length} / ${ctx.session.activeToken.props.limitUsers}</code>\n`
 
-// +++++++++++++++++++
 m.menus.editTokenFiles =
   new global.ext.menu.Menu('edit-token-files', m.menus.params)
   .dynamic(async (ctx, range) => {
@@ -384,7 +379,6 @@ m.menus.editTokenFiles
   .text = (ctx) =>
   `<b>Change '${ctx.session.activeToken.props.name}' files access</b>`
 
-// +++++++++++++++++++
 m.menus.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.menus.params)
   .dynamic(async (ctx, range) => {
@@ -409,7 +403,7 @@ m.menus.editTokenUsers
   `<b>Change '${ctx.session.activeToken.props.name}' users</b>`
 
 
-// set menus
+// :: Install and Register 'Menus'
 global.bot.use(m.menus.tokens)
 m.menus.tokens   .register(m.menus.editToken)
 m.menus.editToken.register(m.menus.editTokenUsers)
@@ -524,7 +518,7 @@ m.commands.sendFile = async function (ctx, file) {
   })
 }
 
-//
+// :: Install 'Commands'
 global.bot.command('start', m.commands.start)
 global.bot.command('help' , m.commands.help)
 // user

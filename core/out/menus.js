@@ -2,10 +2,10 @@ const m = exports
 //
 const global = require("../global");
 //
-const files     = require("../helpers/files");
-const tokens    = require("../helpers/tokens");
-const users     = require("../helpers/users");
-const sessions  = require("../helpers/sessions");
+const files   = require("../helpers/files");
+const tokens  = require("../helpers/tokens");
+const users   = require("../helpers/users");
+const session = require("../helpers/session");
 //
 const commands = require("./commands")
 
@@ -85,7 +85,10 @@ m.editFile =
   .row()
   .text('❌ Delete',
     async (ctx) => {
-      await files.delete(await sessions.get(ctx, 'file'))
+      const file = await session.get(ctx, 'file')
+      if  (!file) return
+      //
+      await files.delete(file)
       //
       await m.replace(ctx, m.adminFiles)
     })
@@ -95,7 +98,8 @@ m.editFile =
       await m.replace(ctx, m.adminFiles))
 m.editFile
   .text = async (ctx) => {
-  const file = await sessions.get(ctx, 'file')
+  const file = await session.get(ctx, 'file')
+  if  (!file) return
   return (
     ` ⚠ <b>You are editing '${file.props.title}'</b>`)}
 
@@ -127,8 +131,11 @@ m.editUser =
   .row()
   .text('❌ Delete',
     async (ctx) => {
-      await tokens.unregister(await sessions.get(ctx, 'user'))
+      const user = await session.get(ctx, 'user')
+      if  (!user) return
       //
+      await tokens.unregister(user)
+      // go back
       await m.replace(ctx, m.users)
     })
   .row()
@@ -137,7 +144,8 @@ m.editUser =
       await m.replace(ctx, m.users))
 m.editUser
   .text = async (ctx) => {
-  const user = await sessions.get(ctx, 'user')
+  const user = await session.get(ctx, 'user')
+  if  (!user) return
   return (
     `<b>You are editing '${users.name(user)}'</b>\n` +
     ` ⚠️ <code>Any change will apply!</code>`)}
@@ -145,7 +153,8 @@ m.editUser
 m.editUserFiles =
   new global.ext.menu.Menu('edit-user-files', m.params)
   .dynamic(async (ctx, range) => {
-    const token = await sessions.get(ctx, 'token')
+    const token = await session.get(ctx, 'token')
+    if  (!token) return
     //
     for (const file of await files.all())
       range
@@ -162,7 +171,7 @@ m.editUserFiles =
       await m.replace(ctx, m.editUser))
 m.editUserFiles
   .text = async (ctx) => {
-  const user = await sessions.get(ctx, 'user')
+  const user = await session.get(ctx, 'user')
   return (
     `<b>Change '${users.name(user)}' files access</b>`)}
 
@@ -198,7 +207,10 @@ m.editToken =
   .row()
   .text('❌ Delete',
     async (ctx) => {
-      await tokens.delete(await sessions.get(ctx, 'token'))
+      const token = await session.get(ctx, 'token')
+      if  (!token) return
+      //
+      await tokens.delete(token)
       //
       await m.replace(ctx, m.tokens)
     })
@@ -208,7 +220,8 @@ m.editToken =
       await m.replace(ctx, m.tokens))
 m.editToken
   .text = async (ctx) => {
-  const token = await sessions.get(ctx, 'token')
+  const token = await session.get(ctx, 'token')
+  if  (!token) return
   return (
     ` ⚠ <b>You are editing '${token.props.name}'</b>\n` +
     ` ● <b>Key: </b><code>${token.key}</code>\n` +
@@ -217,7 +230,8 @@ m.editToken
 m.editTokenFiles =
   new global.ext.menu.Menu('edit-token-files', m.params)
   .dynamic(async (ctx, range) => {
-    const token = await sessions.get(ctx, 'token')
+    const token = await session.get(ctx, 'token')
+    if  (!token) return
     //
     for (const file of await files.all())
       range
@@ -234,14 +248,16 @@ m.editTokenFiles =
       await m.replace(ctx, m.editToken))
 m.editTokenFiles
   .text = async (ctx) => {
-  const token = await sessions.get(ctx, 'token')
+  const token = await session.get(ctx, 'token')
+  if  (!token) return
   return (
     `<b>Change '${token.props.name}' files access</b>`)}
 
 m.editTokenUsers =
   new global.ext.menu.Menu('edit-token-users', m.params)
   .dynamic(async (ctx, range) => {
-    const token = await sessions.get(ctx, 'token')
+    const token = await session.get(ctx, 'token')
+    if  (!token) return
     //
     for (const user of await tokens.users(token)) {
       range
@@ -259,7 +275,8 @@ m.editTokenUsers =
       await m.replace(ctx, m.editToken))
 m.editTokenUsers
   .text = async (ctx) => {
-  const token = await sessions.get(ctx, 'token')
+  const token = await session.get(ctx, 'token')
+  if  (!token) return
   return (
     `<b>Change '${token.props.name}' users</b>`)}
 

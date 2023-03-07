@@ -2,10 +2,10 @@ const m = exports
 //
 const global = require("../global");
 //
-const files    = require("../helpers/files");
-const tokens   = require("../helpers/tokens");
-const users    = require("../helpers/users");
-const sessions = require("../helpers/sessions");
+const files   = require("../helpers/files");
+const tokens  = require("../helpers/tokens");
+const users   = require("../helpers/users");
+const session = require("../helpers/session");
 
 
 m.readFile = async function
@@ -64,35 +64,44 @@ m.readToken = async function
 
 m.changeFileDocument = async function
   change_file_document(conversation, ctx) {
+  const file = await session.get(ctx, 'file')
+  if  (!file) return
+  //
   await ctx.reply(
     "📄 <b>Update <u>file document</u></b>\n",
     { parse_mode: "HTML" })
   const { message : { document : document } } =
     await conversation.waitFor('message:document')
   //
-  await files.update(await sessions.get(ctx, 'file'), document, null, null)
+  await files.update(file, document, null, null)
 }
 
 m.changeFileTitle = async function
   change_file_title(conversation, ctx) {
+  const file = await session.get(ctx, 'file')
+  if  (!file) return
+  //
   await ctx.reply(
     "📄 <b>Update <u>file title</u></b>\n",
     { parse_mode: "HTML" })
   const { message : { text : title } } =
     await conversation.waitFor('message:text')
   //
-  await files.update(await sessions.get(ctx, 'file'), null, title, null)
+  await files.update(file, null, title, null)
 }
 
 m.changeFileDescription = async function
   change_file_description(conversation, ctx) {
+  const file = await session.get(ctx, 'file')
+  if  (!file) return
+  //
   await ctx.reply(
     "📄 <b>Update <u>file description</u></b>\n",
     { parse_mode: "HTML" })
   const { message : { text : description } } =
     await conversation.waitFor('message:text')
   //
-  await files.update(await sessions.get(ctx, 'file'), null, null, description)
+  await files.update(file, null, null, description)
 }
 
 m.register = async function

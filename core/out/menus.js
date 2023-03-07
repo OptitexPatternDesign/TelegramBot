@@ -19,15 +19,20 @@ m.params = {
 
 
 m.show = async function (ctx, menu, text=null) {
-  return ctx.reply(text || await menu.text(ctx),
+  return ctx.reply(
+    text || await menu.text(ctx),
     { parse_mode: "HTML", reply_markup: menu })
 }
 
 m.replace = async function (ctx, menu, text=null) {
   ctx.menu.nav(menu.id)
   // change menu text
-  ctx.editMessageText(text || await menu.text(ctx),
-    { parse_mode: "HTML" })
+  if (!text)
+    text = await menu.text(ctx)
+  if (text)
+    ctx.editMessageText(
+      text,
+      { parse_mode: "HTML" })
 }
 
 
